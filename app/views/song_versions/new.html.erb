@@ -1,0 +1,12 @@
+<%= form_for @song_version do |f| %>
+  <%= f.label :title %> :
+  <%= f.text_field :title %><br />
+
+  <%= f.label :bpm %>:
+  <%= f.text_field :bpm %><br />
+  
+  <%= f.label :song_id %>:
+  <%= f.text_field :song_id %><br />
+  
+  <%= f.submit %>
+<% end %>

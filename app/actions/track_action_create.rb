@@ -1,6 +1,6 @@
 class TrackActionCreate < TrackAction
 
-  field :params, :type => Hash
+  field :params, :type => Hash, :default => {}
 
   def name
     "track_action_create_#{track_id}"

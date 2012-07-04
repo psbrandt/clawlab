@@ -5,8 +5,8 @@ class Clip
 
   has_one :source
 
-  field :source_offset, :type => Float
-  field :begin_offset, :type => Float
-  field :end_offset, :type => Float
+  field :source_offset, :type => Float, :default => 0
+  field :begin_offset, :type => Float, :default => 0
+  field :end_offset, :type => Float, :default => 0
 
 end

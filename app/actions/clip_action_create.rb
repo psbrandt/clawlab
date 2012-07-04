@@ -1,6 +1,6 @@
 class ClipActionCreate < ClipAction
 
-  field :params, :type => Hash
+  field :params, :type => Hash, :default => {}
 
   def name
     "clip_action_create_#{clip_id}"
@@ -8,7 +8,7 @@ class ClipActionCreate < ClipAction
 
   def redo
     t = Clip.new(params)
-    song_version.clips << t
+    track.clips << t
     track.song_version.root_action.children.find { |a|
       a.name == "track_action_create_#{track.id}"
     } << self

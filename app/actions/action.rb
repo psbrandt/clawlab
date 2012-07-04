@@ -1,16 +1,19 @@
-class Action < DagNode
-  include Mongoid::Document
+class Action
   include Command
+  include Node
 
-  field :parents, :type => Hash, :default => {}
-  field :children, :type => Hash, :default => {}
+  # including Mongoid after Node. Fields seems to override attributes declared
+  # in Node
+  include Mongoid::Document 
+
+  field :parents, :type => Array, :default => []
+  field :children, :type => Array, :default => []
   # has_and_belongs_to_many :parents, :inverse_of => :children
   # has_and_belongs_to_many :children, :class_name => "Action", :inverse_of => :parents
 
   after_initialize do
-    @children = children
-    @parents  = parents
-    @name     = name
+    @parents  = self.parents
+    @children = self.children
   end
 
   def name

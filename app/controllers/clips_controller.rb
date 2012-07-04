@@ -3,9 +3,8 @@ class ClipsController < ApplicationController
   load_and_authorize_resource :through => :track
 
   def create
-    action = AddClipAction.new params[:clip]
-    @song_version.action_tree.children["track_added_#{track_id}"] << action
-    if @clip = action.execute
+    action = ClipActionCreate.new :track => @track, :params => params[:clip]
+    if @clip = action.redo
       render :json => @clip
     else
       render :json => @clip.errors, :status => :unprocessable_entity
@@ -13,26 +12,17 @@ class ClipsController < ApplicationController
   end
 
   def offset_clip_source
-    action = OffsetClipSourceAction.new params[:track_id, :clip_id, :offset]
-    action.execute
-    @song_version.action_tree.
-      children["track_added_#{track_id}"].
-      children["clip_added_#{clip_id}"] << action
+    action = ClipActionOffsetSource.new :clip => @clip, :offset => :offset
+    action.redo
   end
 
   def offset_clip_begin
-    action = OffsetClipBeginAction.new params[:track_id, :clip_id, :offset]
-    action.execute
-    @song_version.action_tree.
-      children["track_added_#{track_id}"].
-      children["clip_added_#{clip_id}"] << action
+    action = ClipActionOffsetBegin.new :clip => @clip, :offset => :offset
+    action.redo
   end
 
   def offset_clip_end
-    action = OffsetClipEndAction.new params[:track_id, :clip_id, :offset]
-    action.execute
-    @song_version.action_tree.
-      children["track_added_#{track_id}"].
-      children["clip_added_#{clip_id}"] << action
+    action = ClipActionOffsetEnd.new :clip => @clip, :offset => :offset
+    action.redo
   end
 end

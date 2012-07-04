@@ -1,7 +1,5 @@
 class TrackActionCreate < TrackAction
 
-  belongs_to :song_version
-
   field :params, :type => Hash
 
   def name
@@ -11,8 +9,8 @@ class TrackActionCreate < TrackAction
   def redo
     t = Track.new(params)
     song_version.tracks << t
-    self.track = t
     song_version.root_action << self
+    self.track = t
   end
 
   def undo

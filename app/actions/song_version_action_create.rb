@@ -1,4 +1,5 @@
 class SongVersionActionCreate < SongVersionAction
+  # overriding relation
   belongs_to :song_version, :inverse_of => :root_action
 
   def name

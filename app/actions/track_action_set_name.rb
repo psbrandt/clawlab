@@ -1,19 +1,22 @@
 class TrackActionSetName < TrackAction
 
-  field :after, :type => String
-  field :before, :type => String
+  field :name, :type => String
+  field :old_name, :type => String
 
   def redo
-    self.update_attributes!(:before => track.name)
-    track.song_version.root_action.
-      children["track_action_create_#{track.id}"] << self
-    track.update_attributes!(:name => after)
+    self.update_attributes!(:old_name => track.name)
+    track.song_version.root_action.children.find { |a| 
+      a.name == "track_action_create_#{track.id}"
+    } << self
+    track.update_attributes!(:name => name)
     track.save!
   end
 
   def undo
-    track.song_version.root_action.remove_child!(self)
-    track.update_attributes!(:name => before)
+    track.song_version.root_action.children.find { |a|
+      a.name == "track_action_create_#{track.id}"
+    }.remove_child!(self)
+    track.update_attributes!(:name => old_name)
     track.save!
   end
 end

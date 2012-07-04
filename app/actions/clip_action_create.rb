@@ -19,7 +19,7 @@ class ClipActionCreate < ClipAction
     track.song_version.root_action.children.find { |a|
       a.name == "track_action_create_#{track.id}"
     }.remove_child!(self)
-    song_version.clips.delete(clip)
+    track.clips.delete(clip)
     song_version.save!
   end
 end

@@ -14,6 +14,11 @@ class TracksController < ApplicationController
     end
   end
 
+  def destroy
+    action = TrackActionDestroy.new :track => @track
+    action.redo
+  end
+
   def set_track_name
     action = TrackActionSetName.new :track => @track, :name => params[:name]
     action.redo

@@ -10,6 +10,11 @@ class ClipsController < ApplicationController
       render :json => @clip.errors, :status => :unprocessable_entity
     end
   end
+  
+  def destroy
+    action = ClipActionDestroy.new :clip => @clip
+    action.redo
+  end
 
   def offset_clip_source
     action = ClipActionOffsetSource.new :clip => @clip, :offset => :offset

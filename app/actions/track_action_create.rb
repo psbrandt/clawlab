@@ -4,6 +4,10 @@ class TrackActionCreate < TrackAction
 
   field :params, :type => Hash
 
+  def name
+    "track_action_create_#{track_id}"
+  end
+
   def redo
     t = Track.new(params)
     song_version.tracks << t

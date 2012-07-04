@@ -10,6 +10,5 @@ class SongVersion
 
   embeds_many :tracks
 
-  validates_presence_of :title, :bpm
-
+  validates_presence_of :title, :bpm, :user, :song, :root_action
 end

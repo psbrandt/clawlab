@@ -7,4 +7,7 @@ class Track
   field :volume, :type => Float, :default => 0
 
   embeds_many :clips
+
+  validates_numericality_of :volume, :less_than_or_equal_to => 6
+  validates_presence_of :name
 end

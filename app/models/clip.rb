@@ -8,4 +8,5 @@ class Clip
   field :source_offset, :type => Float
   field :begin_offset, :type => Float
   field :end_offset, :type => Float
+
 end

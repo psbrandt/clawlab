@@ -1,5 +1,6 @@
 class Clip
   include Mongoid::Document
+  include Mongoid::Timestamps
 
   embedded_in :track
 

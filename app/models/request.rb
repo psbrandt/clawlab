@@ -1,5 +1,6 @@
 class Request
   include Mongoid::Document
+  include Mongoid::Timestamps
 
   belongs_to :sender,   :class_name => "User", :inverse_of => :send_requests
   belongs_to :receiver, :class_name => "User", :inverse_of => :reveived_requests

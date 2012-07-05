@@ -1,5 +1,6 @@
 class Track
   include Mongoid::Document
+  include Mongoid::Timestamps
 
   embedded_in :song_version
 

@@ -1,6 +1,6 @@
 Claw::Application.routes.draw do
 
-  devise_for :users do
+  devise_scope :users do
     get "users/sign_out" => "devise/sessions#destroy"
   end
   resources :projects, :controller => :song_versions do

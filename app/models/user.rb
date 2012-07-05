@@ -1,5 +1,6 @@
 class User
   include Mongoid::Document
+  include Mongoid::Timestamps
   # Include default devise modules. Others available are:
   # :token_authenticatable, :confirmable,
   # :lockable, :timeoutable and :omniauthable
@@ -12,11 +13,11 @@ class User
 
   validates_presence_of :email
   validates_presence_of :encrypted_password
-  
+  validates_uniqueness_of :email  
   ## Recoverable
   field :reset_password_token,   :type => String
   field :reset_password_sent_at, :type => Time
-
+ 
   ## Rememberable
   field :remember_created_at, :type => Time
 
@@ -45,7 +46,7 @@ class User
   has_and_belongs_to_many :friends, :class_name => "User"
 
   has_many :songs, :inverse_of => :created_by
-  has_many :song_versions
-  has_many :sent_requests, :inverse_of => :sender
-  has_many :received_requests, :inverse_of => :receiver
+  has_many :song_versions, :dependent => :destroy
+  has_many :sent_requests, :inverse_of => :sender, :dependent => :destroy
+  has_many :received_requests, :inverse_of => :receiver, :dependent => :destroy
 end

@@ -42,6 +42,7 @@ class User
   field :authentication_token, :type => String
 
   has_and_belongs_to_many :bands
+  has_and_belongs_to_many :friends, :class_name => "User"
 
   has_many :songs, :inverse_of => :created_by
   has_many :song_versions

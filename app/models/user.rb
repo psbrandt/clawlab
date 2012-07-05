@@ -13,7 +13,7 @@ class User
 
   validates_presence_of :email
   validates_presence_of :encrypted_password
-  validates_uniqueness_of :email  
+
   ## Recoverable
   field :reset_password_token,   :type => String
   field :reset_password_sent_at, :type => Time
@@ -42,11 +42,17 @@ class User
   ## Token authenticatable
   field :authentication_token, :type => String
 
+  field :name
+  validates_presence_of :name
+  validates_uniqueness_of :name, :email, :case_sensitive => false
+  attr_accessible :name, :email, :password, :password_confirmation, :remember_me
+
   has_and_belongs_to_many :bands
   has_and_belongs_to_many :friends, :class_name => "User"
 
   has_many :songs, :inverse_of => :created_by
   has_many :song_versions, :dependent => :destroy
-  has_many :sent_requests, :inverse_of => :sender, :dependent => :destroy
-  has_many :received_requests, :inverse_of => :receiver, :dependent => :destroy
+  has_many :sent_requests, :class_name => "Request", :inverse_of => :sender, :dependent => :destroy
+  has_many :received_requests, :class_name => "Request", :inverse_of => :receiver, :dependent => :destroy
+  
 end

@@ -25,7 +25,7 @@ end
 # gem 'bcrypt-ruby', '~> 3.0.0'
 
 # To use Jbuilder templates for JSON
-# gem 'jbuilder'
+gem 'jbuilder'
 
 # Use unicorn as the app server
 # gem 'unicorn'
@@ -36,16 +36,22 @@ end
 # To use debugger
 # gem 'ruby-debug19', :require => 'ruby-debug'
 
-gem "devise"
+gem "devise", ">= 2.1.0"
 gem "jquery-rails"
 gem "bson_ext"
-gem "mongoid", ">= 2.0.0.beta.19"
-gem "rspec-rails", ">= 2.0.1", :group => [:development, :test]
+gem "mongoid", ">= 2.4.11"
+
+# Tests
+gem "rspec-rails", ">= 2.10.1", :group => [:development, :test]
+gem "factory_girl_rails", ">= 3.3.0", :group => [:development, :test]
+gem "database_cleaner", ">= 0.8.0", :group => :test
+gem "mongoid-rspec", ">= 1.4.4", :group => :test
+gem "email_spec", ">= 1.2.1", :group => :test
+gem "cucumber-rails", ">= 1.3.0", :group => :test, :require => false
+gem "capybara", ">= 1.1.2", :group => :test
+gem "launchy", ">= 2.1.0", :group => :test
+
 gem "haml", ">= 3.0.0"
 
 gem "cancan"
-gem "jbuilder"
 
-#A library to work with trees
-gem "rubytree"
-gem "rgl"

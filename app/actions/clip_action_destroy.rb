@@ -16,5 +16,8 @@ class ClipActionDestroy < ClipAction
     }.children.find { |a|
       a.name == "clip_action_create_#{clip.id}"
     } << self
+
+    # undoing children (dependant actions)
+    children.each &:undo
   end
 end

@@ -12,5 +12,8 @@ class TrackActionDestroy < TrackAction
     track.song_version.root_action.children.find { |a|
       a.name == "track_action_create_#{track.id}"
     } << self
+
+    # undoing children (dependant actions)
+    children.each &:undo
   end
 end

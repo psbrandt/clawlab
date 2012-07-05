@@ -17,5 +17,8 @@ class TrackActionCreate < TrackAction
     song_version.root_action.remove_child!(self)
     song_version.tracks.delete(track)
     song_version.save!
+
+    # undoing children (dependant actions)
+    children.each &:undo
   end
 end

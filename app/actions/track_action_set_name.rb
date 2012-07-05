@@ -18,5 +18,8 @@ class TrackActionSetName < TrackAction
     }.remove_child!(self)
     track.update_attributes!(:name => old_name)
     track.save!
+
+    # undoing children (dependant actions)
+    children.each &:undo
   end
 end

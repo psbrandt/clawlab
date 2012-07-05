@@ -14,5 +14,8 @@ class SongVersionActionSetTitle < SongVersionAction
     song_version.root_action.remove_child!(self)
     song_version.update_attributes!(:title => old_title)
     song_version.save!
+
+    # undoing children (dependant actions)
+    children.each &:undo
   end
 end

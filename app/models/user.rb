@@ -43,7 +43,8 @@ class User
 
   has_and_belongs_to_many :bands
 
-  has_many :songs
+  has_many :songs, :inverse_of => :created_by
   has_many :song_versions
-  has_many :requests
+  has_many :sent_requests, :inverse_of => :sender
+  has_many :received_requests, :inverse_of => :receiver
 end

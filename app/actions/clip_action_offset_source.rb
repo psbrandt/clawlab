@@ -22,5 +22,8 @@ class ClipActionOffsetSource < ClipAction
     }.remove_child!(self)
     clip.update_attributes!(:source_offset => old_offset)
     clip.save!
+
+    # undoing children (dependant actions)
+    children.each &:undo
   end
 end

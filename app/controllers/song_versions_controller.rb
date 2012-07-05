@@ -17,6 +17,10 @@ class SongVersionsController < ApplicationController
     end
   end
 
+  def destroy
+    @song_version.destroy!
+  end
+
   def undo(action)
     action.undo
   end

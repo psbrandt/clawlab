@@ -6,7 +6,7 @@ class SongVersion
 
   belongs_to :user
   belongs_to :song
-  has_one :root_action, :class_name => "SongVersionActionCreate"
+  has_one :root_action, :class_name => "SongVersionActionCreate", :dependent => :destroy
 
   embeds_many :tracks
 

@@ -8,8 +8,8 @@ class User
          :recoverable, :rememberable, :trackable, :validatable
 
   ## Database authenticatable
-  field :email,              :type => String, :default => ""
-  field :encrypted_password, :type => String, :default => ""
+  field :email,              :type => String
+  field :encrypted_password, :type => String
 
   validates_presence_of :email
   validates_presence_of :encrypted_password
@@ -42,9 +42,14 @@ class User
   ## Token authenticatable
   field :authentication_token, :type => String
 
+  # field :name
+  # validates_presence_of :name
+  # validates_uniqueness_of :name, :email, :case_sensitive => false
+  # attr_accessible :name, :email, :password, :password_confirmation, :remember_me
+
+  index :email, :unique => true
   field :name
   validates_presence_of :name
-  validates_uniqueness_of :name, :email, :case_sensitive => false
   attr_accessible :name, :email, :password, :password_confirmation, :remember_me
 
   has_and_belongs_to_many :bands

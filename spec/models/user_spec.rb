@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe User do
-  before do
+  before(:each) do
     @attr = { 
       :name => "Example User",
       :email => "user@example.com",
@@ -36,7 +36,7 @@ describe User do
   end
   
   it "should reject duplicate email addresses" do
-    # User.create!(@attr)
+    User.create!(@attr)
     user_with_duplicate_email = User.new(@attr)
     user_with_duplicate_email.should_not be_valid
   end

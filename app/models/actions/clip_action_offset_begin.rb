@@ -11,7 +11,6 @@ class ClipActionOffsetBegin < ClipAction
       a.name == "clip_action_create_#{clip.id}"
     } << self
     clip.update_attributes!(:begin_offset => offset)
-    clip.save!
   end
 
   def undo
@@ -21,7 +20,6 @@ class ClipActionOffsetBegin < ClipAction
       a.name == "clip_action_create_#{clip.id}"
     }.remove_child!(self)
     clip.update_attributes!(:begin_offset => old_offset)
-    clip.save!
 
     # undoing children (dependant actions)
     children.each &:undo

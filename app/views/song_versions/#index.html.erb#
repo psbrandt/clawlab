@@ -1,5 +1,0 @@
-<ul>
-<% @song_versions.each do |s| %>
-<li><%= link_to s.title, song_version_path(s)  %></li>
-<% end %>
-</ul>

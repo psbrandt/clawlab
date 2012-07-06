@@ -6,7 +6,7 @@ class ClipActionDestroy < ClipAction
     }.children.find { |a|
       a.name == "clip_action_create_#{clip.id}"
     }.remove_child!(self)
-    clip.destroy!
+    clip.delete
   end
 
   def undo

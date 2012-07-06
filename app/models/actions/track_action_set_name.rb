@@ -9,7 +9,6 @@ class TrackActionSetName < TrackAction
       a.name == "track_action_create_#{track.id}"
     } << self
     track.update_attributes!(:name => name)
-    track.save!
   end
 
   def undo
@@ -17,7 +16,6 @@ class TrackActionSetName < TrackAction
       a.name == "track_action_create_#{track.id}"
     }.remove_child!(self)
     track.update_attributes!(:name => old_name)
-    track.save!
 
     # undoing children (dependant actions)
     children.each &:undo

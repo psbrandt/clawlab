@@ -23,10 +23,12 @@ class SongVersionsController < ApplicationController
 
   def undo(action)
     action.undo
+    @song_version.save!
   end
 
   def redo(action)
     action.redo
+    @song_version.save!
   end
 
   def set_title
@@ -35,6 +37,11 @@ class SongVersionsController < ApplicationController
       :title => params[:title]
     )
     action.redo
+    if @song_version.save!
+      render :json => :ok
+    else
+      render :json => @song_version.errors, :status => :unprocessable_entity
+    end
   end
 
 end

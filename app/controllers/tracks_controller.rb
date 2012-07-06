@@ -17,16 +17,27 @@ class TracksController < ApplicationController
   def destroy
     action = TrackActionDestroy.new :track => @track
     action.redo
+    # @track.save! ? @song_version.save! ?
   end
 
   def set_track_name
     action = TrackActionSetName.new :track => @track, :name => params[:name]
     action.redo
+    if @track.save!
+      render :json => @track
+    else
+      render :json => @track.errors, :status => :unprocessable_entity
+    end
   end
 
   def set_volume
     action = TrackActionSetVolume.new :track => @track, :volume => params[:volume]
     action.redo
+    if @track.save!
+      render :json => @track
+    else
+      render :json => @track.errors, :status => :unprocessable_entity
+    end
   end
 
 end

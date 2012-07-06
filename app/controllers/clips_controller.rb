@@ -4,7 +4,8 @@ class ClipsController < ApplicationController
 
   def create
     action = ClipActionCreate.new :track => @track, :params => params[:clip]
-    if @clip = action.redo
+    @clip = action.redo
+    if @clip.save!
       render :json => @clip
     else
       render :json => @clip.errors, :status => :unprocessable_entity
@@ -14,20 +15,36 @@ class ClipsController < ApplicationController
   def destroy
     action = ClipActionDestroy.new :clip => @clip
     action.redo
+    # @clip.save? save track ?
   end
 
   def offset_clip_source
     action = ClipActionOffsetSource.new :clip => @clip, :offset => :offset
     action.redo
+    if @clip.save!
+      render :json => @clip
+    else
+      render :json => @clip.errors, :status => :unprocessable_entity
+    end    
   end
 
   def offset_clip_begin
     action = ClipActionOffsetBegin.new :clip => @clip, :offset => :offset
     action.redo
+    if @clip.save!
+      render :json => @clip
+    else
+      render :json => @clip.errors, :status => :unprocessable_entity
+    end
   end
 
   def offset_clip_end
     action = ClipActionOffsetEnd.new :clip => @clip, :offset => :offset
     action.redo
+    if @clip.save!
+      render :json => @clip
+    else
+      render :json => @clip.errors, :status => :unprocessable_entity
+    end
   end
 end

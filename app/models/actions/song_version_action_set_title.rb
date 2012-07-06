@@ -7,13 +7,11 @@ class SongVersionActionSetTitle < SongVersionAction
     self.update_attributes!(:old_title => song_version.title)
     song_version.root_action.add_child(self)
     song_version.update_attributes!(:title => title)
-    song_version.save!
   end
 
   def undo 
     song_version.root_action.remove_child!(self)
     song_version.update_attributes!(:title => old_title)
-    song_version.save!
 
     # undoing children (dependant actions)
     children.each &:undo

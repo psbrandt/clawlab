@@ -20,7 +20,6 @@ class ClipActionCreate < ClipAction
       a.name == "track_action_create_#{track.id}"
     }.remove_child!(self)
     track.clips.delete(clip)
-    song_version.save!
 
     # undoing children (dependant actions)
     children.each &:undo

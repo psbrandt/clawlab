@@ -4,7 +4,7 @@ class TrackActionDestroy < TrackAction
     track.song_version.root_action.children.find { |a| 
       a.name == "track_action_create_#{track.id}"
     }.remove_child!(self)
-    track.destroy!
+    track.delete
   end
 
   def undo

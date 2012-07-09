@@ -6,6 +6,10 @@ class Ability
     user ||= User.new # guest user (not logged in)
     
     can :manage, SongVersion, :user_id => user.id
+    can :manage, SongVersionActionCreate, :song_version => { :user_id => user.id }    
+
+    # can read root_action if song_version.song.users includes user
+
     #
     # The first argument to `can` is the action you are giving the user permission to do.
     # If you pass :manage it will apply to every action. Other common actions here are

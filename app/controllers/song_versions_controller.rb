@@ -5,12 +5,12 @@ class SongVersionsController < ApplicationController
     @song_version = current_user.song_versions.new(params[:song_version])
 
     # if no parent song was given, create one and set it as parent
-    @song_version.song = Song.new unless @song_version.song_id
+    @song = @song_version.song = Song.new unless @song_version.song_id
     
     # create the root_action node
-    @song_version.root_action = SongVersionActionCreate.new
+    @song_version.create_root_action
 
-    if @song_version.save! && @song_version.song.save!
+    if @song_version.save! && @song.save!
       render :json => @song_version
     else
       render :json => @song_version.errors, :status => :unprocessable_entity
@@ -21,11 +21,13 @@ class SongVersionsController < ApplicationController
     @song_version.destroy!
   end
 
+  # TODO : allow action to be nil to undo last action
   def undo(action)
     action.undo
     @song_version.save!
   end
 
+  # TODO : allow action to be nil to redo last undone action
   def redo(action)
     action.redo
     @song_version.save!

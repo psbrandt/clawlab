@@ -1,12 +1,18 @@
 Claw::Application.routes.draw do
 
   devise_for :users
-
-  resources :projects, :controller => :song_versions do
-    resources :tracks, :except => [:edit, :new]
-    resources :clips, :except => [:edit, :new]
-    resources :sources, :except => [:edit, :new]
-    resource :action_tree, :only => [:update, :show]
+  devise_scope :user do
+    get "login", :to => "devise/sessions#new"
+    get "logout", :to => "devise/sessions#destroy"
+  end
+  resources :song_versions, :except => [:update] do
+    put "set_title"
+    post "undo"
+    post "redo"
+    resources :tracks, :except => [:edit, :new, :update]
+    resources :clips, :except => [:edit, :new, :update]
+    resources :sources, :except => [:edit, :new, :update]
+    resource :root_action, :only => [:update, :show], :controller => "actions"
   end
   root :to => "song_versions#index"
 

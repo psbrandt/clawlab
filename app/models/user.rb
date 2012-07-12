@@ -4,7 +4,7 @@ class User
   # Include default devise modules. Others available are:
   # :token_authenticatable, :confirmable,
   # :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :registerable,
+  devise :database_authenticatable, :registerable, :token_authenticatable,
          :recoverable, :rememberable, :trackable, :validatable
 
   ## Database authenticatable
@@ -41,7 +41,8 @@ class User
 
   ## Token authenticatable
   field :authentication_token, :type => String
-
+  before_save :ensure_authentication_token
+  
   # field :name
   # validates_presence_of :name
   # validates_uniqueness_of :name, :email, :case_sensitive => false

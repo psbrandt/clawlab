@@ -6,14 +6,17 @@ Claw::Application.routes.draw do
     get "logout", :to => "devise/sessions#destroy"
   end
   resources :song_versions, :except => [:update] do
-    put "set_title"
-    post "undo"
-    post "redo"
     resources :tracks, :except => [:edit, :new, :update]
+    put "tracks/:id/set_name" => "tracks#set_name"
+
     resources :clips, :except => [:edit, :new, :update]
     resources :sources, :except => [:edit, :new, :update]
     resource :root_action, :only => [:update, :show], :controller => "actions"
   end
+  put  "song_versions/:id/set_title" => "song_versions#set_title"
+  post "song_versions/:id/undo"      => "song_versions#undo"
+  post "song_versions/:id/redo"      => "song_versions#redo"
+  
   root :to => "song_versions#index"
 
   # The priority is based upon order of creation:

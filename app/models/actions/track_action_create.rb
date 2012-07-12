@@ -7,15 +7,15 @@ class TrackActionCreate < TrackAction
   end
 
   def redo
-    t = Track.new(params)
+    t = Track.new params
     song_version.tracks << t
+    self.track_id = t.id
     song_version.root_action << self
-    self.track = t
   end
 
   def undo
     song_version.root_action.remove_child!(self)
-    song_version.tracks.delete(track)
+    song_version.tracks.find(self.track_id).delete
 
     # undoing children (dependant actions)
     children.each &:undo

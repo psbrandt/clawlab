@@ -22,13 +22,15 @@ class SongVersionsController < ApplicationController
   end
 
   # TODO : allow action to be nil to undo last action
-  def undo(action)
+  def undo
+    action = Action.find(params[:action_id])
     action.undo
     @song_version.save!
   end
 
   # TODO : allow action to be nil to redo last undone action
   def redo(action)
+    action = Action.find(params[:action_id])
     action.redo
     @song_version.save!
   end

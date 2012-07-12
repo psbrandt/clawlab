@@ -3,13 +3,13 @@ class Ability
 
   def initialize(user)
     # Define abilities for the passed in user here. For example:
-    user ||= User.new # guest user (not logged in)
-    
-    can :manage, SongVersion, :user_id => user.id
-    can :manage, SongVersionActionCreate, :song_version => { :user_id => user.id }
-    can :manage, Track, :song_version => { :user_id => user.id }
-    can :manage, Clip, :track => { :song_version => { :user_id => user.id } }
-
+    # user ||= User.new # guest user (not logged in)
+    if user
+      can [:manage, :set_title, :undo, :redo], SongVersion, :user_id => user.id
+      can :manage, SongVersionActionCreate, :song_version => { :user_id => user.id }
+      can :manage, Track, :song_version => { :user_id => user.id }
+      can :manage, Clip, :track => { :song_version => { :user_id => user.id } }
+    end
     # can read root_action if song_version.song.users includes user
 
     #

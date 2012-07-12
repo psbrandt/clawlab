@@ -6,17 +6,17 @@ class Action
   # in Node
   include Mongoid::Document 
 
-  field :parents, :type => Array, :default => []
-  field :children, :type => Array, :default => []
+  # field :parents, :type => Array, :default => []
+  # field :children, :type => Array, :default => []
   # NOTE : tought about using recursively_embeds_many but it didn't fit so well
-
-  # has_and_belongs_to_many :parents, :inverse_of => :children
-  # has_and_belongs_to_many :children, :class_name => "Action", :inverse_of => :parents
+  
+  has_and_belongs_to_many :parents,  :class_name => "Action", :inverse_of => :children
+  has_and_belongs_to_many :children, :class_name => "Action", :inverse_of => :parents
 
   # Node methods use instance variable. We need to set them before we can do 
   # anything
   after_initialize do
-    @parents  = parents
+    @parents  = self.parents
     @children = self.children
   end
 

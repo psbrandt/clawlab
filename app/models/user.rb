@@ -43,11 +43,6 @@ class User
   field :authentication_token, :type => String
   before_save :ensure_authentication_token
   
-  # field :name
-  # validates_presence_of :name
-  # validates_uniqueness_of :name, :email, :case_sensitive => false
-  # attr_accessible :name, :email, :password, :password_confirmation, :remember_me
-
   index :email, :unique => true
   field :name
   validates_presence_of :name
@@ -60,5 +55,5 @@ class User
   has_many :song_versions, :dependent => :destroy
   has_many :sent_requests, :class_name => "Request", :inverse_of => :sender, :dependent => :destroy
   has_many :received_requests, :class_name => "Request", :inverse_of => :receiver, :dependent => :destroy
-  
+
 end

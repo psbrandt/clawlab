@@ -2,14 +2,21 @@ Claw::Application.routes.draw do
 
   devise_for :users
   devise_scope :user do
-    get "login", :to => "devise/sessions#new"
+    post "login", :to => "users/sessions#create"
     get "logout", :to => "devise/sessions#destroy"
   end
+  
+  resources :songs
+  
   resources :song_versions, :except => [:update] do
     resources :tracks, :except => [:edit, :new, :update]
     put "tracks/:id/set_name" => "tracks#set_name"
 
     resources :clips, :except => [:edit, :new, :update]
+    put "clips/:id/offset_source" => "clips#offset_source"
+    put "clips/:id/offset_begin"  => "clips#offset_begin"
+    put "clips/:id/offset_end"    => "clips#offset_end"
+
     resources :sources, :except => [:edit, :new, :update]
     resource :root_action, :only => [:update, :show], :controller => "actions"
   end

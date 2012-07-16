@@ -4,7 +4,7 @@ class TracksController < ApplicationController
 
   def create
     action = TrackActionCreate.new(
-      :song_version => @song_version, 
+      :song_version_id => @song_version.id, 
       :params => params[:track]
     )
     if @track = action.redo
@@ -17,7 +17,6 @@ class TracksController < ApplicationController
   def destroy
     action = TrackActionDestroy.new :track => @track
     action.redo
-    # @track.save! ? @song_version.save! ?
   end
 
   def set_name

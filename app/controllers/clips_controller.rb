@@ -1,11 +1,11 @@
 class ClipsController < ApplicationController
-  load_and_authorize_resource :track
-  load_and_authorize_resource :through => :track
+  load_and_authorize_resource :song_version
+  load_and_authorize_resource :track, :through => :song_version
+  load_and_authorize_resource :clip, :through => :track
 
   def create
-    action = ClipActionCreate.new :track => @track, :params => params[:clip]
-    @clip = action.redo
-    if @clip.save!
+    action = ClipActionCreate.new(:track => @track, :params => params[:clip])
+    if @clip = action.redo
       render :json => @clip
     else
       render :json => @clip.errors, :status => :unprocessable_entity
@@ -15,11 +15,10 @@ class ClipsController < ApplicationController
   def destroy
     action = ClipActionDestroy.new :clip => @clip
     action.redo
-    # @clip.save? save track ?
   end
 
-  def offset_clip_source
-    action = ClipActionOffsetSource.new :clip => @clip, :offset => :offset
+  def offset_source
+    action = ClipActionOffsetSource.new :clip => @clip, :offset => params[:offset]
     action.redo
     if @clip.save!
       render :json => @clip
@@ -28,8 +27,8 @@ class ClipsController < ApplicationController
     end    
   end
 
-  def offset_clip_begin
-    action = ClipActionOffsetBegin.new :clip => @clip, :offset => :offset
+  def offset_begin
+    action = ClipActionOffsetBegin.new :clip => @clip, :offset => params[:offset]
     action.redo
     if @clip.save!
       render :json => @clip
@@ -38,8 +37,8 @@ class ClipsController < ApplicationController
     end
   end
 
-  def offset_clip_end
-    action = ClipActionOffsetEnd.new :clip => @clip, :offset => :offset
+  def offset_end
+    action = ClipActionOffsetEnd.new :clip => @clip, :offset => params[:offset]
     action.redo
     if @clip.save!
       render :json => @clip

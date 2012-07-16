@@ -26,13 +26,22 @@ class SongVersionsController < ApplicationController
     action = Action.find(params[:action_id])
     action.undo
     @song_version.save!
+    if @song_version.save!
+      render :json => { :message => "Undo successed" }
+    else
+      render :json => @song_version.errors, :status => :unprocessable_entity
+    end
   end
 
   # TODO : allow action to be nil to redo last undone action
   def redo
     action = Action.find(params[:action_id])
     action.redo
-    @song_version.save!
+    if @song_version.save!
+      render :json => { :message => "Redo successed" }
+    else
+      render :json => @song_version.errors, :status => :unprocessable_entity
+    end
   end
 
   def set_title
@@ -42,7 +51,7 @@ class SongVersionsController < ApplicationController
     )
     action.redo
     if @song_version.save!
-      render :json => :ok
+      render :json => { :message => "Title set" }
     else
       render :json => @song_version.errors, :status => :unprocessable_entity
     end

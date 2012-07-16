@@ -9,5 +9,6 @@ class ApplicationController < ActionController::Base
       render :json => {:status => :error, :message => "You must be logged in to do that!"}, :status => 401
     end
   end
+
 end
 

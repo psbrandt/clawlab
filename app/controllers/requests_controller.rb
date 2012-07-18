@@ -16,7 +16,7 @@ class RequestsController < ApplicationController
                 when "sent"
                   current_user.sent_requests
                 else # should never happen
-                  [] #TODO redirect to an error page instead (404?)
+                  raise ActionController::RoutingError.new('Not Found')
                 end
   end
 end

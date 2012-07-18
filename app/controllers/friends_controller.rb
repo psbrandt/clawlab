@@ -1,5 +1,4 @@
 class FriendsController < ApplicationController
-  # before_filter :test
   load_and_authorize_resource :class => "User", :through => :current_user
 
   def add_friend
@@ -12,9 +11,4 @@ class FriendsController < ApplicationController
    end
   end
 
-  private
-
-  # def test
-  #   @users = current_user.friends
-  # end
 end

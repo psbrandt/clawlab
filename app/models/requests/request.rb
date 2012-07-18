@@ -10,10 +10,11 @@ class Request
   validates_inclusion_of :status, :in => ["pending", "accepted"]
 
   after_update do
-    accept if status == "accepted"
+    accepted if status == "accepted"
   end
   
-  # abstract method, need to be implemented by subclasses
-  def accept
+  # Action to be done when request is accepted by receiver (abstract method, 
+  # need to be implemented by subclasses)
+  def accepted
   end
 end

@@ -1,10 +1,13 @@
 Claw::Application.routes.draw do
 
   devise_for :users
-  devise_scope :user do
-    post "login", :to => "users/sessions#create"
-    get "logout", :to => "devise/sessions#destroy"
-  end
+
+  resources :friends, :only => [:index, :show, :destroy]
+  post "add_friend", :to => "users#add_friend"
+
+  resources :requests, :only => [:destroy]
+  put "requests/:id/accept" => "requests#accept"
+  get "requests/:type" => "requests#index"
   
   resources :songs
   

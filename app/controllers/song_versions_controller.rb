@@ -5,7 +5,7 @@ class SongVersionsController < ApplicationController
     @song_version = current_user.song_versions.new(params[:song_version])
 
     # if no parent song was given, create one and set it as parent
-    @song = @song_version.song = Song.new unless @song_version.song_id
+    @song = @song_version.song = Song.new(:created_by => current_user) unless @song_version.song_id
     
     # create the root_action node
     @song_version.create_root_action
@@ -21,7 +21,7 @@ class SongVersionsController < ApplicationController
     @song_version.destroy!
   end
 
-  # TODO : allow action to be nil to undo last action
+  # TODO : if action_id is nil, undo last action
   def undo
     action = Action.find(params[:action_id])
     action.undo
@@ -33,7 +33,7 @@ class SongVersionsController < ApplicationController
     end
   end
 
-  # TODO : allow action to be nil to redo last undone action
+  # TODO : if action_id is nil, redo last undone action
   def redo
     action = Action.find(params[:action_id])
     action.redo

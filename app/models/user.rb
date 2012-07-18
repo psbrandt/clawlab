@@ -56,4 +56,8 @@ class User
   has_many :sent_requests, :class_name => "Request", :inverse_of => :sender, :dependent => :destroy
   has_many :received_requests, :class_name => "Request", :inverse_of => :receiver, :dependent => :destroy
 
+  def song_ids
+    song_versions.map(&:song_id).uniq
+  end
+
 end

@@ -16,4 +16,8 @@ class SongVersionActionSetTitle < SongVersionAction
     # undoing children (dependant actions)
     children.each &:undo
   end
+
+  def same_as? action
+    super(action) && self.title == action.title
+  end
 end

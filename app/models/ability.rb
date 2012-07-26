@@ -4,10 +4,11 @@ class Ability
   def initialize(user)
     # Define abilities for the passed in user here. For example:
     # user ||= User.new # guest user (not logged in)
+    can :index, User
     if user
       # managing friends
-      can :add_friend, User
       can :read, User #TODO, :id => user.friend_ids
+      can :add_friend, User
 
       # managing requests
       can [:read, :destroy], Request, :sender_id => user.id
@@ -16,11 +17,10 @@ class Ability
       
       # songs
       can :manage, Song, :created_by => user.id
-      can :read, Song, :id => user.song_ids
 
       # song versions
-      can [:manage, :set_title, :undo, :redo], SongVersion, :user_id => user.id
       can :read, SongVersion, :song => {:id => user.song_ids}
+      can [:manage, :set_title, :undo, :redo, :share], SongVersion, :user_id => user.id
 
       # song version action tree
       can :manage, SongVersionActionCreate, :song_version => { :user_id => user.id }

@@ -4,7 +4,10 @@ class ClipsController < ApplicationController
   load_and_authorize_resource :clip, :through => :track
 
   def create
-    action = ClipActionCreate.new(:track => @track, :params => params[:clip])
+    action = ClipActionCreate.new(
+      :track => @track, 
+      :params => (params[:clip] || {})
+    )
     if @clip = action.redo
       render :json => @clip
     else

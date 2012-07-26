@@ -13,8 +13,8 @@ class TrackActionCreate < TrackAction
 
     song_version.tracks << t
 
-    # storing the id to recreate the exact same track when redoing
-    self.params["id"] = t.id
+    # storing the id in params to recreate the exact same track when redoing
+    params["id"] = t.id
 
     song_version.root_action << self
   end
@@ -27,5 +27,10 @@ class TrackActionCreate < TrackAction
 
     # undoing children (dependant actions)
     children.each &:undo
+  end
+
+  def same_as? action
+    # not calling super because self.clip is nil 
+    self.class == action.class && self.params["id"] == action.params["id"]
   end
 end

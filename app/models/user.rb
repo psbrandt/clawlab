@@ -59,5 +59,4 @@ class User
   def song_ids
     song_versions.map(&:song_id).uniq
   end
-
 end

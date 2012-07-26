@@ -2,7 +2,7 @@ class SongVersionsController < ApplicationController
   load_and_authorize_resource
 
   def create
-    @song_version = current_user.song_versions.new(params[:song_version])
+    @song_version = current_user.song_versions.new params[:song_version]
 
     # if no parent song was given, create one and set it as parent
     @song = @song_version.song = Song.new(:created_by => current_user) unless @song_version.song_id
@@ -18,7 +18,24 @@ class SongVersionsController < ApplicationController
   end
 
   def destroy
-    @song_version.destroy!
+    if @song_version.destroy
+      render :json => {:message => "Song version successfully deleted"}
+    else
+      render :json => @song_version.errors, :status => :unprocessable_entity
+    end
+  end
+
+  def share
+    user = User.find params[:user_id]
+    request = SongVersionSharingRequest.new(
+      :sender => current_user, 
+      :receiver => user, 
+      :song_version_id => @song_version.id)
+    if request.save!
+      render :json => request
+    else
+      render :json => request.errors, :status => :unprocessable_entity
+    end
   end
 
   # TODO : if action_id is nil, undo last action

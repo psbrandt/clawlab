@@ -1,9 +1,9 @@
 class ClipActionDestroy < ClipAction
 
   def redo
-    clip.track.song_version.root_action.children.find { |a| 
+    clip.track.song_version.root_action.children.detect { |a| 
       a.name == "track_action_create_#{clip.track.id}"
-    }.children.find { |a|
+    }.children.detect { |a|
       a.name == "clip_action_create_#{clip.id}"
     }.remove_child!(self)
     clip.delete
@@ -11,13 +11,14 @@ class ClipActionDestroy < ClipAction
 
   def undo
     clip.track.clips << clip
-    clip.track.song_version.root_action.children.find { |a| 
+    clip.track.song_version.root_action.children.detect { |a| 
       a.name == "track_action_create_#{clip.track.id}"
-    }.children.find { |a|
+    }.children.detect { |a|
       a.name == "clip_action_create_#{clip.id}"
     } << self
 
     # undoing children (dependant actions)
     children.each &:undo
   end
+
 end

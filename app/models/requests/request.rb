@@ -10,7 +10,12 @@ class Request
   validates_inclusion_of :status, :in => ["pending", "accepted"]
 
   after_update do
-    accepted if status == "accepted"
+    if status == "accepted"
+      # execute accepted callback
+      accepted
+      # destroy the requests
+      self.destroy
+    end
   end
   
   # Action to be done when request is accepted by receiver (abstract method, 

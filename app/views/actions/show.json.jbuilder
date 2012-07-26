@@ -1,1 +1,2 @@
-json.(@root_action, :name, :children)
+json.partial! "actions/action", :action => @root_action
+

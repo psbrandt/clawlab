@@ -1,15 +1,17 @@
 Claw::Application.routes.draw do
 
   devise_for :users
+  get "users", :to => "users#index"
 
   resources :friends, :only => [:index, :show, :destroy]
-  post "add_friend", :to => "users#add_friend"
+  post "add_friend", :to => "friends#add_friend"
 
   resources :requests, :only => [:destroy]
   put "requests/:id/accept" => "requests#accept"
   get "requests/:type" => "requests#index"
   
   resources :songs
+  post "songs/:id/share" => "songs#share"
   
   resources :song_versions, :except => [:update] do
     resources :tracks, :except => [:edit, :new, :update]
@@ -21,11 +23,15 @@ Claw::Application.routes.draw do
     put "clips/:id/offset_end"    => "clips#offset_end"
 
     resources :sources, :except => [:edit, :new, :update]
+
     resource :root_action, :only => [:update, :show], :controller => "actions"
+
   end
   put  "song_versions/:id/set_title" => "song_versions#set_title"
   post "song_versions/:id/undo"      => "song_versions#undo"
   post "song_versions/:id/redo"      => "song_versions#redo"
+
+  post "song_versions/:id/share"     => "song_versions#share"
   
   root :to => "song_versions#index"
 

@@ -1,21 +1,23 @@
 class RequestsController < ApplicationController
-  before_filter :find_requests
-  load_and_authorize_resource
+  load_and_authorize_resource :class => "Request"
   
   def accept
-    @request.update_attribute(:status, "accepted")
+    # TODO : find something else to return with request (message, errors)
+    if @request.update_attribute(:status, "accepted")
+      render :json => @request
+    else
+      render :json => @request.errors, :status => :unprocessable_entity
+    end
   end
 
-  private
-
   # Check whether received or sent requests were asked
-  def find_requests
+  def index
     @requests = case params[:type]
                 when "received"
                   current_user.received_requests
                 when "sent"
                   current_user.sent_requests
-                else # should never happen
+                else
                   raise ActionController::RoutingError.new('Not Found')
                 end
   end

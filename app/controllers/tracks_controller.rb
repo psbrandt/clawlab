@@ -5,7 +5,7 @@ class TracksController < ApplicationController
   def create
     action = TrackActionCreate.new(
       :song_version_id => @song_version.id, 
-      :params => params[:track]
+      :params => (params[:track] || {})
     )
     if @track = action.redo
       render :json => @track
@@ -15,12 +15,12 @@ class TracksController < ApplicationController
   end
 
   def destroy
-    action = TrackActionDestroy.new :track => @track
+    action = TrackActionDestroy.new :track_id => @track.id
     action.redo
   end
 
   def set_name
-    action = TrackActionSetName.new :track => @track, :name => params[:name]
+    action = TrackActionSetName.new :track_id => @track.id, :name => params[:name]
     action.redo
     if @track.save!
       render :json => @track
@@ -30,7 +30,7 @@ class TracksController < ApplicationController
   end
 
   def set_volume
-    action = TrackActionSetVolume.new :track => @track, :volume => params[:volume]
+    action = TrackActionSetVolume.new :track_id => @track.id, :volume => params[:volume]
     action.redo
     if @track.save!
       render :json => @track

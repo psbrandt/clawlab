@@ -24,4 +24,9 @@ class ClipActionOffsetBegin < ClipAction
     # undoing children (dependant actions)
     children.each &:undo
   end
+
+  def same_as? action
+    super(action) && self.offset == action.offset
+  end
+
 end

@@ -5,4 +5,5 @@ class SongVersionActionCreate < SongVersionAction
   def name
     "song_version_action_create_#{song_version_id}"
   end
+
 end

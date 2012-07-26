@@ -31,4 +31,30 @@ class Action
     id.to_s
   end
 
+  # Add all children from the given action to self.children
+  def merge action
+    # raise an error if actions are not of same type
+    unless self.class.to_s == action.class.to_s
+      raise ArgumentError, "#{action.class} and #{self.class} are not equal" 
+    end
+
+    action.children.each do |child|
+      # checking if the action already has such a child
+      c = self.children.detect { |c| c.same_as? child }
+      
+      # if not, create one with no parents and no children
+      unless c
+        c = child.class.new(child.as_document.except "_id", "child_ids", "parent_ids")
+        self.children << c
+      end
+      
+      # then merge kids
+      c.merge child 
+    end
+  end
+
+  def same_as? action
+    return self.class.to_s == action.class.to_s
+  end
+
 end

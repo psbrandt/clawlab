@@ -20,4 +20,8 @@ class TrackActionSetName < TrackAction
     # undoing children (dependant actions)
     children.each &:undo
   end
+
+  def same_as? action
+    super(action) && self.name = action.name
+  end
 end

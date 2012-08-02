@@ -17,8 +17,13 @@ class Ability
       
       # songs
       can :manage, Song, :created_by => user.id
+      
+      # comments
+      can :read, Comment
+      can :manage, Comment, :user_id => user.id
 
       # song versions
+      # User can read all song versions of a song he's involved in
       can :read, SongVersion, :song => {:id => user.song_ids}
       can [:manage, :set_title, :undo, :redo, :share], SongVersion, :user_id => user.id
 

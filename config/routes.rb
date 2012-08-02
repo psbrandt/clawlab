@@ -10,8 +10,11 @@ Claw::Application.routes.draw do
   put "requests/:id/accept" => "requests#accept"
   get "requests/:type" => "requests#index"
   
-  resources :songs
+  resources :songs do
+    resources :comments
+  end
   post "songs/:id/share" => "songs#share"
+  
   
   resources :song_versions, :except => [:update] do
     resources :tracks, :except => [:edit, :new, :update]

@@ -5,10 +5,13 @@ class Ability
     # Define abilities for the passed in user here. For example:
     # user ||= User.new # guest user (not logged in)
     can :index, User
+    can :index, Band
     if user
       # managing friends
       can :read, User #TODO, :id => user.friend_ids
       can :add_friend, User
+
+      can [:create, :read], Band
 
       # managing requests
       can [:read, :destroy], Request, :sender_id => user.id
@@ -16,7 +19,7 @@ class Ability
       can [:read, :update, :accept], Request, :receiver_id => user.id
       
       # songs
-      can :manage, Song, :created_by => user.id
+      can :manage, Song, :user_id => user.id
       
       # comments
       can :read, Comment
@@ -24,9 +27,12 @@ class Ability
 
       # song versions
       # User can read all song versions of a song he's involved in
-      can :read, SongVersion, :song => {:id => user.song_ids}
+      can :read, SongVersion, :song => { :id => user.song_ids }
       can [:manage, :set_title, :undo, :redo, :share], SongVersion, :user_id => user.id
 
+      # audio sources
+      can :manage, AudioSource
+      
       # song version action tree
       can :manage, SongVersionActionCreate, :song_version => { :user_id => user.id }
 

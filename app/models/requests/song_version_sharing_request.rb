@@ -1,5 +1,5 @@
 class SongVersionSharingRequest < Request
-  field :song_version_id, :type => BSON::ObjectId
+  field :song_version_id, :type => Moped::BSON::ObjectId
   
   def accepted
     song_version = SongVersion.find song_version_id

@@ -1,0 +1,35 @@
+<%= link_to "Create new song", new_song_version_path %>
+<ul>
+  <% current_user.received_requests.each do |request| %>
+    <% if request._type == "SongVersionSharingRequest" %>
+      <li>
+        <%= link_to request.sender.name, request.sender %> 
+        wants to share a song with you
+        <%= link_to "accept", accept_request_path(request), :method => :put %>
+      </li>
+    <% end %>
+  <% end %>  
+</ul>
+<ul>
+  <% @song_versions.group_by(&:song).each do |song, song_versions| %>
+  <li>
+    Created <%= song.created_at.strftime "%Y-%m-%d at %H:%M" %> by <%= current_user == song.user ? "me" : song.user.name %>
+    <ul>
+      <% song_versions.each do |song_version| %>
+      <li>
+        <%= link_to song_version.title, song_version %><br />
+        last update <%= song_version.updated_at.strftime "%Y-%m-%d at %H:%M" %> <br />
+        <% current_user.friends.each do |friend| %>
+          <%= link_to "share version with #{friend.name}", 
+              share_song_version_path(song_version, :user => friend),
+              :method => :post
+          %>
+        <% end %><br />
+        <%= link_to "delete", song_version, 
+            :data => { :confirm => "Are you sure ?" }, :method => :delete %>
+      </li>
+      <% end %>
+    </ul>
+  </li>
+  <% end %>
+</ul>

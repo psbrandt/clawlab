@@ -4,9 +4,13 @@ class Band
 
   field :name, :type => String
 
-  belongs_to :created_by, :class_name => "User"
   has_and_belongs_to_many :users
 
+  attr_accessible :name, :avatar, :avatar_cache, :remove_avatar
+  mount_uploader :avatar, ImageUploader
+
   validates :name, :uniqueness => true, :presence => true
-  validates_presence_of :created_by
+  # validates_presence_of   :avatar
+  # validates_integrity_of  :avatar
+  # validates_processing_of :avatar
 end

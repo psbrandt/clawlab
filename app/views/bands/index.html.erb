@@ -1,0 +1,6 @@
+<h1>Bands</h1>
+<ul>
+  <% @bands.each do |band| %>
+  <li><%= image_tag band.avatar.thumb.url %> <%= link_to band.name, band %></li>
+  <% end %>
+</ul>

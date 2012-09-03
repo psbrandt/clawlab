@@ -1,3 +1,3 @@
 json.array!(@tracks) do |json, track|
- json.(track, :id, :name)
+  json.partial! "tracks/track", :track => track
 end

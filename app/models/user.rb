@@ -43,7 +43,7 @@ class User
   field :authentication_token, :type => String
   before_save :ensure_authentication_token
   
-  index :email, :unique => true
+  index({ :email => 1 }, { :unique => true })
   field :name
   validates_presence_of :name
   attr_accessible :name, :email, :password, :password_confirmation, :remember_me
@@ -51,7 +51,7 @@ class User
   has_and_belongs_to_many :bands
   has_and_belongs_to_many :friends, :class_name => "User"
 
-  has_many :songs, :inverse_of => :created_by
+  has_many :songs
   has_many :song_versions, :dependent => :destroy
   has_many :sent_requests, :class_name => "Request", :inverse_of => :sender, :dependent => :destroy
   has_many :received_requests, :class_name => "Request", :inverse_of => :receiver, :dependent => :destroy
@@ -59,4 +59,5 @@ class User
   def song_ids
     song_versions.map(&:song_id).uniq
   end
+
 end

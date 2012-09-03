@@ -3,7 +3,7 @@ class Song
   include Mongoid::Timestamps
 
   has_many :song_versions
-  belongs_to :created_by, :class_name => "User"
+  belongs_to :user
   embeds_many :comments, :as => :commentable
   embeds_many :todos
 

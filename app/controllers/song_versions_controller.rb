@@ -5,36 +5,50 @@ class SongVersionsController < ApplicationController
     @song_version = current_user.song_versions.new params[:song_version]
 
     # if no parent song was given, create one and set it as parent
-    @song = @song_version.song = Song.new(:created_by => current_user) unless @song_version.song_id
+    @song = @song_version.song = Song.new(:user => current_user) unless @song_version.song_id
     
     # create the root_action node
     @song_version.create_root_action
 
-    if @song_version.save! && @song.save!
-      render :json => @song_version
-    else
-      render :json => @song_version.errors, :status => :unprocessable_entity
+    respond_to do |format|
+      if @song_version.save! && @song.save!
+        format.html { redirect_to song_versions_url, :notice => "Song version successfully created" }
+        format.json { render } # app/views/song_versions/create.json.jbuilder
+      else
+        # TODO show errors for html
+        format.html { render :action => "new" }
+        format.json { render :json => @song_version.errors, :status => :unprocessable_entity }
+      end
     end
   end
 
   def destroy
-    if @song_version.destroy
-      render :json => {:message => "Song version successfully deleted"}
-    else
-      render :json => @song_version.errors, :status => :unprocessable_entity
+    respond_to do |format|
+      begin 
+        @song_version.destroy
+        format.html {redirect_to song_versions_url, :notice => "Song version was successfully deleted"}
+        format.json { render :json => {:message => "Song version was successfully deleted"} }
+      rescue
+        not_found
+      end
     end
   end
 
+  # TODO : accept user unregistered email and send an invitation by email
   def share
-    user = User.find params[:user_id]
+    user = User.find params[:user]
     request = SongVersionSharingRequest.new(
       :sender => current_user, 
       :receiver => user, 
       :song_version_id => @song_version.id)
-    if request.save!
-      render :json => request
-    else
-      render :json => request.errors, :status => :unprocessable_entity
+    respond_to do |format|
+      if request.save!
+        format.html { redirect_to song_versions_url, :notice => "Request sent" }
+        format.json { render :json => request }
+      else
+        format.html { redirect_to song_versions_url }
+        format.json { render :json => request.errors, :status => :unprocessable_entity }
+      end
     end
   end
 

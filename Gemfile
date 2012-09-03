@@ -11,7 +11,6 @@ gem 'rails', '3.2.6'
 # in production environments by default.
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
-  gem 'coffee-rails', '~> 3.2.1'
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   # gem 'therubyracer', :platform => :ruby
@@ -55,3 +54,6 @@ gem "haml", ">= 3.0.0"
 
 gem "cancan"
 
+gem "carrierwave"
+gem "carrierwave-mongoid", :require => 'carrierwave/mongoid'
+gem "mini_magick"

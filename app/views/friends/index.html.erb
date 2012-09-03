@@ -1,0 +1,24 @@
+<h1>Friends</h1>
+<ul>
+  <% current_user.received_requests.each do |request| %>
+    <% if request._type == "FriendRequest" %>
+      <li>
+        <%= link_to request.sender.name, request.sender %> 
+        <%= request.status %>
+        <%= link_to "accept", accept_request_path(request), :method => :put %>
+      </li>
+    <% end %>
+  <% end %>
+</ul>
+<ul>
+  <% current_user.sent_requests.each do |request| %>
+    <% if request._type == "FriendRequest" %>
+      <li><%= request.receiver.name %> <%= request.status %></li>
+    <% end %>
+  <% end %>
+</ul>
+<ul>
+  <% @friends.each do |friend| %>
+  <li><%= friend.name %></li>
+  <% end %>
+</ul>

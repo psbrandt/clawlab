@@ -2,11 +2,17 @@ class RequestsController < ApplicationController
   load_and_authorize_resource :class => "Request"
   
   def accept
+    session[:return_to] = request.referer
     # TODO : find something else to return with request (message, errors)
-    if @request.update_attribute(:status, "accepted")
-      render :json => @request
-    else
-      render :json => @request.errors, :status => :unprocessable_entity
+    respond_to do |format|
+      if @request.update_attribute(:status, "accepted")
+        format.html { redirect_to session[:return_to] }
+        format.json { render :json => @request }
+      else
+        # TODO : add error message for html
+        format.html { redirect_to session[:return_to] }
+        format.json { render :json => @request.errors, :status => :unprocessable_entity }
+      end
     end
   end
 

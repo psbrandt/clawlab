@@ -1,6 +1,10 @@
 class TracksController < ApplicationController
   load_and_authorize_resource :song_version
-  load_and_authorize_resource :through => :song_version
+  load_and_authorize_resource :track, :through => :song_version
+
+  def index
+    @tracks = @song_version.tracks
+  end
 
   def create
     action = TrackActionCreate.new(

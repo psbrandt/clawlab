@@ -2,4 +2,15 @@
 <p>
   BPM : <%= @song_version.bpm %>
 </p>
-
+<h2>Sources</h2>
+<%= form_tag song_version_audio_sources_path(@song_version), :multipart => true do %>
+  <%= file_field_tag "audio_source[audio]" %><br />
+  <%= text_field_tag "audio_source[author]" %><br />
+  <%= text_field_tag "audio_source[instrument]" %><br />
+  <%= submit_tag "upload source" %>
+<% end %>
+<ul>
+  <% @song_version.audio_sources.each do |source| %>
+  <li><%= source.audio_filename %></li>
+  <% end %>
+</ul>

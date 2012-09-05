@@ -1,5 +1,6 @@
 class AudioSource
   include Mongoid::Document
+  include Mongoid::Timestamps::Created
 
   embedded_in :song_version
 

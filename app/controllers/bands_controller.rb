@@ -3,7 +3,7 @@ class BandsController < ApplicationController
 
   def create
     respond_to do |format|
-      if @band.save
+      if @band.save!
         format.html { redirect_to user_bands_url, :notice => "Band successfully created" }
       else
         format.html { render :action => "new" }

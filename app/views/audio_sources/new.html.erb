@@ -1,8 +1,1 @@
 <h1>New audio source</h1>
-<%= form_for @audio_source, :html => {:multipart => true} do |f| %>
-<p>
-  <label>Audio file</label>
-  <%= f.file_field :audio %>
-  <%= f.hidden_field :audio_cache %>
-</p>
-<% end %>

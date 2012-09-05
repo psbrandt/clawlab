@@ -23,6 +23,8 @@ class RequestsController < ApplicationController
                   current_user.received_requests
                 when "sent"
                   current_user.sent_requests
+                when "all"
+                  current_user.received_requests + current_user.sent_requests
                 else
                   raise ActionController::RoutingError.new('Not Found')
                 end

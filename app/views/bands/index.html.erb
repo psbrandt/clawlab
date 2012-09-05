@@ -1,4 +1,8 @@
 <h1>Bands</h1>
+<% #if the user is logged in and indexing his bands, show a link to  %>
+<% if user_signed_in? and params[:user_id] == current_user.id.to_s %>
+  <%= link_to "create new band", new_user_band_path %>
+<% end %>
 <ul>
   <% @bands.each do |band| %>
   <li><%= image_tag band.avatar.thumb.url %> <%= link_to band.name, band %></li>

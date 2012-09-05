@@ -1,0 +1,9 @@
+<ul>
+  <% @requests.each do |request| %>
+  <li>
+    <%= link_to request.sender.name, request.sender %> 
+    <%= request.status %>
+    <%= link_to "accept", accept_request_path(request), :method => :put %>
+  </li>
+  <% end %>
+</ul>

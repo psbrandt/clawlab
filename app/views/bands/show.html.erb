@@ -1,2 +1,11 @@
+<% if can? :manage, @band %>
+  <%= link_to "edit", edit_band_url %>
+<% end %>
 <h1><%= @band.name %></h1>
 <%= image_tag @band.avatar.url %>
+<h2>Members</h2>
+<ul>
+  <% @band.users.each do |user| %>
+  <li><%= user.name %></li>
+  <% end %>
+</ul>

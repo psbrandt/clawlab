@@ -1,13 +1,16 @@
 <h1>Users</h1>
 <ul>
   <% @users.each do |user| %>
-  <% if user != current_user %>
+  <% if user != current_user %> 
     <li>
-      <%= user.name %> <%= user.email %>
-      <% if user.in? current_user.friends %>
-        <%= link_to "remove friend", friend, :confirm => "Are you sure ?", :method => :delete %>
-      <% else %>
-        <%= link_to "add as friend", add_friend_path(:user => user), :method => :post %>
+      <%= link_to user.name, show_user_path(user) %> 
+      <%= user.email if user_signed_in? %>
+      <% if user_signed_in? %>
+        <% if user.in? current_user.friends %>
+          <%= link_to "remove friend", user, :confirm => "Are you sure ?", :method => :delete %>
+        <% else %>
+          <%= link_to "add as friend", add_friend_path(:user => user), :method => :post %>
+        <% end %>
       <% end %>
     </li>
     <% end %>

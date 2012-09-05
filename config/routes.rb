@@ -1,23 +1,31 @@
 Claw::Application.routes.draw do
 
+  # USERS
   devise_for :users
-  resources :users, :only => [:index, :show]
+  resources :users, :only => :index
+  # show action at the end
 
+  # BANDS
   resources :bands
+  get ":user_id/bands", :controller => :bands, :action => :index, :as => :user_bands
 
+  # FRIENDS
   resources :friends, :only => [:index, :show, :destroy]
   post "add_friend", :to => "friends#add_friend"
 
+  # REQUESTS
   resources :requests, :only => [:destroy]
   put "requests/:id/accept" => "requests#accept", :as => :accept_request
-  get "requests/:type" => "requests#index"
+  get "requests/:type" => "requests#index", :as => :requests
   
+  # SONGS
   resources :songs do
     resources :comments
+    get "song_versions/new" => "song_versions#new", :as => :new_version
   end
   post "songs/:id/share" => "songs#share", :as => :share_song
   
-  
+  # SONG VERSIONS
   resources :song_versions, :except => [:update] do
     resources :tracks, :except => [:edit, :new, :update]
     put "tracks/:id/set_name" => "tracks#set_name"
@@ -35,10 +43,12 @@ Claw::Application.routes.draw do
   put  "song_versions/:id/set_title" => "song_versions#set_title"
   post "song_versions/:id/undo"      => "song_versions#undo"
   post "song_versions/:id/redo"      => "song_versions#redo"
-
   post "song_versions/:id/share"     => "song_versions#share", :as => :share_song_version
   
-  root :to => "song_versions#index"
+  # at last to make it work
+  get ":id" => "users#show", :as => :show_user
+
+  root :to => "songs#index"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

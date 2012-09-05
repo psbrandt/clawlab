@@ -1,0 +1,10 @@
+<!-- here, I want to write something like -->
+<!-- include claw.css -->
+<!-- include claw.js  -->
+<script>
+  var json = <%= @song_version.to_json.html_safe %>;
+  var token = "<%= form_authenticity_token %>";
+  console.log(json);
+  console.log(token);
+  //Claw.load(json, token, el);
+</script>

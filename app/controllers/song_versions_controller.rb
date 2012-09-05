@@ -5,14 +5,15 @@ class SongVersionsController < ApplicationController
     @song_version = current_user.song_versions.new params[:song_version]
 
     # if no parent song was given, create one and set it as parent
-    @song = @song_version.song = Song.new(:user => current_user) unless @song_version.song_id
-    
+    @song_version.song = Song.new(:user => current_user) unless @song_version.song_id
+    @song = @song_version.song
+
     # create the root_action node
     @song_version.create_root_action
 
     respond_to do |format|
       if @song_version.save! && @song.save!
-        format.html { redirect_to song_versions_url, :notice => "Song version successfully created" }
+        format.html { redirect_to songs_url, :notice => "Song version successfully created" }
         format.json { render } # app/views/song_versions/create.json.jbuilder
       else
         # TODO show errors for html
@@ -26,7 +27,7 @@ class SongVersionsController < ApplicationController
     respond_to do |format|
       begin 
         @song_version.destroy
-        format.html {redirect_to song_versions_url, :notice => "Song version was successfully deleted"}
+        format.html {redirect_to songs_url, :notice => "Song version was successfully deleted"}
         format.json { render :json => {:message => "Song version was successfully deleted"} }
       rescue
         not_found
@@ -43,10 +44,10 @@ class SongVersionsController < ApplicationController
       :song_version_id => @song_version.id)
     respond_to do |format|
       if request.save!
-        format.html { redirect_to song_versions_url, :notice => "Request sent" }
+        format.html { redirect_to songs_url, :notice => "Request sent" }
         format.json { render :json => request }
       else
-        format.html { redirect_to song_versions_url }
+        format.html { redirect_to songs_url }
         format.json { render :json => request.errors, :status => :unprocessable_entity }
       end
     end

@@ -1,0 +1,14 @@
+<ul>
+  <li>
+    <%= link_to "my songs", songs_path %>
+  </li>
+  <li>
+    <%= link_to "my bands", user_bands_path(current_user) %>
+  </li>
+  <li>
+    <%= link_to "friends", friends_path %>
+  </li>
+  <li>
+    <%= link_to "requests (#{current_user.received_requests.size})", requests_path(:type => :all) %>
+  </li>
+</ul>

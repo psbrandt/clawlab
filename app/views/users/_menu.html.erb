@@ -1,14 +1,28 @@
-<ul>
-  <li>
-    <%= link_to "my songs", songs_path %>
-  </li>
-  <li>
-    <%= link_to "my bands", user_bands_path(current_user) %>
-  </li>
-  <li>
-    <%= link_to "friends", friends_path %>
-  </li>
-  <li>
-    <%= link_to "requests (#{current_user.received_requests.size})", requests_path(:type => :all) %>
-  </li>
-</ul>
+<li <%= "class='active'" if current_page?(songs_path) %>>
+  <%= link_to "my songs", songs_path %>
+</li>
+<li <%= "class='active'" if current_page?(user_bands_path(current_user)) %>>
+  <%= link_to "my bands", user_bands_path(current_user) %>
+</li>
+<li <%= "class='active'" if current_page?(friends_path) %>>
+  <%= link_to friends_path do %>
+  friends <span class='badge'><%= current_user.friends.size %></span>
+  <% end %>
+</li>
+<li <%= "class='active'" if current_page?(requests_path(:all)) %>>
+  <%= link_to requests_path(:type => :all) do %>
+  requests <span class='badge'><%= current_user.received_requests.size %></span>
+  <% end %>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+    <%= current_user.name %>
+    <b class="caret"></b>
+  </a>
+  <ul class="dropdown-menu">
+    <li><%= link_to "profile", show_user_path(current_user) if user_signed_in? %></li>
+    <li class="divider"></li>
+    <li><%= link_to "logout", destroy_user_session_path, :method => :delete %></li>
+  </ul>
+</li>
+

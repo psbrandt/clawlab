@@ -1,0 +1,8 @@
+<%= image_tag band.avatar.url, :class => "img-rounded" %> 
+<h3><%= link_to band.name, band %></h3>
+<h5>Members</h5>
+<p>
+  <% band.users.each do |user| %>
+  <%= link_to image_tag(user.avatar.thumb.url, :class => "img-circle"), show_user_path(user) %>
+  <% end %>
+</p>

@@ -1,5 +1,5 @@
 <% if can? :manage, @band %>
-  <%= link_to "edit", edit_band_url %>
+  <%= render "menu", :band => @band %>
 <% end %>
 <h1><%= @band.name %></h1>
 <%= image_tag @band.avatar.url %>

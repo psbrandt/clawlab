@@ -1,18 +1,32 @@
 <h1>Users</h1>
-<ul>
+<div class="row-fluid">
+<ul class="thumbnails">
   <% @users.each do |user| %>
   <% if user != current_user %> 
-    <li>
-      <%= link_to user.name, show_user_path(user) %> 
-      <%= user.email if user_signed_in? %>
-      <% if user_signed_in? %>
-        <% if user.in? current_user.friends %>
-          <%= link_to "remove friend", user, :confirm => "Are you sure ?", :method => :delete %>
-        <% else %>
-          <%= link_to "add as friend", add_friend_path(:user => user), :method => :post %>
+    <li class="span1">
+      <div class="thumbnail">
+        <%= image_tag user.avatar.thumb.url, :class => "img-rounded" %>
+        <h5 style="text-align:center">
+          <%= link_to user.name, show_user_path(user) %> 
+        </h5>
+        <% if user_signed_in? %>
+        <p>
+          <% if user.in? current_user.friends %>
+            <%= link_to user, :confirm => "Are you sure ?", 
+               :method => :delete, :class=>"btn btn-warning btn-small" do %>
+            <i class="icon-minus icon-white"></i> remove
+            <% end %>
+          <% else %>
+            <%= link_to add_friend_path(:user => user), :method => :post, 
+              :class => "btn btn-small btn-block btn-primary" do %>
+            <i class="icon-plus icon-white"></i> add
+            <% end %>
+          <% end %>
         <% end %>
-      <% end %>
+        </p>
+      </div>
     </li>
     <% end %>
   <% end %>
 </ul>
+</div>

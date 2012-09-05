@@ -1,0 +1,11 @@
+<div class="btn-group">
+  <%= link_to edit_band_path(band), :class => "btn btn-small" do %>
+  <i class="icon-edit"></i> edit
+  <% end %>
+  <%= link_to band, 
+      :data => { :confirm => "This will definitely remove the band for every members. Are you sure ?" }, :class => "btn btn-danger btn-small",
+  :method => :delete do %>
+  <i class="icon-trash icon-white"></i> delete
+  <% end %>
+</div>
+

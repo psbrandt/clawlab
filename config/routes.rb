@@ -48,7 +48,7 @@ Claw::Application.routes.draw do
   # at last to make it work
   get ":id" => "users#show", :as => :show_user
 
-  root :to => "users#index"
+  root :to => "application#index"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

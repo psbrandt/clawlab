@@ -2,6 +2,9 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
   check_authorization :unless => :devise_controller?
 
+  # Needed to display index
+  skip_authorization_check :only => :index
+
   rescue_from Mongoid::Errors::DocumentNotFound do |exception|
     render :json => {:status => :error}, :status => :not_found
   end

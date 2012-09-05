@@ -5,7 +5,7 @@
     <li><%= link_to "bands", bands_path %></li>
   </ul>
   <% if user_signed_in? %>
-    <li><%= current_user.name %></li>
+    <li><%= link_to current_user.name, show_user_path(current_user) %></li>
     <%= render "users/menu" %>
     <li>
       <%= link_to "logout", destroy_user_session_path, :method => :delete %>

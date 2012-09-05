@@ -23,6 +23,7 @@
     <li><%= link_to "profile", show_user_path(current_user) if user_signed_in? %></li>
     <li class="divider"></li>
     <li><%= link_to "logout", destroy_user_session_path, :method => :delete %></li>
+    <li><%= link_to "manage account", edit_user_registration_path %></li>    
   </ul>
 </li>
 

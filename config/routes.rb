@@ -7,6 +7,7 @@ Claw::Application.routes.draw do
 
   # BANDS
   resources :bands
+  post "bands/:id/invite" => "bands#invite", :as => "band_invite"
   get ":user_id/bands", :controller => :bands, :action => :index, :as => :user_bands
 
   # FRIENDS

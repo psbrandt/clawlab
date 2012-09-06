@@ -11,8 +11,9 @@ class Ability
       can :read, User #TODO, :id => user.friend_ids
       can :add_friend, User
 
+      # bands
       can [:create, :read], Band
-      can :manage, Band, :user_ids => user.id
+      can [:manage, :invite], Band, :user_ids => user.id
 
       # managing requests
       can [:read, :destroy], Request, :sender_id => user.id

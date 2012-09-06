@@ -1,0 +1,15 @@
+<div class="thumbnail">
+  <%= image_tag user.avatar.thumb.url, :class => "img-rounded" %>
+  <h5 style="text-align:center">
+    <%= link_to user.name, show_user_path(user) %> 
+  </h5>
+  <p>
+    <%= link_to show_user_path(user), :confirm => "Are you sure ?", 
+      :method => :delete, :class=>"btn btn-warning btn-small" do %>
+      <i class="icon-minus icon-white"></i> remove
+    <% end %>
+    <% current_user.bands.each do |band| %>
+      <%= link_to "invite to #{band.name}", band_invite_path(band, :user => user), :method => :post %>
+    <% end %>
+  </p>
+</div>

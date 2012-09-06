@@ -13,4 +13,6 @@ class Band
   # validates_presence_of   :avatar
   # validates_integrity_of  :avatar
   # validates_processing_of :avatar
+
+  has_many :requests, :class_name => "BandRequest"
 end

@@ -1,0 +1,21 @@
+<div class="thumbnail">
+  <%= image_tag user.avatar.thumb.url, :class => "img-rounded" %>
+  <h5 style="text-align:center">
+    <%= link_to user.name, show_user_path(user) %> 
+  </h5>
+  <% if user_signed_in? %>
+  <p>
+    <% if user.in? current_user.friends %>
+    <%= link_to show_user_path(user), :confirm => "Are you sure ?", 
+    :method => :delete, :class=>"btn btn-warning btn-small" do %>
+    <i class="icon-minus icon-white"></i> remove
+    <% end %>
+    <% else %>
+    <%= link_to add_friend_path(:user => user), :method => :post, 
+    :class => "btn btn-small btn-block btn-primary" do %>
+    <i class="icon-plus icon-white"></i> add
+    <% end %>
+    <% end %>
+    <% end %>
+  </p>
+</div>

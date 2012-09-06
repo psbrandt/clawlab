@@ -3,6 +3,18 @@
   <p>
     <%= link_to "New band", new_band_path, :class => "btn btn-primary" %>
   </p>
+  <ul class="thumbnails">
+    <% current_user.received_band_requests.each do |request| %>
+    <li class="span1">
+      <div class="thumbnail">
+        <%= request.sender.name %> invited you to join <%= request.band.name %>
+        <%= link_to accept_request_path(request), :method => :put, :class => "btn btn-success" do %>
+          <i class="icon-ok icon-white"></i>
+          <% end %>
+      </div>
+    </li>
+    <% end %>
+  </ul>
 <% end %>
 <ul class="thumbnails">
   <% @bands.each do |band| %>

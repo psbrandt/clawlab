@@ -29,4 +29,19 @@ class BandsController < ApplicationController
     @bands = @bands.where(:user_ids => params[:user_id]) if params[:user_id]
   end
 
+  def invite
+    user = User.find(params[:user])
+    request = BandRequest.new :sender => current_user, :receiver => user, :band => @band
+    respond_to do |format|
+      if request.save!
+        format.html { redirect_to bands_url, :notice => "Request sent" }
+        format.json { render :json => request }
+      else
+        # TODO : render errors in html
+        format.html { redirect_to bands_url }
+        format.json { render :json => request.errors, :status => :unprocessable_entity }
+      end
+    end
+  end
+
 end

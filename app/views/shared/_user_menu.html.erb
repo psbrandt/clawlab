@@ -6,12 +6,10 @@
 </li>
 <li <%= "class='active'" if current_page?(friends_path) %>>
   <%= link_to friends_path do %>
-  friends <span class='badge'><%= current_user.friends.size %></span>
+  friends 
+  <% if current_user.received_friend_requests.size > 0 %>
+  <span class='badge badge-important'><%= current_user.received_friend_requests.size %></span>
   <% end %>
-</li>
-<li <%= "class='active'" if current_page?(requests_path(:all)) %>>
-  <%= link_to requests_path(:type => :all) do %>
-  requests <span class='badge'><%= current_user.received_requests.size %></span>
   <% end %>
 </li>
 <li class="dropdown">

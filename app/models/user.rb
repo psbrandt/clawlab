@@ -63,4 +63,12 @@ class User
     song_versions.map(&:song_id).uniq
   end
 
+  def received_friend_requests
+    received_requests.where :_type => "FriendRequest"
+  end
+
+  def received_band_requests
+    received_requests.where :_type => "BandRequest"
+  end
+
 end

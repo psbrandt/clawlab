@@ -5,26 +5,27 @@ define([
   "models/track", 
   "text!templates/transport.html"
 ], function($, _, Backbone, Track, transportT) {
-  var transportView = Backbone.View.extend ({
+  return Backbone.View.extend ({
 
     events : {
       "click #add-track-button" : "addTrackClicked"
     },
 
+    template : _.template (transportT),
+
     render : function () {
       var data = {
         title : this.model.get("title")
       };
-      var template = _.template (transportT, data);
-      $(this.el).html(template);
+      $(this.el).html (this.template (data));
+      //render directly in body
       $("body").append (this.el);
       return this;
     },
 
     addTrackClicked : function () {
-      this.model.tracks.add(new Track);
+      this.model.addTrack ();
     }
   });
   
-  return transportView;
 });

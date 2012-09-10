@@ -4,12 +4,17 @@ define([
   "backbone",
 ], function($, _, Backbone) {
   var TrackModel = Backbone.Model.extend ({
+    
+    //Setting the id to match Mongoid ids
+    idAttribute : "_id", 
+
     defaults : {
-      name : "New track"
+      name : "New track",
+      volume : 0
     },
 
-    initialize : function (data) {
-      
+    delete : function () {
+      this.destroy ();
     }
   });
   return TrackModel;

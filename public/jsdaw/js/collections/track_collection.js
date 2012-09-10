@@ -6,8 +6,7 @@ define([
 ], function($, _, Backbone, TrackModel) {
 
   return Backbone.Collection.extend ({
-    model : TrackModel,
-    url : "tracks"
+    model : TrackModel
   });
 
 });

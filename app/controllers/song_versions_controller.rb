@@ -89,4 +89,8 @@ class SongVersionsController < ApplicationController
     end
   end
 
+  def edit
+    render :layout => false
+  end
+
 end

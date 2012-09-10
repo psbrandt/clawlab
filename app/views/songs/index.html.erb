@@ -21,7 +21,12 @@
       <% song.song_versions.each do |song_version| %>
       <li>
         <%= link_to song_version.title, song_version %> 
-        <%= song_version.user == current_user ? "my" : "#{song_version.user.name}'s" %> version<br />
+        <%= song_version.user == current_user ? "my" : "#{song_version.user.name}'s" %> version
+        <%= link_to edit_song_version_path(song_version) do %>
+        <i class="icon-edit"></i>
+        <% end %>
+        <br />
+        
         last update <%= song_version.updated_at.strftime "%Y-%m-%d at %H:%M" %> <br />
         <% current_user.friends.each do |friend| %>
           <%= link_to "share version with #{friend.name}", 

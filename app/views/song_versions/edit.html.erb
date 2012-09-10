@@ -1,6 +1,18 @@
-<!-- here, I want to write something like -->
-<!-- include claw.css -->
-<!-- include claw.js  -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Claw</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <%= stylesheet_link_tag    "bootstrap" %>
+  <%= stylesheet_link_tag    "bootstrap-responsive" %>
+  <%= stylesheet_link_tag    "navigation", :media => "all" %>
+  <%= javascript_include_tag "application" %>
+  <%= javascript_include_tag "bootstrap.min" %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+<%= render "shared/navigation" %>
+<div id="claw"></div>
 <script>
   var json = <%= @song_version.to_json.html_safe %>;
   var token = "<%= form_authenticity_token %>";
@@ -8,3 +20,5 @@
   console.log(token);
   //Claw.load(json, token, el);
 </script>
+</body>
+</html>

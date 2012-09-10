@@ -11,19 +11,3 @@
  *= require_self
  *= require_tree .
 */
-
-body {
-  padding-top:28px;
-}
-
-
-.navbar-inner {
-  min-height:28px;
-}
-.navbar .nav > li > a {
-  padding:3px 15px;
-}
-.navbar .brand {
-  padding:4px 15px;
-}
-

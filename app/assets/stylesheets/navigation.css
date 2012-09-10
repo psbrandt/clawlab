@@ -1,0 +1,13 @@
+body {
+  padding-top:28px;
+}
+
+.topbar .navbar-inner {
+  min-height:28px;
+}
+.topbar .nav > li > a {
+  padding:3px 15px;
+}
+.topbar .brand {
+  padding:4px 15px;
+}

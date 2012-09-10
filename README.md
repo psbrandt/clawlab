@@ -7,5 +7,17 @@ A prototype version is online here : http://clawlab.org
 
 and the source code is here : https://github.com/gabriel-cardoso/claw-proto
 
+# Running a local server
+
+You need :
+    - [Rails 3+](http://rubyonrails.org/) : to run a local server
+    - [MongoDB](http://www.mongodb.org/) : BDD
+
+Run MongoDB and launch Rails server
+``
+mongod [--dbpath=path/to/data]
+rails server
+``
+
 # Development
 Currently under development

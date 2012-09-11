@@ -20,7 +20,7 @@ class Action
     @children = self.children
   end
 
-  # When undo is called, we want to call undo on the children too. Would be cool
+  # TODO : When undo is called, we want to call undo on the children too. Would be cool
   # to be able to write something like this ... 
   # after_undo do {children.each &:undo} end
 

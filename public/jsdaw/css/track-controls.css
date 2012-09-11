@@ -1,0 +1,17 @@
+.track-controls {
+  padding:0 5px;
+}
+
+.track-controls .name {
+  color:#EEE;
+}
+
+.track-controls .remove-track {
+  float : right;
+  padding:2px;
+}
+
+.track-controls .remove-track:hover {
+  background-color:#222;
+  cursor:pointer;
+}

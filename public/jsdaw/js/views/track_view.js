@@ -35,6 +35,7 @@ define([
     },
 
     removeTrackClicked : function () {
+      console.log ("doso");
       this.model.delete ();
     },
 

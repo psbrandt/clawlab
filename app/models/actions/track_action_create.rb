@@ -17,6 +17,8 @@ class TrackActionCreate < TrackAction
     params["id"] = t.id
 
     song_version.root_action << self
+    
+    return t
   end
 
   def undo

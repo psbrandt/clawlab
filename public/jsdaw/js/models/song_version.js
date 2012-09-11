@@ -17,7 +17,6 @@ define([
 
       this.tracks = new TrackCollection (trackModels);
 
-      this.tracks.bind ("remove", this.removeTrack);
     },
 
     // Create a new track in song version and save it
@@ -32,10 +31,6 @@ define([
 	//add it to the song version track collection
 	this.tracks.add(t);
       };
-    },
-    
-    removeTrack : function () {
-      console.log ("sdf");
     }
     
   });

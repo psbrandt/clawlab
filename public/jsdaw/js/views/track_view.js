@@ -17,7 +17,7 @@ define([
     },
 
     initialize : function () {
-      this.model.bind ("destroy", this.remove);
+      this.model.bind ("destroy", this.remove, this);
     },
 
     render : function () {
@@ -35,12 +35,7 @@ define([
     },
 
     removeTrackClicked : function () {
-      console.log ("doso");
       this.model.delete ();
-    },
-
-    remove : function () {
-      $(this.el).remove();
     }
   });
 });

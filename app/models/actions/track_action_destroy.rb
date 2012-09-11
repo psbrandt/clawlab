@@ -4,18 +4,17 @@ class TrackActionDestroy < TrackAction
 
   def redo
     sv = song_version
-    logger.info sv.to_json
     # Find the TrackActionCreate for this track and add self as child
-    song_version.root_action.children.find { |a| 
+    song_version.root_action.children.detect { |a| 
       a.name == "track_action_create_#{track_id}"
     } << self
     # and delete the track
-    song_version.tracks.delete(track_id)
+    song_version.tracks.find(track_id).destroy
   end
 
   def undo
     # Find the create action
-    create_action = song_version.root_action.children.find { |a|
+    create_action = song_version.root_action.children.detect { |a|
       a.name == "track_action_create_#{track_id}"
     }
     # remove self from children

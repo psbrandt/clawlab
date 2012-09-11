@@ -14,14 +14,10 @@ class BandsController < ApplicationController
   
   def destroy
     respond_to do |format|
-      begin 
-        @band.destroy
-        format.html {redirect_to user_bands_url(current_user), 
-          :notice => "Band was successfully deleted"}
-        format.json { render :json => {:message => "Band was successfully deleted"} }
-      rescue
-        not_found
-      end
+      @band.destroy
+      format.html {redirect_to user_bands_url(current_user), 
+        :notice => "Band was successfully deleted"}
+      format.json { render :json => {:message => "Band was successfully deleted"} }
     end
   end
 

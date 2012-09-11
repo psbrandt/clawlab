@@ -24,6 +24,7 @@ class TracksController < ApplicationController
       :track_id => @track.id
     )
     action.redo
+    render :json => {:message => "Track successfully destroyed"}
   end
 
   def set_name

@@ -7,6 +7,10 @@ class ClipActionCreate < ClipAction
     "clip_action_create_#{i}"
   end
 
+  def pretty_name
+    "Create clip"
+  end
+
   def redo
     c = Clip.new params
     track.clips << c

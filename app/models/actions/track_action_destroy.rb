@@ -2,6 +2,10 @@ class TrackActionDestroy < TrackAction
   # NOTE TODO : maybe the destroy action should just consist in deleting 
   # the TrackActionCreate node ...
 
+  def pretty_name
+    "Delete"
+  end
+
   def redo
     sv = song_version
     # Find the TrackActionCreate for this track and add self as child

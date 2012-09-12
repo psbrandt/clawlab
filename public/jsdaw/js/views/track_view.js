@@ -20,6 +20,12 @@ define([
       this.model.bind ("destroy", this.remove, this);
     },
 
+    remove : function () {
+      $(this.el).remove ();
+      // TODO : remove clip
+      // erase clip from canvas ?
+    },
+
     render : function () {
       // setting up the data needed by the view
       var data = {
@@ -28,8 +34,10 @@ define([
       
       // Rendering controls
       $(this.el).html (this.template (data));
+      $("#tracks-controls").append (this.el);
 
       // TODO : render clips
+      // Drawing in a canvas ?
 
       return this;
     },

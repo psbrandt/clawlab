@@ -13,4 +13,22 @@ class SongVersion
   embeds_many :audio_sources
 
   validates_presence_of :title, :bpm, :user, :song, :root_action
+
+  # format to json
+  def to_builder
+    song_version = Jbuilder.new
+    
+    # add id, title and tracks
+    song_version.(self, :id, :title, :tracks)
+    
+    # add root_action ( song_version.root_action root_action.to_builder didn't
+    # work here ...
+    song_version.root_action do |builder|
+      root_action.to_builder.attributes!.each do |key, value|
+        builder.set! key, value
+      end
+    end
+
+    song_version
+  end
 end

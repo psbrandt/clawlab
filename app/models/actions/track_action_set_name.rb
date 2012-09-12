@@ -3,6 +3,10 @@ class TrackActionSetName < TrackAction
   field :name, :type => String
   field :old_name, :type => String
 
+  def pretty_name
+    "Set name #{name}"
+  end
+
   def redo
     self.update_attributes!(:old_name => track.name)
     song_version.root_action.children.detect { |a|

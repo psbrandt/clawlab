@@ -30,7 +30,6 @@ define([
     },
 
     render : function () {
-      console.log (this.model);
       // Computing root action view
       var root_action = this.template (this.model);
 

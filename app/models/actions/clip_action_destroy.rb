@@ -1,5 +1,9 @@
 class ClipActionDestroy < ClipAction
 
+  def pretty_name
+    "Delete clip"
+  end
+
   def redo
     clip.track.song_version.root_action.children.detect { |a| 
       a.name == "track_action_create_#{clip.track.id}"

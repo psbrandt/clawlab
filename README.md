@@ -2,8 +2,9 @@
 
 Clawlab is a website to collaborate on musical projects.
 It allows you to share your projects and ideas via an online multitrack
-sequencer, with the ability of cherry picking your collaborators updates thourgh
-a dedicated versionning system backed by [git](http://git-scm.com).
+sequencer, with the ability of cherry picking your collaborators updates through
+a dedicated versionning system (strongly inspired by [git](http://git-scm.com) 
+and [darcs](darcs.net) among others).
 
 A prototype version is online here : http://clawlab.org
 
@@ -14,7 +15,7 @@ and the source code is here : https://github.com/gabriel-cardoso/claw-proto
 You need :
 
 - Server-side framework : [Rails 3.1+](http://rubyonrails.org/)
-- Databse : [MongoDB](http://www.mongodb.org/)
+- Database : [MongoDB](http://www.mongodb.org/)
 
 Be sure to have a running MongoDB server on port `:27017`
 

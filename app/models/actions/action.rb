@@ -20,9 +20,11 @@ class Action
     @children = self.children
   end
 
-  # When undo is called, we want to call undo on the children too. Would be cool
-  # to be able to write something like this ... 
-  # after_undo do {children.each &:undo} end
+  # TODO : try to uncomment this, and remove the last line in undo methods in 
+  # sub classes
+  # after_undo do 
+  #   children.each { |a| a.undo unless a.undone }
+  # end
 
   # This method will be used to find an action in the tree. We return id by
   # by default but some action might override it to return a more meaningful

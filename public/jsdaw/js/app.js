@@ -17,14 +17,14 @@ define([
     // Create a song version model
     var songVersionModel = new SongVersionModel (clawData.currentSongVersion);
 
-    // Render the song version
-    new SongVersionView ({
-      el : "#main",
+    // Render the transport view
+    new TransportView({
       model : songVersionModel
     }).render ();
 
-    // Render the transport view
-    new TransportView({
+    // Render the song version
+    new SongVersionView ({
+      el : "#main",
       model : songVersionModel
     }).render ();
 

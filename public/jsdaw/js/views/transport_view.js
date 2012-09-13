@@ -17,9 +17,8 @@ define([
       var data = {
         title : this.model.get("title")
       };
-      $(this.el).html (this.template (data));
       //render directly in body
-      $("body").append (this.el);
+      $("body").append (this.template (data));
       return this;
     },
 

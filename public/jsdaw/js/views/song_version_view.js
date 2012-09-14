@@ -1,5 +1,5 @@
 /**
- * The song version view
+ * The song version view contains the workspace (tracks, transport bar and more)
  */
 define([
   "jquery",
@@ -23,9 +23,15 @@ define([
       // listen when a track is created
       this.model.tracks.bind ("add", this.addTrack);
 
+      // to access the sequencer view
+      this.sequencerView = new SequencerView ({
+        model : this.model
+      });
+
       var self = this;
       $(window).resize (function () {
-        self.renderSequencer ();
+        self.setWorkspaceDimensions ();
+        self.sequencerView.render ();
       });
     },
     
@@ -38,8 +44,12 @@ define([
         model : this.model
       }).render ();
 
-      // Rendering sequencer
-      this.renderSequencer ();
+      // Setting workspace dimensions
+      this.setWorkspaceDimensions ();
+
+      // Setting el and rendering sequencer
+      this.sequencerView.el = $("#sequencer");
+      this.sequencerView.render ();
 
       // Render tracks
       this.model.tracks.each (this.addTrack);
@@ -54,21 +64,23 @@ define([
     },
     
     renderSequencer : function () {
-      this.setWorkspaceDimensions ();
-      new SequencerView ({
-        el : $("#sequencer")
-      }).render ();
+      this.sequencerView.render ();
     },
 
     setWorkspaceDimensions : function () {
+      // Workspace width
       $("#workspace").css ("width", window.innerWidth // inner width
                            - $("#right-bar").width () // minus right-bar width
                            - $.getScrollbarWidth () // minus scrollbars width
-                           - 1 ); //minus 1 just in case ...
+                           - 1 ); //minus 1 for FF ...
+      // Workspace height
       $("#workspace").css ("height", window.innerHeight - // inner height
                            $("#transport").height () - // minus transport height
                            $(".topbar").height () - // minus topbar height
                            $.getScrollbarWidth ()); // minus scrollbar width
+      // Workspace margin top for the timeline
+      $("#tracks-controls").css ("margin-top", this.sequencerView.timelineHeight);
+      // right-bar height
       $("#right-bar").css ("height", window.innerHeight - // inner height
                            $("#transport").height () - // minus transport height
                            $(".topbar").height () - // minus topbar height

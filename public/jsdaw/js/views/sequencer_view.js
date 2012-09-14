@@ -11,14 +11,6 @@ define([
 
     template : _.template (sequencerTemplate),
 
-    events : {
-      "resize window" : "test"
-    },
-
-    test : function () {
-      console.log ("df");
-    },
-
     initialize : function () {
       // Listen to resize event ?
       var self = this;
@@ -27,15 +19,21 @@ define([
       $(window).resize (function () {
         self.render ()
       });
+
     },
 
     render : function () {
       $(this.el).html (this.template ());
+
+      $(this.el).css ("width", this.getWidth());
+      $(this.el).css ("height", this.getHeight());
       // TODO : set canvas width, draw timeline
       var canvas = $("canvas", this.el);
-      $(canvas).attr("width", this.getWidth ());
-      $(canvas).attr("height", this.getHeight ());
+      $(canvas).attr("width",  $(this.el).innerWidth ());
+      $(canvas).attr("height", $(this.el).innerHeight ());
       $(this.el).css ("margin-left", $("#left-bar").innerWidth ());
+
+      return this;
     },
 
     /**

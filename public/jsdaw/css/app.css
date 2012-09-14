@@ -1,37 +1,46 @@
 @import "track-controls.css";
+@import "sequencer.css";
+@import "actions.css";
 
 body {
   background-color:black;
-  margin-bottom:40px;
-  bottom:0;
+  margin-bottom:40px 0;
+  overflow:hidden;
 }
 
-.container-fluid {
-  padding:0;
+#main {
+}
+
+#workspace {
+  overflow-x:hidden;
+  float:left;
 }
 
 #left-bar {
   background-color:#333;
-  min-height:100px;
+  height:100%;
   width:200px;
   float:left;
 }
 
 #sequencer {
+  z-index:-1000;
   background-color:#335;
   height:100%;
+  position:fixed;
+  overflow-y:hidden;
+  overflow-x:scroll;
 }
 
 #right-bar {
   float:right;
   width:300px;
-  height:100%;
   background-color:#222;
   color:#EEE;
   padding:8px;
+  overflow:hidden;
 }
 
-#action-tree {
-  max-height:500px;
-  overflow:auto
+#right-bar .content {
+  overflow-y:auto;
 }

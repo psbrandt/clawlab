@@ -5,10 +5,8 @@ define([
   "router",
   "models/song_version",
   "views/song_version_view",
-  "views/transport_view"
 ], function (
-  $, _, Backbone, Router, SongVersionModel, SongVersionView,
-  TransportView) {
+  $, _, Backbone, Router, SongVersionModel, SongVersionView) {
 
   var initialize = function(clawData){
     // Pass in our Router module and call it's initialize function
@@ -20,11 +18,6 @@ define([
     // Render the song version
     new SongVersionView ({
       el : "#main",
-      model : songVersionModel
-    }).render ();
-
-    // Render the transport view
-    new TransportView({
       model : songVersionModel
     }).render ();
 

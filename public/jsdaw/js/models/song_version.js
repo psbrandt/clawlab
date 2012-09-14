@@ -3,9 +3,8 @@ define([
   "underscore",
   "backbone",
   "collections/track_collection",
-  "models/track",
-  "models/root_action"
-], function($, _, Backbone, TrackCollection, Track, RootAction) {
+  "models/track"
+], function($, _, Backbone, TrackCollection, Track) {
   var SongVersion = Backbone.Model.extend ({
 
     urlRoot : "/song_versions",
@@ -16,8 +15,6 @@ define([
         return new Track (json_track);
       });
       this.tracks = new TrackCollection (trackModels);
-
-      this.root_action = new RootAction (data.root_action);
     },
 
     // Create a new track in song version and save it

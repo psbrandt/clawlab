@@ -1,18 +1,18 @@
 /**
- * RootAction tree view. It renders the root_action of a song_version.
+ * Action tree view. It renders the root_action of a song_version.
  */
 define([
   "jquery",
   "underscore",
   "backbone",
-  "text!templates/root_action.html",
+  "text!templates/action_tree.html",
   "text!templates/action.html",
   "text!templates/action_children.html",
-], function($, _, Backbone, rootActionTemplate, actionTemplate, actionChildrenTemplate) {
+], function($, _, Backbone, actionTreeTemplate, actionTemplate, actionChildrenTemplate) {
   return Backbone.View.extend ({
     
-    // The main template for the root action
-    template : _.template (rootActionTemplate),
+    // The main template for the action tree
+    template : _.template (actionTreeTemplate),
 
     // A common template for actions
     actionTemplate : _.template (actionTemplate),
@@ -26,7 +26,6 @@ define([
 
     initialize : function () {
       _.bindAll (this, "render");
-      this.model.on ("change", this.render);
     },
 
     render : function () {

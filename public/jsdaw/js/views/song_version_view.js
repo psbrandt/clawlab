@@ -7,9 +7,9 @@ define([
   "backbone",
   "text!templates/main.html", 
   "views/track_view",
-  "views/root_action_view",
+  "views/action_tree_view",
   "views/sequencer_view"
-], function($, _, Backbone, mainTemplate, TrackView, RootActionView, SequencerView) {
+], function($, _, Backbone, mainTemplate, TrackView, ActionTreeView, SequencerView) {
   return Backbone.View.extend ({
 
     template : _.template (mainTemplate),
@@ -34,8 +34,8 @@ define([
       this.model.tracks.each (this.addTrack);
       
       // Render action tree
-      new RootActionView ({
-        model : this.model.root_action,
+      new ActionTreeView ({
+        model : this.model.get("root_action"),
         el : $("#action-tree", this.el)
       }).render ();
 

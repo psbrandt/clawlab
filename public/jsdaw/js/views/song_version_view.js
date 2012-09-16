@@ -50,7 +50,8 @@ define([
       // Setting el and rendering sequencer
       this.sequencerView.el = $("#sequencer");
       this.sequencerView.render ();
-
+      // NOTE : this line should not be here ... but needed to rerender timeline
+      $("#sequencer").scroll (this.sequencerView.render);
       // Render tracks
       this.model.tracks.each (this.addTrack);
       

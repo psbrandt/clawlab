@@ -9,6 +9,9 @@ require.config({
     text: "libs/require/text",
     order: "libs/require/order",
 
+    // KineticJS
+    kinetic : "libs/kinetic/kinetic",
+
     // A jQuery plugin to get scrollbar width
     getscrollbarwidth : "libs/jquery.getscrollbarwidth",
 

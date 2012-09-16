@@ -4,5 +4,7 @@
 }
 
 #sequencer canvas {
-  position:fixed;
+  background-color:#777;
+  position : fixed;
+  z-index:-1
 }

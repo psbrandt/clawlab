@@ -26,14 +26,17 @@ define([
 
     initialize : function () {
       _.bindAll (this, "render");
+
+      this.model.on ("change:root_action", this.render);
     },
 
     render : function () {
       // Computing root action view
-      var root_action = this.template (this.model);
+      var root_action = this.template (this.model.get("root_action"));
 
       // Computing tree view
-      var tree = this.renderAction (this.model, this.childrenTemplate ());
+      var tree = this.renderAction (this.model.get("root_action"), 
+                                    this.childrenTemplate ());
 
       // Concatenate the two views in el
       $(this.el).html ($(root_action).add (tree));
@@ -62,10 +65,7 @@ define([
     },
 
     refreshClicked : function () {
-      var self = this;
-      this.model.fetch ({success : function () {
-        console.log (self);
-      }});
+      this.model.fetchRootAction ();
     }
 
   });

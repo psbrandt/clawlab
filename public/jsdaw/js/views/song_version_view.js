@@ -57,7 +57,7 @@ define([
       
       // Render action tree
       new ActionTreeView ({
-        model : this.model.get("root_action"),
+        model : this.model,
         el : $("#right-bar .content")
       }).render ();
 

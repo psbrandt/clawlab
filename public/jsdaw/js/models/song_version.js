@@ -32,7 +32,15 @@ define([
         // fetch root action
         //self.root_action.fetch ();
       }});
+    },
+
+    fetchRootAction : function () {
+      var self = this;
+      $.get ("root_action", function (data) {
+        self.set ("root_action", data);
+      })
     }
+
     
   });
 

@@ -11,4 +11,6 @@ class AudioSource
   field :uploaded_by, :type => Moped::BSON::ObjectId # user id
   field :author
   field :instrument
+
+  validates_presence_of :audio
 end

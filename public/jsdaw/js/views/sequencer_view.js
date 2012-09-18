@@ -6,7 +6,9 @@ define([
   "underscore",
   "backbone",
   "text!templates/sequencer.html",
-  "getscrollbarwidth"
+  // at the end because not defining Require modules
+  "getscrollbarwidth",
+  "kinetic"
 ], function($, _, Backbone, sequencerTemplate) {
   return Backbone.View.extend ({
 
@@ -19,7 +21,7 @@ define([
     initialize : function () {
       _.bindAll (this, "render");
       // The timeline height
-      this.timelineHeight = 30;
+      this.timelineHeight = 20;
     },
 
     offsetX : function () {
@@ -34,18 +36,31 @@ define([
       $(this.el).css ("height", this.getHeight());
       $(this.el).css ("margin-left", $("#left-bar").innerWidth ());
 
-      // Setting canvas dimension inside #sequencer
-      var $canvas = $("canvas", $(this.el));
-      $canvas.attr("width",  $(this.el).innerWidth ());
-      $canvas.attr("height", $(this.el).innerHeight () - $.getScrollbarWidth ());
+      // Setting timeline canvas dimension inside #sequencer
+      // var $canvas = $("#timeline-canvas", $(this.el));
+      // $canvas.attr("width",  $(this.el).innerWidth ());
+      // $canvas.attr("height", $(this.el).innerHeight () - $.getScrollbarWidth ());
 
-      var ctx = $canvas[0].getContext("2d");
+      var stage = new Kinetic.Stage ({
+        container : "sequencer",
+        width : $(this.el).innerWidth (),
+        height : $(this.el).innerHeight () - $.getScrollbarWidth ()
+      });
+      $(".kineticjs-content").css ("position", "fixed");
+
+      var timelineLayer = new Kinetic.Layer ();
+
+      var clipsLayer = new Kinetic.Layer ();
+
+      stage.add (timelineLayer);
+
+      var ctx = timelineLayer.getCanvas ().element.getContext ("2d");//$canvas[0].getContext("2d");
       this.drawTimeline (ctx, this.offsetX());
       return this;
     },
 
     /* private */
-    // Renvoie la taille en pixels des steps de la grille à snapper
+    // Returns the step size of the grid in pixels
     _grid_steps_width: function(step_size) {
       // FIXME !! 100 is the "scale"
       return ((60 / this.model.get("bpm")) * 100) * step_size;
@@ -61,8 +76,8 @@ define([
         , step_width = this._grid_steps_width(grid_every)
         , is_beat    = function(n) {return (n % (1 / grid_every)) == 0;}
         , is_bar     = function(n) {return (n % (4 / grid_every)) == 0;};
-      // Stipar
 
+      // Filling the top area that will contain timeline numbers
       ctx.fillStyle = '#444';
       ctx.fillRect(0, 0, ctx_width, this.timelineHeight);
       ctx.strokeStyle = "fff";

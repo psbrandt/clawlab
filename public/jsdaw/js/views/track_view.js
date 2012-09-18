@@ -38,12 +38,14 @@ define([
 
       // TODO : render clips
       // Drawing in a canvas ?
+      this.model.clips.each (function (clip) {
+      });
 
       return this;
     },
 
     removeTrackClicked : function () {
-      this.model.delete ();
+      this.model.destroy ();
     }
   });
 });

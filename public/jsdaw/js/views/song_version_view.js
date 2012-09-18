@@ -58,7 +58,7 @@ define([
       this.setWorkspaceDimensions ();
 
       // Setting el and rendering sequencer
-      this.sequencerView.el = $("#sequencer");
+      this.sequencerView.setElement ($("#sequencer"));
       this.sequencerView.render ();
       // NOTE : this line should not be here ... but needed to rerender timeline
       $("#sequencer").scroll (this.sequencerView.render);

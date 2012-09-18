@@ -16,9 +16,11 @@ define([
     },
 
     initialize : function (data) {
-      var clipModels = _.map (data.clips, function (json_clip) {
-        return new Clip (json_clip);
-      });
+      var clipModels = [];
+      if (data)
+        clipsModel = _.map (data.clips, function (json_clip) {
+          return new Clip (json_clip);
+        });
       this.clips = new ClipCollection (clipModels);
     },
 

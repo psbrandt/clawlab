@@ -5,7 +5,9 @@ define([
   "jquery",
   "underscore",
   "backbone",
-  "text!templates/audio_source.html"
+  "text!templates/audio_source.html",
+  // jquery plugins at the end
+  "jqueryui"
 ], function($, _, Backbone, audioSourceTemplate) {
   return Backbone.View.extend ({
     
@@ -26,6 +28,11 @@ define([
         audio_filename : this.model.get ("audio_filename")
       }
       $(this.el).html (this.template (data));
+      this.$el.draggable ({
+        revert : true,
+        revertDuration : 100,
+        zIndex : 40000
+      });
       
       return this;
     },

@@ -6,7 +6,9 @@ define([
   "underscore",
   "backbone",
   "text!templates/sequencer.html",
-  "getscrollbarwidth"
+  // at the end because not defining Require modules
+  "getscrollbarwidth",
+  "kinetic"
 ], function($, _, Backbone, sequencerTemplate) {
   return Backbone.View.extend ({
 
@@ -17,16 +19,13 @@ define([
     },
 
     initialize : function () {
+      _.bindAll (this, "render");
       // The timeline height
-      this.timelineHeight = 30;
+      this.timelineHeight = 20;
     },
 
     offsetX : function () {
       return $(this.el).scrollLeft ();
-    },
-
-    offsetY : function () {
-      return $("#workspace").scrollTop ();
     },
 
     render : function () {
@@ -37,36 +36,49 @@ define([
       $(this.el).css ("height", this.getHeight());
       $(this.el).css ("margin-left", $("#left-bar").innerWidth ());
 
-      // Setting canvas dimension inside #sequencer
-      var $canvas = $("canvas", $(this.el));
-      $canvas.attr("width",  $(this.el).innerWidth ());
-      $canvas.attr("height", $(this.el).innerHeight () - $.getScrollbarWidth ());
+      // Setting timeline canvas dimension inside #sequencer
+      // var $canvas = $("#timeline-canvas", $(this.el));
+      // $canvas.attr("width",  $(this.el).innerWidth ());
+      // $canvas.attr("height", $(this.el).innerHeight () - $.getScrollbarWidth ());
 
-      var ctx = $canvas[0].getContext("2d");
-      this.drawTimeline (this.offsetX (), ctx);
+      var stage = new Kinetic.Stage ({
+        container : "sequencer",
+        width : $(this.el).innerWidth (),
+        height : $(this.el).innerHeight () - $.getScrollbarWidth ()
+      });
+      $(".kineticjs-content").css ("position", "fixed");
+
+      var timelineLayer = new Kinetic.Layer ();
+
+      var clipsLayer = new Kinetic.Layer ();
+
+      stage.add (timelineLayer);
+
+      var ctx = timelineLayer.getCanvas ().element.getContext ("2d");//$canvas[0].getContext("2d");
+      this.drawTimeline (ctx, this.offsetX());
       return this;
     },
 
     /* private */
-    // Renvoie la taille en pixels des steps de la grille à snapper
+    // Returns the step size of the grid in pixels
     _grid_steps_width: function(step_size) {
       // FIXME !! 100 is the "scale"
       return ((60 / this.model.get("bpm")) * 100) * step_size;
     },
-    
+
     /**
      *  Draw the timeline with the given offset on the given 2D context 
      */
-    drawTimeline : function (offsetX, ctx) {
+    drawTimeline : function (ctx, offsetX) {
       var grid_every = 1 / 8
         , ctx_width  = ctx.canvas.width
         , ctx_height = ctx.canvas.height
         , step_width = this._grid_steps_width(grid_every)
         , is_beat    = function(n) {return (n % (1 / grid_every)) == 0;}
         , is_bar     = function(n) {return (n % (4 / grid_every)) == 0;};
-      // Stipar
 
-      ctx.fillStyle = '#555';
+      // Filling the top area that will contain timeline numbers
+      ctx.fillStyle = '#444';
       ctx.fillRect(0, 0, ctx_width, this.timelineHeight);
       ctx.strokeStyle = "fff";
       ctx.moveTo(0, this.timelineHeight);
@@ -74,13 +86,11 @@ define([
       ctx.closePath();
       ctx.stroke();
       
-      // ctx.textBaseline = 'top';
-      // ctx.lineWidth = 0.4;
-      //console.log(Math.ceil(ctx_width / step_width));
-      for(var i = 0, max = (Math.ceil(ctx_width / step_width)); i < max; i++) {
-        var x = i * step_width + 1,
+      for(var i = (Math.ceil (offsetX / step_width)), 
+	  max = (Math.ceil(ctx_width / step_width) + offsetX); 
+	  i < max; i++) {
+        var x = i * step_width + 1 - offsetX,
         start_y = 0;
-        
         if(is_bar(i)) {
           ctx.strokeStyle = "#fff";
           ctx.fillStyle = "#fff";
@@ -88,21 +98,18 @@ define([
           ctx.fillText((i / (4 / grid_every)) + 1, x + 5, 12);
         }
         else if(is_beat(i)) {
-          ctx.strokeStyle = "#999";
-          ctx.fillStyle = "#888";
+          ctx.strokeStyle = "#bbb";
+          ctx.fillStyle = "#ccc";
           ctx.fillText(Math.floor((i / (4 / grid_every)) + 1).toString() + '.' + 
                        (((i / 8) % (4 / grid_every) % 4) + 1), 
                        x + 4, 12);
         }
         else {
-          ctx.strokeStyle = "#CCC";
-          start_y = 37;
+          ctx.strokeStyle = "#888";
+          start_y = this.timelineHeight;
         }
         
         //console.log(x, 0, x + (step_width - 2), ctx_height);
-        ctx.fillStyle = "777";
-        ctx.fillRect(x, 37, x + (step_width - 2), ctx_height - 37);
-        
         ctx.beginPath();
         ctx.moveTo(x, start_y);
         ctx.lineTo(x, ctx_height);

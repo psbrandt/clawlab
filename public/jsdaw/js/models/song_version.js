@@ -3,8 +3,11 @@ define([
   "underscore",
   "backbone",
   "collections/track_collection",
-  "models/track"
-], function($, _, Backbone, TrackCollection, Track) {
+  "models/track",
+  "collections/audio_source_collection",
+  "models/audio_source"
+], function($, _, Backbone, TrackCollection, Track, AudioSourceCollection, 
+            AudioSource) {
   var SongVersion = Backbone.Model.extend ({
 
     urlRoot : "/song_versions",
@@ -15,6 +18,11 @@ define([
         return new Track (json_track);
       });
       this.tracks = new TrackCollection (trackModels);
+
+      var audioSourceModels = _.map (data.audio_sources, function (json_source) {
+        return new AudioSource (json_source);
+      });
+      this.audioSources = new AudioSourceCollection (audioSourceModels);
     },
 
     // Create a new track in song version and save it
@@ -29,10 +37,16 @@ define([
       t.save({}, {wait : true, success : function () {
 	//add it to the song version track collection
         self.tracks.add(t);
-        // fetch root action
-        //self.root_action.fetch ();
       }});
+    },
+
+    fetchRootAction : function () {
+      var self = this;
+      $.get ("root_action", function (data) {
+        self.set ("root_action", data);
+      })
     }
+
     
   });
 

@@ -6,4 +6,8 @@ class ActionsController < ApplicationController
 
   end
 
+  def show
+    render :json => @root_action.to_builder.target!
+  end
+
 end

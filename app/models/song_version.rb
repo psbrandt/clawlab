@@ -19,7 +19,7 @@ class SongVersion
     song_version = Jbuilder.new
     
     # add id, title and tracks
-    song_version.(self, :id, :title, :bpm, :tracks)
+    song_version.(self, :id, :title, :bpm, :tracks, :audio_sources)
     
     # add root_action ( song_version.root_action root_action.to_builder didn't
     # work here ...

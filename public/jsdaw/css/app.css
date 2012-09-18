@@ -1,6 +1,7 @@
 @import "track-controls.css";
 @import "sequencer.css";
 @import "actions.css";
+@import "library.css";
 
 body {
   background-color:black;
@@ -13,6 +14,7 @@ body {
 
 #workspace {
   overflow-x:hidden;
+  overflow-y:scroll;
   float:left;
 }
 
@@ -24,8 +26,6 @@ body {
 }
 
 #sequencer {
-  z-index:-1000;
-  background-color:#335;
   height:100%;
   position:fixed;
   overflow-y:hidden;
@@ -35,12 +35,14 @@ body {
 #right-bar {
   float:right;
   width:300px;
+  height:100%;
   background-color:#222;
   color:#EEE;
   padding:8px;
   overflow:hidden;
 }
 
-#right-bar .content {
+#right-bar .tab-content {
+  height:100%;
   overflow-y:auto;
 }

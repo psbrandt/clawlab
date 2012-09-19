@@ -5,10 +5,13 @@ define([
   "jquery",
   "underscore",
   "backbone",
-  "text!templates/audio_source.html"
-], function($, _, Backbone, audioSourceTemplate) {
+  "text!templates/audio_source.html",
+  "helpers/form_helper"
+  // "fileupload/jquery.iframe-transport",
+  // "fileupload/jquery.fileupload"
+], function($, _, Backbone, audioSourceTemplate, Form) {
   return Backbone.View.extend ({
-    
+
     template : _.template (audioSourceTemplate),
     tagName : "li",
 
@@ -26,7 +29,7 @@ define([
         audio_filename : this.model.get ("audio_filename")
       }
       $(this.el).html (this.template (data));
-      
+
       return this;
     },
 
@@ -35,7 +38,15 @@ define([
     },
 
     uploadClicked : function () {
-      console.log ("Need to upload file", this.model.get ("file"));
+      $(this.el).append(
+        Form.createForm('#', 'put', $.proxy(function($form) {
+          return $form.append(
+            Form.createInput('file', 'audio_source[audio]', this.model.get ("file"), { 'class': 'audio-source-upload-field' })
+          );
+        }, this))
+      );
+
+      console.log("Need to upload file", this.model.get ("file"));
     }
   });
 });

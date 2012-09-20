@@ -35,9 +35,9 @@ class ClipActionCreate < ClipAction
     # undoing children (dependant actions)
     children.each &:undo
   end
-  
+
   def same_as? action
-    # not calling super because self.clip is nil 
+    # not calling super because self.clip is nil
     self.class == action.class && self.params["id"] == action.params["id"]
   end
 

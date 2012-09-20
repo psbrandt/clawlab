@@ -27,14 +27,12 @@ Claw::Application.routes.draw do
   post "songs/:id/share" => "songs#share", :as => :share_song
   
   # SONG VERSIONS
-  resources :song_versions, :except => [:update] do
-    resources :tracks, :except => [:edit, :new, :update]
-    put "tracks/:id/set_name" => "tracks#set_name"
+  resources :song_versions do
+    # TRACKS
+    resources :tracks, :except => [:edit, :new]
 
-    resources :clips, :except => [:edit, :new, :update]
-    put "clips/:id/offset_source" => "clips#offset_source"
-    put "clips/:id/offset_begin"  => "clips#offset_begin"
-    put "clips/:id/offset_end"    => "clips#offset_end"
+    # CLIPS
+    resources :clips, :except => [:edit, :new]
 
     resources :audio_sources, :except => [:edit, :update]
 

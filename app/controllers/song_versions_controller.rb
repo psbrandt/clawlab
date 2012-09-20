@@ -76,6 +76,10 @@ class SongVersionsController < ApplicationController
     end
   end
 
+  def update
+    set_title if params[:title]
+  end
+  
   def set_title
     action = SongVersionActionSetTitle.new(
       :song_version => @song_version, 

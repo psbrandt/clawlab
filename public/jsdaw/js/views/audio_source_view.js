@@ -29,9 +29,9 @@ define([
       }
       $(this.el).html (this.template (data));
       this.$el.draggable ({
-        revert : true,
+        revert : "invalid",
         revertDuration : 100,
-        zIndex : 40000
+        helper : "clone"
       });
       
       return this;

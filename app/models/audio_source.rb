@@ -2,7 +2,8 @@ class AudioSource
   include Mongoid::Document
   include Mongoid::Timestamps::Created
 
-  embedded_in :song_version
+  belongs_to :song_version
+  belongs_to :clip
 
   attr_accessible :audio, :remote_audio_url, :audio_cache
 

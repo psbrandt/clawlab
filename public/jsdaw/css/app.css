@@ -43,6 +43,6 @@ body {
 }
 
 #right-bar .tab-content {
-  height:100%;
+  height:90%;
   overflow-y:auto;
 }

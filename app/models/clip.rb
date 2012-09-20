@@ -4,7 +4,7 @@ class Clip
 
   embedded_in :track
 
-  has_one :source
+  has_one :audio_source
 
   field :source_offset, :type => Float, :default => 0
   field :begin_offset, :type => Float, :default => 0

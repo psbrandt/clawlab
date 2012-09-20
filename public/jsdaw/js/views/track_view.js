@@ -5,8 +5,9 @@ define([
   "jquery",
   "underscore",
   "backbone",
-  "text!templates/track_controls.html"
-], function($, _, Backbone, trackControlsT) {
+  "text!templates/track_controls.html",
+  "views/clip_view"
+], function($, _, Backbone, trackControlsT, ClipView) {
   return Backbone.View.extend ({
     
     template : _.template (trackControlsT),
@@ -14,34 +15,55 @@ define([
 
     events : {
       "click .remove-track" : "removeTrackClicked",
+      "drop .dropzone" : "dropped"
+    },
+    
+    dropped : function (e, ui) {
+      var sourceOffset = Claw.Helpers.pxToSec (
+        Math.max (0, ui.offset.left - this.$el.width())
+      );
+      this.model.addClip (ui.helper.context.id, sourceOffset);
     },
 
     initialize : function () {
       this.model.bind ("destroy", this.remove, this);
+      this.model.clips.on ("add", this.addClip, this);
+      this.kineticNode = new Kinetic.Group ();
     },
 
     remove : function () {
       $(this.el).remove ();
       // TODO : remove clip
-      // erase clip from canvas ?
+      // erase clips from canvas ?
     },
 
     render : function () {
       // setting up the data needed by the view
       var data = {
+        id   : this.model.id, 
 	name : this.model.get("name")
       };
       
       // Rendering controls
       $(this.el).html (this.template (data));
-      $("#tracks-controls").append (this.el);
+
+      // temporarily droppable
+      $(".dropzone", this.el).droppable ();
 
       // TODO : render clips
       // Drawing in a canvas ?
-      this.model.clips.each (function (clip) {
-      });
+      var self = this;
+      this.model.clips.each (function (clip) { self.addClip (clip)});
 
       return this;
+    },
+
+    addClip : function (clip) {
+      var view = new ClipView ({ model : clip });
+      Claw.SequencerView.appendClip (
+        view.render (),
+        this
+      );
     },
 
     removeTrackClicked : function () {

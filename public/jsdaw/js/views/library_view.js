@@ -34,7 +34,8 @@ define([
     addAudioSource : function (audioSourceModel) {
       $("#audio-source-list", this.el).append (
         new AudioSourceView ({ 
-          model : audioSourceModel
+          model : audioSourceModel,
+          id : audioSourceModel.id
         }).render().el
       );
     },

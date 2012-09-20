@@ -19,16 +19,17 @@ class ClipActionCreate < ClipAction
     self.params["id"] = c.id
 
     # adding self in action tree
-    track.song_version.root_action.children.detect { |a|
+    song_version.root_action.children.detect { |a|
       a.name == "track_action_create_#{track.id}"
     } << self
+    c
   end
 
   def undo
     track.clips.delete(clip)
 
     # removing self from action tree
-    track.song_version.root_action.children.detect { |a|
+    song_version.root_action.children.detect { |a|
       a.name == "track_action_create_#{track.id}"
     }.remove_child!(self)
 

@@ -7,8 +7,6 @@ define([
   "backbone",
   "text!templates/audio_source.html",
   "helpers/form_helper"
-  // "fileupload/jquery.iframe-transport",
-  // "fileupload/jquery.fileupload"
 ], function($, _, Backbone, audioSourceTemplate, Form) {
   return Backbone.View.extend ({
 
@@ -28,7 +26,11 @@ define([
       var data = {
         audio_filename : this.model.get ("audio_filename")
       }
+
       $(this.el).html (this.template (data));
+
+      if(!this.model.isNew())
+        $(this.el).find('.upload-btn').remove()
 
       return this;
     },
@@ -38,15 +40,16 @@ define([
     },
 
     uploadClicked : function () {
-      $(this.el).append(
-        Form.createForm('#', 'put', $.proxy(function($form) {
-          return $form.append(
-            Form.createInput('file', 'audio_source[audio]', this.model.get ("file"), { 'class': 'audio-source-upload-field' })
-          );
-        }, this))
-      );
+      // Named handler so we can unbind it with no side-effects
+      var onModelUploaded = _.bind (function() {
+        // Unbind so it is only triggered once
+        this.model.off('change', onModelUploaded);
+        if(!this.model.isNew())
+          $(this.el).find('.upload-btn').remove();
+      }, this);
 
-      console.log("Need to upload file", this.model.get ("file"));
+      this.model.on('change', onModelUploaded);
+      this.model.upload()
     }
   });
 });

@@ -3,6 +3,8 @@ class AudioSourcesController < ApplicationController
   load_and_authorize_resource :audio_source, :through => :song_version
 
   def create
+    # Get audio source from :files array
+    @audio_source.audio = (params[:files] || []).shift
     respond_to do |format|
       if @audio_source.save!
         format.html { redirect_to song_version_url(@song_version), :notice => "Audio file successfully created" }

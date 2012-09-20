@@ -6,15 +6,17 @@ define([
   "underscore",
   "backbone",
   "text!templates/library.html",
-  "views/audio_source_view"
+  "views/audio_source_view",
+  "fileupload/jquery.fileupload",
+  "fileupload/jquery.iframe-transport"
 ], function($, _, Backbone, libraryTemplate, AudioSourceView) {
   return Backbone.View.extend ({
-    
+
     template : _.template (libraryTemplate),
 
     events : {
-      "dragover #dropzone" : "handleDragOver", 
-      "drop #dropzone"     : "handleFileSelect"
+      "dragover #dropzone" : "handleDragOver"
+      // "drop #dropzone"     : "handleFileSelect"
     },
 
     initialize : function () {
@@ -27,7 +29,16 @@ define([
 
       //render audio sources
       this.collection.each (this.addAudioSource);
-      
+
+      // Initialize fileupload
+      this.$fileupload = $(this.el).find('input:file.file-upload-field')
+      // Listen drop or add
+      this.$fileupload.fileupload({
+        dropZone: $(this.el).find('#dropzone'),
+        fileInput: null,
+        add: _.bind(this.handleFileSelect, this),
+        dataType: 'json'
+      })
       return this;
     },
 
@@ -46,32 +57,15 @@ define([
       $e.originalEvent.dataTransfer.dropEffect = "copy";
     },
 
-    handleFileSelect : function ($e) {
-      $e.stopPropagation ();
-      $e.preventDefault ();
-      var files = $e.originalEvent.dataTransfer.files; // FileList object.
-      // files is a FileList of File objects. List some properties.
-      var output = [];
-      for (var i = 0, f; f = files[i]; i++) {
-        this.collection.addFromFile (f);
+    // TODO: Check if we can listen to view events directly so we don't rely on
+    // model's upload event triggering
+    //
+    // NOTE : Only compatible with XHR uploads because of drop, must try to
+    // adapt adding a file upload button, even for ergonomics purposes
+    handleFileSelect : function ($e, data) {
+      for (var i = 0, f; f = data.files[i]; i++) {
+        this.collection.addFromFile (f, this.$fileupload);
       }
-    },
-
-    // Not used ATM
-    uploadFile : function (file) {
-      var xhr = new XMLHttpRequest();
-      xhr.upload.addEventListener('progress',function(ev){
-        console.log((ev.loaded/ev.total)+'%');
-      }, false);
-      xhr.onreadystatechange = function(e){
-        
-        // Blah blah blah, you know how to make AJAX requests
-      };
-      xhr.open('POST', "audio_sources", true);
-      var data = new FormData();
-      data.append('audio_source[audio]', file);
-      data.append('authenticity_token', window.authenticityToken);
-      xhr.send(data);
     }
   });
 });

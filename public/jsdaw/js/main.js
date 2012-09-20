@@ -5,6 +5,12 @@ require.config({
     underscore: "libs/underscore/underscore-min", // https://github.com/amdjs
     backbone: "libs/backbone/backbone-min", // https://github.com/amdjs
 
+    // File uplaod
+    fileupload: "libs/fileupload",
+
+    // Helpers
+    helpers: "libs/helpers",
+
     // Require.js plugins
     text: "libs/require/text",
     order: "libs/require/order",

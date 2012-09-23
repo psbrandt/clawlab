@@ -50,8 +50,6 @@ define([
       // temporarily droppable
       $(".dropzone", this.el).droppable ();
 
-      // TODO : render clips
-      // Drawing in a canvas ?
       var self = this;
       this.model.clips.each (function (clip) { self.addClip (clip)});
 

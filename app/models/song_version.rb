@@ -19,8 +19,14 @@ class SongVersion
     song_version = Jbuilder.new
     
     # add id, title and tracks
-    song_version.(self, :id, :title, :bpm, :tracks, :audio_sources)
-    
+    song_version.(self, :id, :title, :bpm, :tracks)
+ 
+    song_version.audio_sources audio_sources do |builder, audio_source|
+      builder.(audio_source, :id, :author, :instrument, :uploaded_by)      
+      builder.audio_filename audio_source.audio_filename
+      builder.url audio_source.audio.url
+    end
+
     # add root_action ( song_version.root_action root_action.to_builder didn't
     # work here ...
     song_version.root_action do |builder|

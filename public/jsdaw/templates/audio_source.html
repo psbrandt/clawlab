@@ -1,9 +1,11 @@
 <div class="audio-source">
-  <i class="icon-play icon-white"></i> <%= audio_filename %>
+  <i class="icon-play icon-white play-stop-btn"></i> <%= audioFilename %>
   <span class="pull-right">
+    <% if (notUploaded) { %> 
     <i class="icon-upload icon-white upload-btn"></i>
+    <% } %>
     <i class="icon-remove-circle icon-white remove-btn"></i>
   </span>
-  <div class="bar" style="width:0%"></div>
+  <div class="bar"></div>
 </div>
 

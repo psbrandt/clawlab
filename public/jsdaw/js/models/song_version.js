@@ -12,6 +12,11 @@ define([
 
     urlRoot : "/song_versions",
 
+    defaults : {
+      playingAt : 0,
+      playing : false
+    },
+
     initialize : function (data) {
       // initializing an array of TrackModel from JSON data
       var trackModels = _.map(data.tracks, function (json_track) { 
@@ -23,6 +28,24 @@ define([
         return new AudioSource (json_source);
       });
       this.audioSources = new AudioSourceCollection (audioSourceModels);
+    },
+
+    clips : function () {
+      return this.tracks.reduce (function (acc, track) { 
+        return acc.concat (track.clips.toArray()) }, new Array ());
+    },
+
+    play : function () {
+      this.trigger ("play");
+    },
+
+    stop : function () {
+      this.set ("playingAt", 0);
+      this.trigger ("stop");
+    },
+
+    pause : function () {
+      this.trigger ("stop");
     },
 
     // Create a new track in song version and save it

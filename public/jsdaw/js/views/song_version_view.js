@@ -43,11 +43,6 @@ define([
       // Setting #main with the main template
       $(this.el).html (this.template ());
 
-      // Render the transport view
-      new TransportView({
-        model : this.model
-      }).render ();
-
       // Setting workspace dimensions
       this.setWorkspaceDimensions ();
 

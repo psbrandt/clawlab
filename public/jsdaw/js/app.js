@@ -6,10 +6,12 @@ define([
   "models/song_version",
   "views/song_version_view",
   "libs/helpers",
-  "views/sequencer_view"
+  "views/sequencer_view",
+  "libs/player",
+  "views/transport_view"
 ], function (
   $, _, Backbone, Router, SongVersionModel, SongVersionView, Helpers, 
-  SequencerView) {
+  SequencerView, Player, TransportView) {
 
   var initialize = function(clawData){
     // Pass in our Router module and call it's initialize function
@@ -27,14 +29,24 @@ define([
       bpm : songVersionModel.get("bpm"),
       pxPerBeat : 40
     });
-    Claw.SequencerView = new SequencerView ();
+
+      // Render the transport view
+    new TransportView({
+      model : songVersionModel
+    }).render ();
+
+
+    Claw.SequencerView = new SequencerView ({
+      model : songVersionModel
+    });
       
-    // Render the song version
+    Claw.Player = new Player (songVersionModel)
+      // Render the song version
     new SongVersionView ({
       el : "#main",
       model : songVersionModel
     }).render ();
-    
+
     window.Claw = Claw;
   };
 

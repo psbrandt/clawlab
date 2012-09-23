@@ -14,8 +14,6 @@ class ClipActionOffsetSource < ClipAction
     }.children.detect { |a|
       a.name == "clip_action_create_#{clip.id}"
     } << self
-    logger.info "========"
-    logger.info offset
     clip.update_attributes!(:source_offset => offset)
   end
 

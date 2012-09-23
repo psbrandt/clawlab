@@ -22,6 +22,8 @@ define([
     initialize : function () {
       _.bindAll (this, "render");
 
+      this.model.on ("change:playingAt", this.playingAtChanged, this);
+
       // An index for tracks
       this.index = 0;
 
@@ -29,6 +31,11 @@ define([
       this.timelineHeight = 20;
       this.rendered = false;
 
+    },
+
+    playingAtChanged : function (model, playingAt) {
+      this.tracker.setX (Claw.Helpers.secToPx (playingAt));
+      this.stage.draw ();
     },
 
     offsetX : function () {
@@ -52,7 +59,7 @@ define([
         );
         this.tracksGroup.setX (-this.offsetX ());
         this.tracksGroup.setY (-this.offsetY ());
-        this.stage.draw ();
+        this.stage.draw ()
       }
       else {
         $(this.el).html (this.template ());
@@ -102,9 +109,16 @@ define([
       // A group for tracks
       this.tracksGroup = new Kinetic.Group ();
 
+      this.tracker = new Kinetic.Line ({
+        points : [0, 0, 0, this.stage.getHeight ()],
+        stroke : "red",
+        strokeWidth : 1
+      });
+
       this.layer.add (this.grid);
       this.layer.add (this.tracksGroup); // the clips over the grid
       this.layer.add (this.timeline); // the timeline over the clips
+      this.layer.add (this.tracker); // The tracker over all
       this.stage.add (this.layer);
     },
 

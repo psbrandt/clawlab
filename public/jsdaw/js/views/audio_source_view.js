@@ -17,34 +17,55 @@ define([
 
     events : {
       "click .remove-btn" : "removeClicked",
-      "click .upload-btn" : "uploadClicked"
+      "click .upload-btn" : "uploadClicked",
+      "click .play-stop-btn"   : "playStopClicked"
     },
 
     initialize : function () {
       this.model.on ("destroy", this.remove, this);
+      this.model.on ("bufferLoaded", this.bufferLoaded, this);
+      this.model.on ("bufferProgress", this.bufferProgressed, this);
+      this.playing = false;
     },
 
     render : function () {
       var data = {
-        audio_filename : this.model.get ("audio_filename")
+        audioFilename : this.model.get ("audio_filename"),
+        notUploaded : typeof this.model.uploader != "undefined",
+        bufferLoaded : this.model.get ("bufferLoaded")
       }
 
       $(this.el).html (this.template (data));
 
-      this.$el.draggable ({
-        revert : "invalid",
-        revertDuration : 100,
-        helper : "clone"
-      });
-      
       if(!this.model.isNew())
         $(this.el).find('.upload-btn').remove()
 
       return this;
     },
 
+    bufferProgressed : function (complete) {
+      this.$el.find (".bar").width (complete + "%");
+    },
+
+    bufferLoaded : function () {
+      this.setDraggable ();
+      this.$el.find (".bar").slideUp ();
+    },
+
+    setDraggable : function () {
+      this.$el.draggable ({
+        revert : "invalid",
+        revertDuration : 100,
+        helper : "clone"
+      });
+    },
+    
     removeClicked : function () {
       this.model.destroy ();
+    },
+
+    playStopClicked : function () {
+      Claw.Player.playAudioSource (this.model.get("id"));
     },
 
     uploadClicked : function () {

@@ -11,6 +11,8 @@ require.config({
     // Helpers
     helpers: "libs/helpers",
 
+    waveform : "libs/waveform-chrome",
+
     // Require.js plugins
     text: "libs/require/text",
     order: "libs/require/order",

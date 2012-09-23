@@ -11,7 +11,7 @@ define([
   Helpers.prototype = {
     
     pxToSec : function (px) {
-      return this.beatsToSec (px / this.pxPerBeat);
+      return 60 * px / (this.bpm * this.pxPerBeat);
     },
     
     secToPx : function (sec) {
@@ -23,7 +23,7 @@ define([
     },
     
     secToBeats : function (sec) {
-      return (sec * 60) / this.bpm;
+      return (sec / 60) * this.bpm;
     },
     
     beatsToPx : function (n) {

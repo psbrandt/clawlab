@@ -2,6 +2,7 @@
 @import "sequencer.css";
 @import "actions.css";
 @import "library.css";
+@import "transport.css";
 
 body {
   background-color:black;

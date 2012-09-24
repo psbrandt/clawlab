@@ -23,13 +23,11 @@ define([
       _.bindAll (this, "render");
 
       this.model.on ("change:playingAt", this.playingAtChanged, this);
+      $("#workspace").scroll (this.render);
 
       this.tracksLayer = new Kinetic.Layer ();
 
       this.initKinetics ();
-
-      // An index for tracks
-      this.index = 0;
 
       this.rendered = false;
     },
@@ -40,7 +38,7 @@ define([
     },
 
     offsetX : function () {
-      return $(this.el).scrollLeft ();
+      return this.$el.scrollLeft ();
     },
 
     offsetY : function () {
@@ -48,14 +46,14 @@ define([
     },
 
     render : function () {
-      $(this.el).append (this.template ());
-      $(this.el).css ("width", this.getAvailableWidth());
-      $(this.el).css ("height", this.getAvailableHeight());
-      $(this.el).css ("margin-left", $("#left-bar").innerWidth ());
+      this.$el.append (this.template ());
+      this.$el.css ("width", this.getAvailableWidth());
+      this.$el.css ("height", this.getAvailableHeight());
+      this.$el.css ("margin-left", $("#left-bar").innerWidth ());
 
       this.stage.setSize (
-        $(this.el).innerWidth (),
-        $(this.el).innerHeight () - $.getScrollbarWidth ()
+        this.$el.innerWidth (),
+        this.$el.innerHeight () - $.getScrollbarWidth ()
       );
       this.tracksLayer.setX (-this.offsetX ());
       this.tracksLayer.setY (-this.offsetY () + this.model.get ("timelineHeight"));
@@ -63,7 +61,10 @@ define([
       this.tracker.setX (
         Claw.Helpers.secToPx (this.model.get ("playingAt")) - this.offsetX ()
       );
-      this.stage.draw ()
+      this.tracker.setPoints (
+        [1, 0, 1, this.stage.getHeight ()]
+      );
+      this.layer.draw ()
       return this;
     },
 
@@ -71,8 +72,8 @@ define([
       // Initialiazing the stage at the dimensions of #sequencer
       this.stage = new Kinetic.Stage ({
         container : "sequencer",
-        width : $(this.el).innerWidth (),
-        height : $(this.el).innerHeight () - $.getScrollbarWidth ()
+        width : this.$el.innerWidth (),
+        height : this.$el.innerHeight () - $.getScrollbarWidth ()
       });
       // A hack needed because default position is set to relative
       $(".kineticjs-content").css ("position", "fixed");
@@ -87,6 +88,7 @@ define([
           self.drawTimeline (ctx)
         }
       });
+      this.timeline.on ("click", function (e) { console.log( "dd");});
 
       // The grid, vertical lines
       this.grid = new Kinetic.Shape ({
@@ -99,9 +101,14 @@ define([
       this.tracksLayer = new Kinetic.Group ({ y : this.model.get ("timelineHeight") });
 
       this.tracker = new Kinetic.Line ({
-        points : [0, 0, 0, this.stage.getHeight ()],
+        points : [1, 0, 1, this.stage.getHeight ()],
         stroke : "red",
-        strokeWidth : 1
+        strokeWidth : 1,
+        draggable : true,
+        dragConstraint : "horizontal",
+        dragBounds : {
+          left:1
+        }
       });
 
       this.layer.add (this.grid);
@@ -111,12 +118,8 @@ define([
       this.stage.add (this.layer);
     },
 
-    trackHeight : function () {
-      return $(".track-controls").height();
-    },
-
-    incIndex : function () {
-      return this.index++;
+    timelineMouseup : function (e) {
+      console.log (e, f);
     },
 
     /**

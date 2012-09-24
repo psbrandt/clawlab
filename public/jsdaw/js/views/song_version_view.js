@@ -53,9 +53,6 @@ define([
         model : this.model,
         el : "#sequencer"
       });
-      // NOTE : fixme, should be in sequencer view but does not work
-      $("#sequencer").scroll (this.sequencerView.render);
-      $("#workspace").scroll (this.sequencerView.render);
 
       // Render tracks
       var self = this;

@@ -10,7 +10,8 @@ define([
     events : {
       "click #add-track-button" : "addTrackClicked",
       "click #play-btn"         : "playPauseClicked",
-      "click #stop-btn"         : "stopClicked"
+      "click #stop-btn"         : "stopClicked",
+      "click #rewind-btn"       : "rewindClicked"
     },
 
     template : _.template (transportT),
@@ -66,6 +67,15 @@ define([
 
     stopClicked : function () {
       this.model.stop ();
+    },
+    
+    rewindClicked : function () {
+      if (this.model.get ("playing")) {
+        this.model.stop (); 
+        this.model.play ();
+      }
+      else 
+        this.model.stop ()
     }
   });
   

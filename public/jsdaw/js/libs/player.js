@@ -93,14 +93,25 @@ define([
         trackGainNode.connect(this.context.destination);
 
         var self = this;
-        //track.on ("mute", this.muteTrack (track));
-        //track.on ("change:volume", this.setTrackVolume (track));
+        track.on ("change:muted", function (track, muted) { 
+          muted ? this.muteTrack (track) : this.unmuteTrack (track)
+        }, this);
+        //track.on ("change:volume", this.setTrackVolume, this);
         track.clips.on ("add", function (clip) { self.addClip (clip, track) });
 
         track.clips.each (function (clip) {
           self.addClip (clip, track);
         });
       }
+    },
+
+    muteTrack : function (track) {
+      console.log (this.trackNodes[track.id]);
+      this.trackNodes[track.id].gain.value = 0;
+    },
+
+    unmuteTrack : function (track) {
+      this.trackNodes[track.id].gain.value = 1; //FIXME set with volume
     },
 
     releaseTrack : function(track) {

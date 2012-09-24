@@ -15,7 +15,13 @@ define([
 
     events : {
       "click .remove-track" : "removeTrackClicked",
-      "drop .dropzone" : "dropped"
+      "drop .dropzone" : "dropped",
+      "click .mute-btn" : "muteClicked"
+    },
+
+    muteClicked : function () {
+      this.$el.find (".mute-btn").toggleClass ("active");
+      this.model.set ("muted", !this.model.get ("muted"));
     },
     
     dropped : function (e, ui) {

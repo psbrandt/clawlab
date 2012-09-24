@@ -31,7 +31,7 @@ define([
     },
 
     playingAtChanged : function (model, playingAt) {
-      var beat = Math.floor ( Claw.Helpers.secToBeats (playingAt) );
+      var beat = Math.floor (Claw.Helpers.secToBeats (playingAt));
       var min  = Math.floor ( playingAt / 60 );
       var sec  = Math.floor ( playingAt % 60);
       var ms   = Math.floor ( (playingAt * 1000) % 1000);
@@ -39,7 +39,7 @@ define([
         (min < 10 ? "0" + min : min) + ":" + 
         (sec < 10 ? "0" + sec : sec) + ":" + 
         (ms  < 10 ? "00" + ms  : (ms < 100 ? "0" + ms : ms )) + " | " +
-        beat ;
+        Math.floor (beat / 4 + 1) + "." + (beat % 4 + 1);
       this.$el.find (".current-time").html (result);
     },
 

@@ -14,15 +14,17 @@ define([
 
     defaults : {
       playingAt : 0,
-      playing : false
+      playing : false,
+      timelineHeight : 20
     },
 
     initialize : function (data) {
       // initializing an array of TrackModel from JSON data
-      var trackModels = _.map(data.tracks, function (json_track) { 
-        return new Track (json_track);
-      });
-      this.tracks = new TrackCollection (trackModels);
+      this.tracks = _.reduce (data.tracks, function (coll, json_track) {
+        json_track.index = coll.getIndexCount ();
+        return coll.add (new Track (json_track));
+      }, new TrackCollection ());
+      
 
       var audioSourceModels = _.map (data.audio_sources, function (json_source) {
         return new AudioSource (json_source);

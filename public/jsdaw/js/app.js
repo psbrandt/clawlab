@@ -36,10 +36,6 @@ define([
     }).render ();
 
 
-    Claw.SequencerView = new SequencerView ({
-      model : songVersionModel
-    });
-      
     Claw.Player = new Player (songVersionModel)
       // Render the song version
     new SongVersionView ({

@@ -73,7 +73,7 @@ define([
     },
 
     dragStopped : function (e) {
-      this.model.save ({
+      this.model.set ({
         source_offset : Claw.Helpers.pxToSec (e.shape.getX())
       });
     },

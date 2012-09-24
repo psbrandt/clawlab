@@ -32,7 +32,7 @@ define([
       this.trackNodes = {};
       this.clipNodes  = {};
       this.clips      = [];
-      this.playingSources = [];
+      this.playingSources = {};
       this.playing    = false;
       this.startTime;
       this.playbackFrom = 0;
@@ -59,10 +59,10 @@ define([
         self.addTrack (track);
       });
 
-      this.model.on ("play" , function () { self.playNotes () });
-      this.model.on ("stop", function () { self.stopNotes () });
-      this.model.tracks.on ("add", function (track) { self.addTrack (track) });
-      this.model.tracks.on ("remove", function (track) { self.releaseTrack (track) });
+      this.model.on ("play" , this.playNotes, this);
+      this.model.on ("stop", this.stopNotes, this);
+      this.model.tracks.on ("add", this.addTrack, this);
+      this.model.tracks.on ("remove", this.releaseTrack, this);
       this.model.audioSources.on ("add", function (audioSource) { console.log ("aads")});
     },
 
@@ -86,10 +86,6 @@ define([
       clip.on ("change:source_offset", this.sourceOffsetChanged, this);
     },
 
-    sourceOffsetChanged : function (clip, offset) {
-      
-    },
-
     addTrack : function(track) {
       if (typeof this.trackNodes[track.id] === 'undefined') {
         var trackGainNode = this.context.createGainNode();
@@ -107,9 +103,20 @@ define([
       }
     },
 
-    releaseTrack : function(cid) {
-      this.gainNodes[cid].disconnect(this.context.destination);
-      delete this.gainNodes[cid];
+    releaseTrack : function(track) {
+      this.trackNodes[track.id].disconnect();
+      delete this.trackNodes[track.id];
+    },
+
+    sourceOffsetChanged : function (clip, offset) {
+      if (this.playing) {
+        var source = this.playingSources [clip.id];
+        source.noteOff (0);
+        var end = source.buffer.duration + offset;
+        if (end > this.context.currentTime - this.startTime + this.playbackFrom)
+          this.playNote (clip, this.startTime + clip.get ("source_offset") 
+                         - this.playbackFrom);
+      }
     },
 
     schedule : function () {
@@ -135,14 +142,14 @@ define([
       else
         source.noteOn (time);
 
-      this.playingSources.push (source);
+      this.playingSources [clip.id] = source;
     },
 
     /* play all clips by getting the current position in the model. All 
      * bufferSources are recorded in this.playingSources */
     playNotes : function () {
       if (this.playing) return;
-
+      this.playing = true;
       this.startTime = this.context.currentTime;
       
       this.playbackFrom = this.model.get ("playingAt");
@@ -163,7 +170,7 @@ define([
       this.playing = false;
       this.model.set ("playing", false);
       _.each (this.playingSources, function (source) { source.noteOff (0) });
-      this.playingSources = [];
+      this.playingSources = {};
     },
 
     volumeChange : function(volume, cid) {

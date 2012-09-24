@@ -12,7 +12,8 @@ define([
 
     defaults : {
       name : "New track",
-      volume : 0
+      volume : 0,
+      height : 75      
     },
 
     initialize : function (data) {

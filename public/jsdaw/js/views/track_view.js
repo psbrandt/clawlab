@@ -33,8 +33,8 @@ define([
 
     remove : function () {
       $(this.el).remove ();
-      // TODO : remove clip
-      // erase clips from canvas ?
+      // TODO : remove clips
+      this.kineticNode.parent.remove (this.kineticNode);
     },
 
     render : function () {
@@ -47,6 +47,10 @@ define([
       // Rendering controls
       $(this.el).html (this.template (data));
 
+      // kinetic
+      this.kineticNode.setY (
+        this.model.get ("height") * this.model.get ("index"));
+
       // temporarily droppable
       $(".dropzone", this.el).droppable ();
 
@@ -57,11 +61,8 @@ define([
     },
 
     addClip : function (clip) {
-      var view = new ClipView ({ model : clip });
-      Claw.SequencerView.appendClip (
-        view.render (),
-        this
-      );
+      var clipView = new ClipView ({ model : clip }).render ();
+      this.kineticNode.add (clipView.kineticNode);
     },
 
     removeTrackClicked : function () {

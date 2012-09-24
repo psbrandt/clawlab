@@ -24,17 +24,18 @@ define([
 
       this.model.on ("change:playingAt", this.playingAtChanged, this);
 
+      this.tracksLayer = new Kinetic.Layer ();
+
+      this.initKinetics ();
+
       // An index for tracks
       this.index = 0;
 
-      // The timeline height
-      this.timelineHeight = 20;
       this.rendered = false;
-
     },
 
     playingAtChanged : function (model, playingAt) {
-      this.tracker.setX (Claw.Helpers.secToPx (playingAt));
+      this.tracker.setX (Claw.Helpers.secToPx (playingAt) - this.offsetX ());
       this.stage.draw ();
     },
 
@@ -47,34 +48,22 @@ define([
     },
 
     render : function () {
-      if (this.rendered) {
-        // Setting #sequencer dimension
-        $(this.el).css ("width", this.getAvailableWidth());
-        $(this.el).css ("height", this.getAvailableHeight());
-        $(this.el).css ("margin-left", $("#left-bar").innerWidth ());
+      $(this.el).append (this.template ());
+      $(this.el).css ("width", this.getAvailableWidth());
+      $(this.el).css ("height", this.getAvailableHeight());
+      $(this.el).css ("margin-left", $("#left-bar").innerWidth ());
 
-        this.stage.setSize (
-          $(this.el).innerWidth (),
-          $(this.el).innerHeight () - $.getScrollbarWidth ()
-        );
-        this.tracksGroup.setX (-this.offsetX ());
-        this.tracksGroup.setY (-this.offsetY ());
-        this.stage.draw ()
-      }
-      else {
-        $(this.el).html (this.template ());
-      
-        // Setting #sequencer dimension
-        $(this.el).css ("width", this.getAvailableWidth());
-        $(this.el).css ("height", this.getAvailableHeight());
-        $(this.el).css ("margin-left", $("#left-bar").innerWidth ());
+      this.stage.setSize (
+        $(this.el).innerWidth (),
+        $(this.el).innerHeight () - $.getScrollbarWidth ()
+      );
+      this.tracksLayer.setX (-this.offsetX ());
+      this.tracksLayer.setY (-this.offsetY () + this.model.get ("timelineHeight"));
 
-        // #sequencer is droppable. It can receive audio sources
-        this.$el.droppable ();
-
-        this.initKinetics ();
-        this.rendered = true;
-      }
+      this.tracker.setX (
+        Claw.Helpers.secToPx (this.model.get ("playingAt")) - this.offsetX ()
+      );
+      this.stage.draw ()
       return this;
     },
 
@@ -107,7 +96,7 @@ define([
       });
 
       // A group for tracks
-      this.tracksGroup = new Kinetic.Group ();
+      this.tracksLayer = new Kinetic.Group ({ y : this.model.get ("timelineHeight") });
 
       this.tracker = new Kinetic.Line ({
         points : [0, 0, 0, this.stage.getHeight ()],
@@ -116,7 +105,7 @@ define([
       });
 
       this.layer.add (this.grid);
-      this.layer.add (this.tracksGroup); // the clips over the grid
+      this.layer.add (this.tracksLayer); // the clips over the grid
       this.layer.add (this.timeline); // the timeline over the clips
       this.layer.add (this.tracker); // The tracker over all
       this.stage.add (this.layer);
@@ -130,21 +119,9 @@ define([
       return this.index++;
     },
 
-    appendTrack : function (trackView) {
-      this.tracksGroup.add  (trackView.kineticNode);
-      trackView.kineticNode.setY (
-        this.timelineHeight + this.trackHeight() * this.incIndex ()
-      );
-    },
-
-    appendClip : function (clipView, trackView) {
-      trackView.kineticNode.add (clipView.kineticNode);
-      this.stage.draw ();
-    },
-
     /**
-     *  Draw the timeline with the given offset on the given 2D context 
-     */
+     * Draw the timeline (numbers at the top) with the given offset on the 
+     * given 2D context */
     drawTimeline : function (ctx) {
       var grid_every = 1/8
         , ctx_width  = ctx.canvas.width
@@ -155,8 +132,8 @@ define([
         , is_bar     = function(n) {return (n % (4 / grid_every)) == 0;};
 
       // Filling the top area that will contain timeline numbers
-      ctx.fillStyle = '#444';
-      ctx.fillRect(0, 0, ctx_width, this.timelineHeight-1);
+      ctx.fillStyle = "#444";
+      ctx.fillRect(0, 0, ctx_width, this.model.get ("timelineHeight") - 1);
       
       for(var i = (Math.ceil (offsetX / step_width)), 
 	  max = (Math.ceil(ctx_width / step_width) + offsetX); 
@@ -181,11 +158,12 @@ define([
         if (drawStroke) {
           ctx.beginPath();
           ctx.moveTo(x, 0);
-          ctx.lineTo(x, this.timelineHeight);
+          ctx.lineTo(x, this.model.get ("timelineHeight"));
           ctx.closePath();
           ctx.stroke();
         }
       }
+      ctx.fillStyle = "";
     },
 
     /**
@@ -200,6 +178,10 @@ define([
         , is_beat    = function(n) {return (n % (1 / grid_every)) == 0;}
         , is_bar     = function(n) {return (n % (4 / grid_every)) == 0;};
 
+      // Filling background
+      ctx.fillStyle = "#777";
+      ctx.fillRect(0, 0, ctx_width, ctx_height);
+
       for(var i = (Math.ceil (offsetX / step_width)), 
 	  max = (Math.ceil(ctx_width / step_width) + offsetX); 
 	  i < max; i++) {
@@ -213,12 +195,12 @@ define([
         }
         else {
           ctx.strokeStyle = "#888";
-          start_y = this.timelineHeight;
+          start_y = this.model.get ("timelineHeight");
         }
         
         //console.log(x, 0, x + (step_width - 2), ctx_height);
         ctx.beginPath();
-        ctx.moveTo(x, this.timelineHeight);
+        ctx.moveTo(x, this.model.get ("timelineHeight"));
         ctx.lineTo(x, ctx_height);
         ctx.closePath();
         ctx.stroke();

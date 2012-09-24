@@ -30,12 +30,14 @@ define([
 
     initialize : function () {
       // listen when a track is created
-      this.model.tracks.bind ("add", this.addTrack);
+      this.model.tracks.bind ("add", this.addTrack, this);
+
+      this.sequencerView;
 
       var self = this;
       $(window).resize (function () {
         self.setWorkspaceDimensions ();
-        Claw.SequencerView.render ();
+        self.sequencerView.render ();
       });
     },
     
@@ -47,15 +49,19 @@ define([
       this.setWorkspaceDimensions ();
 
       // Setting el and rendering sequencer
-      Claw.SequencerView.setElement ($("#sequencer"));
-      Claw.SequencerView.render ();
+      this.sequencerView = new SequencerView ({
+        model : this.model,
+        el : "#sequencer"
+      });
       // NOTE : fixme, should be in sequencer view but does not work
-      $("#sequencer").scroll (Claw.SequencerView.render);
-      $("#workspace").scroll (Claw.SequencerView.render);
+      $("#sequencer").scroll (this.sequencerView.render);
+      $("#workspace").scroll (this.sequencerView.render);
 
       // Render tracks
       var self = this;
       this.model.tracks.each (function (track) { self.addTrack (track) });
+
+      this.sequencerView.render ();
 
       new LibraryView ({
         collection : this.model.audioSources,
@@ -83,7 +89,7 @@ define([
                            - $(".topbar").height () // minus topbar height
                            - $.getScrollbarWidth ()); // minus scrollbar width
       // Workspace margin top for the timeline
-      $("#tracks-controls").css ("margin-top", Claw.SequencerView.timelineHeight);
+      $("#tracks-controls").css ("margin-top", this.model.get ("timelineHeight"));
       // right-bar height
       $("#right-bar").css ("height", window.innerHeight // inner height
                            - $("#transport").height () // minus transport height
@@ -92,11 +98,12 @@ define([
     },
     
     addTrack : function (trackModel) {
-      var view = new TrackView ({ 
+      var trackView = new TrackView ({ 
         model : trackModel
-      });
-      Claw.SequencerView.appendTrack (view);
-      $("#tracks-controls", this.el).append (view.render().el);
+      }).render ();
+      this.sequencerView.tracksLayer.add (trackView.kineticNode);
+      $("#tracks-controls", this.el).append (trackView.el);
+      this.sequencerView.render ();
     }
   });
 });

@@ -6,6 +6,11 @@
   font-size:16px;
 }
 
+.audio-source .filename {
+  width:100px;
+  overflow:hidden;
+}
+
 .audio-source .bar {
   background-color:#888; 
   height:10px;

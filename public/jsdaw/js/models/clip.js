@@ -15,6 +15,7 @@ define([
     },
 
     initialize : function (data) {
+      this.on ("change:source_offset", this.save, this);
     },
 
     delete : function () {

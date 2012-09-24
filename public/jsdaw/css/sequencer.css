@@ -3,8 +3,10 @@
   height:1px;
 }
 
+#sequencer {
+}
+
 #sequencer canvas {
-  background-color:#777;
   position : fixed;
   z-index:-1
 }

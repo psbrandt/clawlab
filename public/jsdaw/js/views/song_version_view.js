@@ -56,8 +56,8 @@ define([
       }).render ();
       
       // Render tracks
-      var self = this;
-      this.model.tracks.each (function (track) { self.addTrack (track) });
+      this.renderTracks ();
+
       this.sequencerView.stage.draw ();
 
       new LibraryView ({
@@ -72,6 +72,11 @@ define([
       }).render ();
       
       return this;
+    },
+
+    renderTracks : function () {
+      var self = this;
+      this.model.tracks.each (function (track) { self.addTrack (track) });
     },
     
     setWorkspaceDimensions : function () {

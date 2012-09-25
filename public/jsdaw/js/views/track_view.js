@@ -39,8 +39,8 @@ define([
 
     remove : function () {
       $(this.el).remove ();
-      // TODO : test it
       this.kineticNode.parent.remove (this.kineticNode);
+      this.kineticNode.getLayer ().draw ();
     },
 
     render : function () {

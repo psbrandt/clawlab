@@ -19,14 +19,29 @@
         <li class="divider-vertical"></li>
         <li>
           <div class="btn-group">
-            <button class="btn btn-primary">
+            <button class="btn btn-primary" id="rewind-btn">
               <i class="icon-fast-backward icon-white"></i>
             </button>
-            <button class="btn btn-inverse">
+            <button class="btn btn-inverse" id="stop-btn">
               <i class="icon-white icon-stop"></i>
             </button>
-            <button class="btn btn-inverse">
+            <button class="btn btn-inverse disabled" id="play-btn">
               <i class="icon-white icon-play"></i>
+            </button>
+          </div>
+        </li>
+        <li class="divider-vertical"></li>
+        <li class="active">
+          <a class="current-time">00:00:000 | 1.1</a>
+        </li>
+        <li class="divider-vertical"></li>
+        <li>
+          <div class="btn-group">
+            <button class="btn" id="zoom-out-btn">
+              <i class="icon-zoom-out"></i>
+            </button>
+            <button class="btn" id="zoom-in-btn">
+              <i class="icon-zoom-in"></i>
             </button>
           </div>
         </li>

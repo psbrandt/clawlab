@@ -27,6 +27,11 @@ class TracksController < ApplicationController
     render :json => {:message => "Track successfully destroyed"}
   end
 
+  def update
+    set_name   if params[:name]
+    set_volume if params[:volume]
+  end
+  
   def set_name
     action = TrackActionSetName.new(
       :song_version_id => @song_version.id,

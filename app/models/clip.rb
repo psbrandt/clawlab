@@ -4,10 +4,11 @@ class Clip
 
   embedded_in :track
 
-  has_one :source
+  field :audio_source_id, :type => Moped::BSON::ObjectId
 
   field :source_offset, :type => Float, :default => 0
   field :begin_offset, :type => Float, :default => 0
   field :end_offset, :type => Float, :default => 0
 
+  validates_presence_of :audio_source_id
 end

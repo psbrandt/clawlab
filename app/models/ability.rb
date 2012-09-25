@@ -31,7 +31,7 @@ class Ability
       # User can read all song versions of a song he's involved in and create his
       can [:read, :create], SongVersion, :song => { :id => user.song_ids }
       # he can manage a song version he owns
-      can [:manage, :set_title, :undo, :redo, :share], SongVersion, :user_id => user.id
+      can [:manage, :undo, :redo, :share], SongVersion, :user_id => user.id
       # audio sources
       can :manage, AudioSource
       
@@ -42,7 +42,7 @@ class Ability
       can :manage, Track, :song_version => { :user_id => user.id }
       
       # clips
-      can :manage, Clip, :track => { :song_version => { :user_id => user.id } }
+      can :manage, Clip,:track => { :song_version => { :user_id => user.id } }
     end
     # can read root_action if song_version.song.users includes user
     # can :read, SongVersionActionCreate, :song_version => { :song_id => ...

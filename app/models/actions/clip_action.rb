@@ -1,10 +1,19 @@
 class ClipAction < Action
-  # Hm... not good. Mongoid says that "Definitions are required on both sides to
-  # the relation in order for it to work properly." which is not the case here.
-  belongs_to :track
-  belongs_to :clip
-  # field :track_id, :type => BSON::ObjectId
-  # field :clip_id,  :type => BSON::ObjectId
+  field :song_version_id, :type => Moped::BSON::ObjectId
+  field :track_id, :type => Moped::BSON::ObjectId
+  field :clip_id, :type => Moped::BSON::ObjectId
+
+  def song_version
+    SongVersion.find self.song_version_id
+  end
+
+  def track
+    song_version.tracks.find self.track_id
+  end
+
+  def clip 
+    track.clips.find self.clip_id
+  end
 
   def same_as? action
     super(action) && self.clip == action.clip

@@ -6,6 +6,10 @@ class TrackAction < Action
     SongVersion.find self.song_version_id
   end
 
+  def track
+    song_version.track.find self.track_id
+  end
+
   def same_as? action
     super(action) && self.track_id == action.track_id
   end

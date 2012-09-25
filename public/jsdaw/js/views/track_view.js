@@ -38,7 +38,7 @@ define([
     },
 
     remove : function () {
-      $(this.el).remove ();
+      this.$el.remove ();
       this.kineticNode.parent.remove (this.kineticNode);
       this.kineticNode.getLayer ().draw ();
     },
@@ -51,7 +51,7 @@ define([
       };
       
       // Rendering controls
-      $(this.el).html (this.template (data));
+      this.$el.html (this.template (data));
 
       // kinetic
       this.kineticNode.setY (

@@ -50,7 +50,6 @@ define([
     },
 
     render : function () {
-      console.log ("render");
       this.$el.append (this.template ());
       this.$el.css ("width", this.getAvailableWidth());
       this.$el.css ("height", this.getAvailableHeight());
@@ -208,7 +207,6 @@ define([
           start_y = this.model.get ("timelineHeight");
         }
         
-        //console.log(x, 0, x + (step_width - 2), ctx_height);
         ctx.beginPath();
         ctx.moveTo(x, this.model.get ("timelineHeight"));
         ctx.lineTo(x, ctx_height);

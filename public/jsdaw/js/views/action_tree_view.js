@@ -39,7 +39,7 @@ define([
                                     this.childrenTemplate ());
 
       // Concatenate the two views in el
-      $(this.el).html ($(root_action).add (tree));
+      this.$el.html ($(root_action).add (tree));
 
       return this;
     },

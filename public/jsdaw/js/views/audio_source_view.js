@@ -35,10 +35,10 @@ define([
         bufferLoaded : this.model.get ("bufferLoaded")
       }
 
-      $(this.el).html (this.template (data));
+      this.$el.html (this.template (data));
 
       if(!this.model.isNew())
-        $(this.el).find('.upload-btn').remove()
+        this.$el.find('.upload-btn').remove()
 
       return this;
     },
@@ -74,7 +74,7 @@ define([
         // Unbind so it is only triggered once
         this.model.off('change', onModelUploaded);
         if(!this.model.isNew())
-          $(this.el).find('.upload-btn').remove();
+          this.$el.find('.upload-btn').remove();
       }, this);
 
       this.model.on('change', onModelUploaded);

@@ -25,16 +25,16 @@ define([
     },
 
     render : function () {
-      $(this.el).html (this.template ());
+      this.$el.html (this.template ());
 
       //render audio sources
       this.collection.each (this.addAudioSource);
 
       // Initialize fileupload
-      this.$fileupload = $(this.el).find('input:file.file-upload-field')
+      this.$fileupload = this.$el.find('input:file.file-upload-field')
       // Listen drop or add
       this.$fileupload.fileupload({
-        dropZone: $(this.el).find('#dropzone'),
+        dropZone: this.$el.find('#dropzone'),
         fileInput: null,
         add: _.bind(this.handleFileSelect, this),
         dataType: 'json'

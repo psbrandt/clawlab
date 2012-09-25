@@ -39,7 +39,7 @@ define([
 
     remove : function () {
       $(this.el).remove ();
-      // TODO : remove clips
+      // TODO : test it
       this.kineticNode.parent.remove (this.kineticNode);
     },
 
@@ -57,7 +57,6 @@ define([
       this.kineticNode.setY (
         this.model.get ("height") * this.model.get ("index"));
 
-      // temporarily droppable
       $(".dropzone", this.el).droppable ();
 
       var self = this;
@@ -69,6 +68,12 @@ define([
     addClip : function (clip) {
       var clipView = new ClipView ({ model : clip }).render ();
       this.kineticNode.add (clipView.kineticNode);
+      // Try to redraw parent layer. Will fail when adding a clip
+      try { 
+        this.kineticNode.getLayer ().draw (); 
+      } catch (e) {
+        // the node was not added in a layer yet
+      }
     },
 
     removeTrackClicked : function () {

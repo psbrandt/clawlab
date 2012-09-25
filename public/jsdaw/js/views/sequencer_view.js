@@ -22,22 +22,22 @@ define([
     initialize : function () {
       _.bindAll (this, "render");
 
+      this.initKinetics ();
+
       this.model.on ("change:playingAt", this.playingAtChanged, this);
       $("#workspace").scroll (this.render);
 
-      this.initKinetics ();
-
-      this.rendered = false;
     },
 
     horizontallyScrolled : function (e) {
       var offset = this.$el.scrollLeft ();
       this.tracksLayer.setX (-offset);
+      this.trackerLayer.setX (-offset);
       this.stage.draw();
     },
 
     playingAtChanged : function (model, playingAt) {
-      this.tracker.setX (Claw.Helpers.secToPx (playingAt) - this.offsetX ());
+      this.trackerLayer.setX (Claw.Helpers.secToPx (playingAt) - this.offsetX ());
       this.trackerLayer.draw ();
     },
 
@@ -50,6 +50,7 @@ define([
     },
 
     render : function () {
+      console.log ("render");
       this.$el.append (this.template ());
       this.$el.css ("width", this.getAvailableWidth());
       this.$el.css ("height", this.getAvailableHeight());
@@ -62,11 +63,11 @@ define([
       this.tracksLayer.setX (-this.offsetX ());
       this.tracksLayer.setY (-this.offsetY () + this.model.get ("timelineHeight"));
 
-      this.tracker.setX (
+      this.trackerLayer.setX (
         Claw.Helpers.secToPx (this.model.get ("playingAt")) - this.offsetX ()
       );
       this.tracker.setPoints (
-        [1, 0, 1, this.stage.getHeight ()]
+        [0, 0, 0, this.stage.getHeight ()]
       );
       this.stage.draw ()
       return this;
@@ -101,14 +102,15 @@ define([
         }
       });
 
-      // A group for tracks
+      // A layer for tracks
       this.tracksLayer = new Kinetic.Layer ({ 
         y : this.model.get ("timelineHeight") 
       });
 
+      // A layer for the tracker
       this.trackerLayer = new Kinetic.Layer ();
       this.tracker = new Kinetic.Line ({
-        points : [1, 0, 1, this.stage.getHeight ()],
+        points : [0, 0, 0, this.stage.getHeight ()],
         stroke : "red",
         strokeWidth : 1,
         draggable : true,
@@ -124,10 +126,6 @@ define([
       this.stage.add (this.layer);
       this.stage.add (this.tracksLayer); // the clips over the grid
       this.stage.add (this.trackerLayer); // The tracker over all
-    },
-
-    timelineMouseup : function (e) {
-      console.log (e, f);
     },
 
     /**

@@ -43,7 +43,7 @@ define([
     
     render : function () {
       // Setting #main with the main template
-      $(this.el).html (this.template ());
+      this.$el.html (this.template ());
 
       // Setting workspace dimensions
       this.setWorkspaceDimensions ();
@@ -52,13 +52,11 @@ define([
       this.sequencerView = new SequencerView ({
         model : this.model,
         el : "#sequencer"
-      });
+      }).render ();
 
       // Render tracks
       var self = this;
       this.model.tracks.each (function (track) { self.addTrack (track) });
-
-      this.sequencerView.render ();
 
       new LibraryView ({
         collection : this.model.audioSources,
@@ -100,7 +98,6 @@ define([
       }).render ();
       this.sequencerView.tracksLayer.add (trackView.kineticNode);
       $("#tracks-controls", this.el).append (trackView.el);
-      this.sequencerView.render ();
     }
   });
 });

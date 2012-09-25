@@ -20,7 +20,6 @@ define([
       this.kineticNode = new Kinetic.Shape ({
         x : offset,
         drawFunc : function () {},
-        //width : this.buffer ? Claw.Helpers.secToPx (this.buffer.duration) : 0,
         fill: {
           start : {
             x : 0,
@@ -32,8 +31,8 @@ define([
             y : 75,
             radius : 0            
           },
-          colorStops: [0, "rgba(0,0,0,0.5)", 0.1, "rgba(255,255,255,0)", 0.9, 
-                       "rgba(255,255,255,0)", 1, "rgba(0,0,0,0.5)"]
+          colorStops: [0, "rgba(0,0,0,0.5)", 0.1, "rgba(255,255,255,0.1)", 0.9, 
+                       "rgba(255,255,255,0.1)", 1, "rgba(0,0,0,0.5)"]
         },
         stroke : "FFA500",
         strokeWidth : 1,
@@ -47,8 +46,12 @@ define([
       this.kineticNode.on ("dragend", function (e) {
         self.dragStopped (e);
       });
+
     },
     
+    /**
+     * When the buffer is loaded, this function set the drawFunc field of the 
+     * node. */
     bufferLoaded : function () {
       this.buffer = Claw.Player.buffers[this.audioSource.id];
       // the lenght of the clip in seconds
@@ -88,12 +91,21 @@ define([
         this.fill (ctx);
         ctx.closePath ();
       });
-
-      this.kineticNode.getLayer ().draw ();
+      
+      // Try to redraw the parent layer. The render function might be called
+      // before adding the node in the layer. If the buffer was loaded, then 
+      // it will fail, else, this function will be called later
+      try {
+        this.kineticNode.getLayer ().draw ();
+      } catch (e) { 
+        // the node was not added in a layer yet
+      }
     },
 
     // renders in the sequencer view
     render : function () {
+      // if the buffer is set, then set drawFunc
+      if (this.buffer) this.bufferLoaded ();
       return this;
     },
 

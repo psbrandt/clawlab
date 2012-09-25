@@ -56,7 +56,10 @@ define([
     },
 
     toggleReadyMode : function (model, ready) {
-      this.$el.find ("#play-btn").toggleClass ("disabled", !ready);
+      if (ready) 
+	this.$el.find ("#play-btn").removeProp ("disabled");
+      else 
+	this.$el.find ("#play-btn").prop ("disabled", "disabled");
     },
 
     togglePlayingMode : function (model, playing) {

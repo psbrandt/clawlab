@@ -16,7 +16,7 @@ define([
     template : _.template (sequencerTemplate),
 
     events : {
-      "scroll" : "render"
+      "scroll" : "horizontallyScrolled"
     },
 
     initialize : function () {
@@ -25,16 +25,20 @@ define([
       this.model.on ("change:playingAt", this.playingAtChanged, this);
       $("#workspace").scroll (this.render);
 
-      this.tracksLayer = new Kinetic.Layer ();
-
       this.initKinetics ();
 
       this.rendered = false;
     },
 
+    horizontallyScrolled : function (e) {
+      var offset = this.$el.scrollLeft ();
+      this.tracksLayer.setX (-offset);
+      this.stage.draw();
+    },
+
     playingAtChanged : function (model, playingAt) {
       this.tracker.setX (Claw.Helpers.secToPx (playingAt) - this.offsetX ());
-      this.stage.draw ();
+      this.trackerLayer.draw ();
     },
 
     offsetX : function () {
@@ -64,7 +68,7 @@ define([
       this.tracker.setPoints (
         [1, 0, 1, this.stage.getHeight ()]
       );
-      this.layer.draw ()
+      this.stage.draw ()
       return this;
     },
 
@@ -98,8 +102,11 @@ define([
       });
 
       // A group for tracks
-      this.tracksLayer = new Kinetic.Group ({ y : this.model.get ("timelineHeight") });
+      this.tracksLayer = new Kinetic.Layer ({ 
+        y : this.model.get ("timelineHeight") 
+      });
 
+      this.trackerLayer = new Kinetic.Layer ();
       this.tracker = new Kinetic.Line ({
         points : [1, 0, 1, this.stage.getHeight ()],
         stroke : "red",
@@ -110,12 +117,13 @@ define([
           left:1
         }
       });
+      this.trackerLayer.add (this.tracker);
 
       this.layer.add (this.grid);
-      this.layer.add (this.tracksLayer); // the clips over the grid
       this.layer.add (this.timeline); // the timeline over the clips
-      this.layer.add (this.tracker); // The tracker over all
       this.stage.add (this.layer);
+      this.stage.add (this.tracksLayer); // the clips over the grid
+      this.stage.add (this.trackerLayer); // The tracker over all
     },
 
     timelineMouseup : function (e) {
@@ -167,6 +175,7 @@ define([
         }
       }
       ctx.fillStyle = "";
+      ctx.closePath ();
     },
 
     /**
@@ -208,6 +217,7 @@ define([
         ctx.closePath();
         ctx.stroke();
       }
+      ctx.closePath ();
     },
 
     /**

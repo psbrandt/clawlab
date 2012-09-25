@@ -15,7 +15,8 @@ define([
     defaults : {
       playingAt : 0,
       playing : false,
-      timelineHeight : 20
+      timelineHeight : 20,
+      readyToPlay : false
     },
 
     initialize : function (data) {

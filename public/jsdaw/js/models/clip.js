@@ -20,8 +20,7 @@ define([
 
     delete : function () {
       this.destroy ();
-    },
-
+    }
   });
   return ClipModel;
 });

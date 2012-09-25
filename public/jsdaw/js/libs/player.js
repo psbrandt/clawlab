@@ -24,9 +24,8 @@ define([
           message: 'Your browser is not supported yet, try using Google Chrome.'
         });
         $(tpl).modal();   
-      } else {
+      } else
         this.context = new webkitAudioContext || new AudioContext;
-      }
       
       this.buffers    = {};
       this.trackNodes = {};
@@ -47,6 +46,8 @@ define([
           function (audioBuffer) {
             self.buffers[audioSource.get("id")] = audioBuffer;
             audioSource.trigger ("bufferLoaded");
+            if (++loadCount == self.model.audioSources.length) 
+              self.model.set ("readyToPlay", true);
           },
           { onprogress : function (e) {
             var complete = e.position * 100 / e.totalSize;
@@ -106,7 +107,6 @@ define([
     },
 
     muteTrack : function (track) {
-      console.log (this.trackNodes[track.id]);
       this.trackNodes[track.id].gain.value = 0;
     },
 

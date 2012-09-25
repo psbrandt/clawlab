@@ -19,6 +19,7 @@ define([
     initialize : function () {
       this.model.on ("change:playingAt", this.playingAtChanged, this);
       this.model.on ("change:playing", this.togglePlayingMode, this);
+      this.model.on ("change:readyToPlay", this.toggleReadyMode, this);
     },
 
     render : function () {
@@ -42,6 +43,10 @@ define([
         (ms  < 10 ? "00" + ms  : (ms < 100 ? "0" + ms : ms )) + " | " +
         Math.floor (beat / 4 + 1) + "." + (beat % 4 + 1);
       this.$el.find (".current-time").html (result);
+    },
+
+    toggleReadyMode : function (model, ready) {
+      this.$el.find ("#play-btn").toggleClass ("disabled", !ready);
     },
 
     togglePlayingMode : function (model, playing) {

@@ -39,6 +39,7 @@ define([
         self.setWorkspaceDimensions ();
         self.sequencerView.render ();
       });
+      this.model.on ("change:scale", this.render, this);
     },
     
     render : function () {
@@ -53,10 +54,11 @@ define([
         model : this.model,
         el : "#sequencer"
       }).render ();
-
+      
       // Render tracks
       var self = this;
       this.model.tracks.each (function (track) { self.addTrack (track) });
+      this.sequencerView.stage.draw ();
 
       new LibraryView ({
         collection : this.model.audioSources,

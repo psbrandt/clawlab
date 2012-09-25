@@ -11,7 +11,9 @@ define([
       "click #add-track-button" : "addTrackClicked",
       "click #play-btn"         : "playPauseClicked",
       "click #stop-btn"         : "stopClicked",
-      "click #rewind-btn"       : "rewindClicked"
+      "click #rewind-btn"       : "rewindClicked",
+      "click #zoom-in-btn"      : "zoomInClicked",
+      "click #zoom-out-btn"     : "zoomOutClicked"
     },
 
     template : _.template (transportT),
@@ -30,6 +32,14 @@ define([
       //render directly in body
       $("body").append (this.el);
       return this;
+    },
+
+    zoomInClicked : function () {
+      this.model.zoomIn ();
+    },
+
+    zoomOutClicked : function () {
+      this.model.zoomOut ();
     },
 
     playingAtChanged : function (model, playingAt) {

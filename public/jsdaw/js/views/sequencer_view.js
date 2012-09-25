@@ -26,7 +26,6 @@ define([
 
       this.model.on ("change:playingAt", this.playingAtChanged, this);
       $("#workspace").scroll (this.render);
-
     },
 
     horizontallyScrolled : function (e) {

@@ -27,7 +27,7 @@ define([
 
     Claw.Helpers = new Helpers ({
       bpm : songVersionModel.get("bpm"),
-      pxPerBeat : 40
+      pxPerBeat : songVersionModel.get ("scale")
     });
 
       // Render the transport view

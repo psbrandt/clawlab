@@ -16,7 +16,8 @@ define([
       playingAt : 0,
       playing : false,
       timelineHeight : 20,
-      readyToPlay : false
+      readyToPlay : false,
+      scale : 40 // in px per beat
     },
 
     initialize : function (data) {
@@ -31,6 +32,17 @@ define([
         return new AudioSource (json_source);
       });
       this.audioSources = new AudioSourceCollection (audioSourceModels);
+    },
+
+    zoomIn : function () {
+      Claw.Helpers.pxPerBeat += 5;
+      this.set ("scale", this.get ("scale") + 5);
+    },
+
+    zoomOut : function () {
+      var scale = Math.max (5, this.get ("scale") - 5);
+      Claw.Helpers.pxPerBeat = scale;
+      this.set ("scale", scale);
     },
 
     clips : function () {

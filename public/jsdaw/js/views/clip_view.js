@@ -14,11 +14,9 @@ define([
       this.audioSource = Claw.Player.model.audioSources.get (
         this.model.get("audio_source_id")
       );
-      var offset = Claw.Helpers.secToPx (this.model.get ("source_offset"));
       this.buffer = Claw.Player.buffers[this.audioSource.id];
       this.audioSource.on ("bufferLoaded", this.bufferLoaded, this);
       this.kineticNode = new Kinetic.Shape ({
-        x : offset,
         drawFunc : function () {},
         fill: {
           start : {
@@ -57,8 +55,6 @@ define([
       // the lenght of the clip in seconds
       var length = this.buffer.duration - this.model.get ("begin_offset") 
         - this.model.get ("end_offset");
-      // the width in pixels
-      var width = Claw.Helpers.secToPx (length);
       // height in pixels
       var height = 75;
       //where to start in the buffer in seconds
@@ -67,7 +63,12 @@ define([
       var end_offset = this.model.get ("end_offset");
 
       var self = this;
+      this.kineticNode.setX (
+        Claw.Helpers.secToPx (this.model.get ("source_offset"))
+      );
+
       this.kineticNode.setDrawFunc (function (ctx) {
+        var width = Claw.Helpers.secToPx (length);
         ctx.beginPath ();
         new Waveform ({
           context : ctx,

@@ -17,7 +17,8 @@ define([
       playing : false,
       timelineHeight : 20,
       readyToPlay : false,
-      scale : 40 // in px per beat
+      scale : 40, // in px per beat
+      rightBarVisible : true
     },
 
     initialize : function (data) {

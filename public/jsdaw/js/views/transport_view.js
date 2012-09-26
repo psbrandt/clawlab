@@ -13,7 +13,8 @@ define([
       "click #stop-btn"         : "stopClicked",
       "click #rewind-btn"       : "rewindClicked",
       "click #zoom-in-btn"      : "zoomInClicked",
-      "click #zoom-out-btn"     : "zoomOutClicked"
+      "click #zoom-out-btn"     : "zoomOutClicked",
+      "click #toggle-right-bar-btn" : "toggleRightBarClicked"
     },
 
     template : _.template (transportT),
@@ -32,6 +33,14 @@ define([
       //render directly in body
       $("body").append (this.el);
       return this;
+    },
+
+    toggleRightBarClicked : function (e) {
+      if ($(e.currentTarget).hasClass ("active"))
+        this.model.set ("rightBarVisible", false)
+      else
+        this.model.set ("rightBarVisible", true)
+      this.$el.find ("#toggle-right-bar-btn").toggleClass ("active");
     },
 
     zoomInClicked : function () {

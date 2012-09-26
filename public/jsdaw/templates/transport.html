@@ -1,12 +1,7 @@
 <div class="navbar-inverse navbar navbar-fixed-bottom" id="transport">
   <div class="navbar-inner">
-    <div class="container" style="width: auto; padding: 0 20px;">
+    <div class="container">
       <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
-      <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </a>
       
       <!-- Be sure to leave the brand out there if you want it shown -->
       <a class="brand" href="#"><%= title %></a>
@@ -46,11 +41,15 @@
           </div>
         </li>
       </ul>
-      
-      <!-- Everything you want hidden at 940px or less, place within here -->
-      <div class="nav-collapse">
-        <!-- .nav, .navbar-search, .navbar-form, etc -->
-      </div>
+
+      <ul class="nav pull-right">
+        <li>
+          <button class="btn btn-inverse active" id="toggle-right-bar-btn">
+            <i class="icon-white icon-headphones"></i>
+            <i class="icon-white icon-list"></i>
+          </button>
+        </li>
+      </ul>
     </div>
   </div>
 </div>

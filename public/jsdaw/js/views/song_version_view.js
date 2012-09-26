@@ -40,11 +40,14 @@ define([
         self.sequencerView.render ();
       });
       this.model.on ("change:scale", this.render, this);
+      this.model.on ("change:rightBarVisible", this.rightBarVisibilityChanged, this);
     },
     
     render : function () {
       // Setting #main with the main template
-      this.$el.html (this.template ());
+      this.$el.html (this.template ({
+        rightBarVisible : this.model.get ("rightBarVisible")
+      }));
 
       // Setting workspace dimensions
       this.setWorkspaceDimensions ();
@@ -74,12 +77,24 @@ define([
       return this;
     },
 
+    rightBarVisibilityChanged : function (model, visible) {
+      if (visible)
+        this.$el.find ("#right-bar").show ("fast")
+      else
+        this.$el.find ("#right-bar").hide ("fast")
+      this.setWorkspaceDimensions ();
+      this.sequencerView.render ();
+    },
+
     renderTracks : function () {
       var self = this;
       this.model.tracks.each (function (track) { self.addTrack (track) });
     },
     
     setWorkspaceDimensions : function () {
+      $("#right-bar").width (
+        this.model.get ("rightBarVisible") ? 300 : 0
+      )
       // Workspace width
       $("#workspace").css ("width", window.innerWidth // inner width
                            - $("#right-bar").width () // minus right-bar width

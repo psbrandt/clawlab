@@ -46,4 +46,5 @@ body {
 #right-bar .tab-content {
   height:90%;
   overflow-y:auto;
+  overflow-x:hidden;
 }

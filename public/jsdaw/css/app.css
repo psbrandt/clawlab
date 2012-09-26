@@ -31,9 +31,8 @@ body {
   overflow-x:scroll;
 }
 
-#sequencer .fake-content {
-  width : 5000px;
-  height : 1px;
+#sequencer #tracks {
+  width : 10000px;
 }
 
 #timeline-stage {

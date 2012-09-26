@@ -1,5 +1,5 @@
 /**
- * Sequencer view
+ * Timeline view and tracker
  */
 define([
   "jquery",
@@ -41,11 +41,10 @@ define([
         , ctx_height = ctx.canvas.height
         , ctx_width  = ctx.canvas.width
       
-      var x = offset + Claw.Helpers.secToPx (playingAt);
-
+      var x = Claw.Helpers.secToPx (playingAt) - offset;
       // Clear canvas
       ctx.clearRect(0, 0, ctx_width, ctx_height);
-
+      if (x < 0 || x > ctx_width) return;
       ctx.beginPath ();
       ctx.moveTo (x, 0);
       ctx.lineTo (x, ctx_height);

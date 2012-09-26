@@ -5,10 +5,6 @@ define([
 ], function($, _, Backbone, TrackCollection, Track) {
   var AudioSource = Backbone.Model.extend ({
 
-    defaults : {
-      bufferLoaded : 0 // percentage loaded
-    },
-
     initialize : function (data) {
       self = this;
     },

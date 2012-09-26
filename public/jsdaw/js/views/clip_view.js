@@ -19,7 +19,6 @@ define([
     },
 
     initialize : function () {
-      var self = this;
       this.audioSource = Claw.Player.model.audioSources.get (
         this.model.get("audio_source_id")
       );
@@ -29,19 +28,31 @@ define([
     },
 
     render : function () {
-      this.$el.html (this.template ());
+      this.$el.html (this.template ({
+        filename : this.audioSource.get ("filename")
+      }));
       this.$el.draggable ({
-        containment : "#timeline",
+        containment : "parent",
         scroll : true,
+        scrollSensitivity : 40,
         axis : "x"
       });
+
+      // Hack to remove position set to relative by default
+      this.$el.css ("position", "absolute");
+      if (this.buffer) this.drawWaveform ()
       return this;
     },
     
-    /**
-     * When the buffer is loaded, update the el with right size and offset */
+    /** Set the buffer and render the clip */
     bufferLoaded : function () {
       this.buffer = Claw.Player.buffers[this.audioSource.id];
+      this.render ();
+    },
+
+    /**
+     * Update the el with right size and offset. Buffer need to be loaded */
+    drawWaveform : function () {
       // the lenght of the clip in seconds
       var length = this.buffer.duration - this.model.get ("begin_offset") 
         - this.model.get ("end_offset");
@@ -54,6 +65,7 @@ define([
       // when the clip starts in the song
       var offset = this.model.get("source_offset") + begin_offset
       this.$el.css ({
+        width : Claw.Helpers.secToPx (length),
         left : Claw.Helpers.secToPx (offset)
       }).find ("canvas").attr ({
         width : Claw.Helpers.secToPx (length),
@@ -73,7 +85,8 @@ define([
     },
 
     dragStopped : function (e, ui) {
-      var offset = Math.max(0, ui.offset.left - 200) // huh ... left-bar width
+      var offset = ui.offset.left - 200 // huh ... left-bar width
+        + $("#sequencer").scrollLeft () // huh ... scroll
       console.log (offset);
       this.model.set ({
         source_offset : Claw.Helpers.pxToSec (offset)

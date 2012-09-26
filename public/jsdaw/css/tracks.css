@@ -33,9 +33,14 @@
   cursor:pointer;
 }
 
+.track {
+  position:relative;
+  width : 100%;
+}
+
 .track .clip {
   height : 100%;
-  float:left;
+  position:absolute;
 }
 
 .track .clip canvas {

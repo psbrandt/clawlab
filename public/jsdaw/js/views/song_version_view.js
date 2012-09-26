@@ -66,7 +66,7 @@ define([
       }).render ();
       
       // Render tracks
-      this.renderTracks ();
+      this.model.tracks.each (function (track) { self.addTrack (track) });
 
       new LibraryView ({
         collection : this.model.audioSources,
@@ -91,11 +91,6 @@ define([
       this.timelineView.render ();
     },
 
-    renderTracks : function () {
-      var self = this;
-      this.model.tracks.each (function (track) { self.addTrack (track) });
-    },
-    
     setWorkspaceDimensions : function () {
       // right-bar height and width
       $("#right-bar").css ({

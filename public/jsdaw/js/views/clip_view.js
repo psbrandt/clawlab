@@ -5,9 +5,18 @@ define([
   "jquery",
   "underscore",
   "backbone",
+  "text!templates/clip.html",
   "libs/waveform"
-], function($, _, Backbone, Waveform) {
+], function($, _, Backbone, clipTemplate, Waveform) {
   return Backbone.View.extend ({
+
+    template : _.template (clipTemplate),
+
+    className : "clip",
+
+    events : {
+      "dragstop" : "dragStopped"
+    },
 
     initialize : function () {
       var self = this;
@@ -16,40 +25,21 @@ define([
       );
       this.buffer = Claw.Player.buffers[this.audioSource.id];
       this.audioSource.on ("bufferLoaded", this.bufferLoaded, this);
-      this.kineticNode = new Kinetic.Shape ({
-        drawFunc : function () {},
-        fill: {
-          start : {
-            x : 0,
-            y : 0,
-            radius : 0
-          },
-          end : {
-            x : 0,
-            y : 75,
-            radius : 0            
-          },
-          colorStops: [0, "rgba(0,0,0,0.5)", 0.1, "rgba(255,255,255,0.1)", 0.9, 
-                       "rgba(255,255,255,0.1)", 1, "rgba(0,0,0,0.5)"]
-        },
-        stroke : "FFA500",
-        strokeWidth : 1,
-        draggable : true,
-        dragConstraint : "horizontal",
-        dragBounds : {
-          left:1
-        }
-      })
+      this.model.on ("change:source_offset", this.sourceOffsetChanged, this)
+    },
 
-      this.kineticNode.on ("dragend", function (e) {
-        self.dragStopped (e);
+    render : function () {
+      this.$el.html (this.template ());
+      this.$el.draggable ({
+        containment : "#timeline",
+        scroll : true,
+        axis : "x"
       });
-
+      return this;
     },
     
     /**
-     * When the buffer is loaded, this function set the drawFunc field of the 
-     * node. */
+     * When the buffer is loaded, update the el with right size and offset */
     bufferLoaded : function () {
       this.buffer = Claw.Player.buffers[this.audioSource.id];
       // the lenght of the clip in seconds
@@ -57,63 +47,38 @@ define([
         - this.model.get ("end_offset");
       // height in pixels
       var height = 75;
-      //where to start in the buffer in seconds
+      // where to start in the buffer in seconds
       var begin_offset = this.model.get ("begin_offset");
       // where to end in the buffer in seconds
       var end_offset = this.model.get ("end_offset");
-
-      var self = this;
-      this.kineticNode.setX (
-        Claw.Helpers.secToPx (this.model.get ("source_offset"))
-      );
-
-      this.kineticNode.setDrawFunc (function (ctx) {
-        var width = Claw.Helpers.secToPx (length);
-        ctx.beginPath ();
-        new Waveform ({
-          context : ctx,
-          width : width,
-          height : height,
-          innerColor : "black",
-          data : self.buffer.getChannelData(0)
-        });
-        ctx.closePath ();
-
-        // Draw a rectangle for 
-        ctx.beginPath ();
-        ctx.moveTo (0, 0);
-        ctx.lineTo (0, height);
-        ctx.moveTo (width, 0);
-        ctx.lineTo (width, height);
-        // Calling this.stroke on context draw stroke using kinetic node config
-        this.stroke (ctx);
-        ctx.rect (0, 0, width, height);
-        // Calling this.fill on context fill it using kinetic node config
-        this.fill (ctx);
-        ctx.closePath ();
+      // when the clip starts in the song
+      var offset = this.model.get("source_offset") + begin_offset
+      this.$el.css ({
+        left : Claw.Helpers.secToPx (offset)
+      }).find ("canvas").attr ({
+        width : Claw.Helpers.secToPx (length),
+        height : height
+      })
+      new Waveform ({
+        canvas : this.$el.find ("canvas")[0],
+        data : this.buffer.getChannelData (0)
       });
-      
-      // Try to redraw the parent layer. The render function might be called
-      // before adding the node in the layer. If the buffer was loaded, then 
-      // it will fail, else, this function will be called later
-      try {
-        this.kineticNode.getLayer ().draw ();
-      } catch (e) { 
-        // the node was not added in a layer yet
-      }
     },
 
-    // renders in the sequencer view
-    render : function () {
-      // if the buffer is set, then set drawFunc
-      if (this.buffer) this.bufferLoaded ();
-      return this;
+    sourceOffsetChanged : function (model, sourceOffset) {
+      console.log ("changed " + sourceOffset);
+      this.$el.css ({
+        left : Claw.Helpers.secToPx (sourceOffset + model.get ("begin_offset"))
+      })
     },
 
-    dragStopped : function (e) {
+    dragStopped : function (e, ui) {
+      var offset = Math.max(0, ui.offset.left - 200) // huh ... left-bar width
+      console.log (offset);
       this.model.set ({
-        source_offset : Claw.Helpers.pxToSec (e.shape.getX())
+        source_offset : Claw.Helpers.pxToSec (offset)
       });
     }
+
   });
 });

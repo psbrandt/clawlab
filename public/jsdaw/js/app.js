@@ -6,12 +6,11 @@ define([
   "models/song_version",
   "views/song_version_view",
   "libs/helpers",
-  "views/sequencer_view",
   "libs/player",
   "views/transport_view"
 ], function (
   $, _, Backbone, Router, SongVersionModel, SongVersionView, Helpers, 
-  SequencerView, Player, TransportView) {
+  Player, TransportView) {
 
   var initialize = function(clawData){
     // Pass in our Router module and call it's initialize function

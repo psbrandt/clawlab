@@ -16,7 +16,6 @@ define([
 
     events : {
       "dragover #dropzone" : "handleDragOver"
-      // "drop #dropzone"     : "handleFileSelect"
     },
 
     initialize : function () {

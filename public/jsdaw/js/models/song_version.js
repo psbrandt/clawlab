@@ -15,10 +15,12 @@ define([
     defaults : {
       playingAt : 0,
       playing : false,
-      timelineHeight : 20,
+      timelineHeight : 40,
       readyToPlay : false,
       scale : 40, // in px per beat
-      rightBarVisible : true
+      rightBarVisible : true,
+      scrollLeft : 0,
+      scrollTop  : 0
     },
 
     initialize : function (data) {

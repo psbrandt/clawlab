@@ -1,5 +1,5 @@
-@import "track-controls.css";
-@import "sequencer.css";
+@import "timeline.css";
+@import "tracks.css";
 @import "actions.css";
 @import "library.css";
 @import "transport.css";
@@ -14,7 +14,6 @@ body {
 }
 
 #workspace {
-  overflow-x:hidden;
   overflow-y:scroll;
   float:left;
 }
@@ -24,13 +23,22 @@ body {
   height:100%;
   width:200px;
   float:left;
+  z-index:1000;
 }
-
 #sequencer {
   height:100%;
-  position:fixed;
-  overflow-y:hidden;
+  overflow-y : hidden;
   overflow-x:scroll;
+}
+
+#sequencer .fake-content {
+  width : 5000px;
+  height : 1px;
+}
+
+#timeline-stage {
+  position:absolute;
+  overflow:hidden;
 }
 
 #right-bar {

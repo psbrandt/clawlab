@@ -15,7 +15,7 @@ define([
     defaults : {
       playingAt : 0,
       playing : false,
-      timelineHeight : 40,
+      timelineHeight : 20,
       readyToPlay : false,
       scale : 40, // in px per beat
       rightBarVisible : true,

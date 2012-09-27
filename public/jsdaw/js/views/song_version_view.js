@@ -91,6 +91,18 @@ define([
       this.timelineView.render ();
     },
 
+    addTrack : function (trackModel) {
+      var trackControlsView = new TrackControlsView ({ 
+        model : trackModel
+      }).render ();
+      var trackView = new TrackView ({ 
+        model : trackModel
+      }).render ();
+
+      this.$el.find ("#tracks").append (trackView.el);
+      this.$el.find ("#tracks-controls").append (trackControlsView.el);
+    },
+
     setWorkspaceDimensions : function () {
       // right-bar height and width
       $("#right-bar").css ({
@@ -118,6 +130,10 @@ define([
         "height" : $("#workspace").height () 
           + $("#workspace").scrollTop ()
       });
+
+      // Infinite tracks width
+      $("#tracks").width ($("#sequencer").scrollLeft () + 1000);
+
       // grid stage width, height and margin top
       $("#timeline-stage").css ({
         "width" : $("#sequencer").innerWidth (),
@@ -127,18 +143,7 @@ define([
           + this.model.get ("timelineHeight"),
         "margin-top" : -this.model.get ("timelineHeight")
       });
-    },
-    
-    addTrack : function (trackModel) {
-      var trackControlsView = new TrackControlsView ({ 
-        model : trackModel
-      }).render ();
-      var trackView = new TrackView ({ 
-        model : trackModel
-      }).render ();
-
-      this.$el.find ("#tracks").append (trackView.el);
-      this.$el.find ("#tracks-controls").append (trackControlsView.el);
     }
+    
   });
 });

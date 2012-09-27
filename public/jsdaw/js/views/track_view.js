@@ -12,7 +12,7 @@ define([
     className : "track",
 
     events : {
-      "drop .dropzone" : "dropped",
+      "drop" : "dropped",
     },
 
     dropped : function (e, ui) {
@@ -33,6 +33,9 @@ define([
 
     render : function () {
       this.$el.css ("height", this.model.get ("height"));
+      this.$el.droppable ({
+        accept : ".audio-source"
+      });
       var self = this;
       this.model.clips.each (function (clip) { self.addClip (clip)});
 

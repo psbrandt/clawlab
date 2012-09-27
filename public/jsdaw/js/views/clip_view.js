@@ -78,7 +78,6 @@ define([
     },
 
     sourceOffsetChanged : function (model, sourceOffset) {
-      console.log ("changed " + sourceOffset);
       this.$el.css ({
         left : Claw.Helpers.secToPx (sourceOffset + model.get ("begin_offset"))
       })
@@ -87,7 +86,6 @@ define([
     dragStopped : function (e, ui) {
       var offset = ui.offset.left - 200 // huh ... left-bar width
         + $("#sequencer").scrollLeft () // huh ... scroll
-      console.log (offset);
       this.model.set ({
         source_offset : Claw.Helpers.pxToSec (offset)
       });

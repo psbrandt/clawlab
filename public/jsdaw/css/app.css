@@ -31,10 +31,6 @@ body {
   overflow-x:scroll;
 }
 
-#sequencer #tracks {
-  width : 10000px;
-}
-
 #timeline-stage {
   position:absolute;
   overflow:hidden;

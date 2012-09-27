@@ -36,7 +36,7 @@ define([
         id   : this.model.id, 
 	name : this.model.get("name")
       };
-      
+
       // Rendering controls
       this.$el.html (this.template (data));
 

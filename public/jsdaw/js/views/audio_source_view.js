@@ -14,6 +14,7 @@ define([
 
     template : _.template (audioSourceTemplate),
     tagName : "li",
+    className : "audio-source",
 
     events : {
       "click .remove-btn" : "removeClicked",
@@ -44,12 +45,12 @@ define([
     },
 
     bufferProgressed : function (complete) {
-      this.$el.find (".bar").width (complete + "%");
+      this.$el.find (".buffer-bar").width (complete + "%");
     },
 
     bufferLoaded : function () {
       this.setDraggable ();
-      this.$el.find (".bar").slideUp ();
+      this.$el.find (".buffer-bar").slideUp ();
     },
 
     setDraggable : function () {

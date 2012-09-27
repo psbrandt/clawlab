@@ -1,14 +1,10 @@
-<div class="audio-source">
-  <i class="icon-play icon-white play-stop-btn"></i> 
-  <span class="filename"><%= audioFilename %></span>
-  <span class="pull-right">
-    <% if (notUploaded) { %> 
-    <i class="icon-upload icon-white upload-btn"></i>
-    <% } %>
-    <i class="icon-remove-circle icon-white remove-btn"></i>
-  </span>
-  <% if (bufferLoaded) { %>
-  <div class="bar"></div>
+<i class="icon-play icon-white play-stop-btn"></i> 
+<span class="filename"><%= audioFilename %></span>
+<span class="pull-right">
+  <% if (notUploaded) { %> 
+  <i class="icon-upload icon-white upload-btn"></i>
   <% } %>
-</div>
+  <i class="icon-remove-circle icon-white remove-btn"></i>
+</span>
+<div class="bar buffer-bar" style="width:0%"></div>
 

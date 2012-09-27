@@ -17,7 +17,8 @@ define([
 
     dropped : function (e, ui) {
       var sourceOffset = Claw.Helpers.pxToSec (
-        Math.max (0, ui.offset.left - this.$el.width())
+        Math.max (0, ui.offset.left + $("#sequencer").scrollLeft () 
+                  - $("#left-bar").width ())
       );
       this.model.addClip (ui.helper.context.id, sourceOffset);
     },

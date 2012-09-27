@@ -131,8 +131,8 @@ define([
           + $("#workspace").scrollTop ()
       });
 
-      // Infinite tracks width
-      $("#tracks").width ($("#sequencer").scrollLeft () + 1000);
+      // 10 minutes of song
+      $("#tracks").width (Claw.Helpers.secToPx (600))
 
       // grid stage width, height and margin top
       $("#timeline-stage").css ({

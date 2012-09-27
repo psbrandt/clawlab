@@ -3,8 +3,9 @@ define([
   "underscore",
   "backbone",
   "models/audio_source",
-  "helpers/audio_source_loader"
-], function($, _, Backbone, AudioSourceModel, AudioSourceLoader, Player) {
+  "helpers/audio_source_loader",
+  "helpers/object_id"
+], function($, _, Backbone, AudioSourceModel, AudioSourceLoader, ObjectId) {
 
   return Backbone.Collection.extend ({
     model : AudioSourceModel,
@@ -16,15 +17,12 @@ define([
     addFromFile : function (file, uploader) {
       var src = new AudioSourceModel ({
         file : file,
-        audio_filename : file.name
+        audio_filename : file.name,
+        id : new ObjectId ().toString ()
       });
       src.uploader = uploader;
       src.collection = this;
-      var self = this;
-      AudioSourceLoader.loadFromFile (file, Claw.Player.context, function (audioBuffer) {
-        src.buffer = audioBuffer;
-        self.add (src);
-      });
+      this.add (src);
     }
   });
 

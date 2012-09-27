@@ -19,9 +19,6 @@
 .audio-source .remove-btn {
   padding:2px;
 }
-.audio-source .remove-btn:hover {
-  cursor:pointer;
-}
-.audio-source .upload-btn:hover {
+.audio-source .remove-btn:hover, .upload-btn:hover, .preview-btn:hover {
   cursor:pointer;
 }

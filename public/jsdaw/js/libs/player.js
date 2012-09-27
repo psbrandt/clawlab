@@ -49,12 +49,12 @@ define([
           self.context,
           function (audioBuffer) {
             self.buffers[audioSource.get("id")] = audioBuffer;
-            audioSource.trigger ("bufferLoaded");
+            audioSource.set ("bufferLoaded", true);
             if (++loadCount == self.model.audioSources.length) 
               self.model.set ("readyToPlay", true);
           },
           { onprogress : function (e) {
-            var complete = e.position * 100 / e.totalSize;
+            var complete = e.loaded * 100 / e.total;
             audioSource.trigger ("bufferProgress", complete);
           }}
         );
@@ -68,7 +68,24 @@ define([
       this.model.on ("stop", this.stopNotes, this);
       this.model.tracks.on ("add", this.addTrack, this);
       this.model.tracks.on ("remove", this.releaseTrack, this);
-      this.model.audioSources.on ("add", function (audioSource) { console.log ("aads")});
+      this.model.audioSources.on ("add", this.audioSourceAdded, this);
+    },
+
+    audioSourceAdded : function (audioSource) {
+      var self = this;
+      AudioSourceLoader.loadFromFile (
+        audioSource.get ("file"),
+        self.context,
+        function (audioBuffer) {
+          self.buffers[audioSource.get("id")] = audioBuffer;
+          audioSource.set ("bufferLoaded", true)
+        },
+        { onprogress : function (e) {
+          console.log (e);
+          var complete = e.loaded * 100 / e.total;
+          audioSource.trigger ("bufferProgress", complete);
+        }}
+      );
     },
 
     startAudioSourcePreview : function (audioSource) {

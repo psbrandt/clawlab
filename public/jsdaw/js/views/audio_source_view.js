@@ -19,12 +19,12 @@ define([
     events : {
       "click .remove-btn" : "removeClicked",
       "click .upload-btn" : "uploadClicked",
-      "click .preview-btn"   : "previewClicked"
+      "click .preview-btn": "previewClicked"
     },
 
     initialize : function () {
       this.model.on ("destroy", this.remove, this);
-      this.model.on ("bufferLoaded", this.bufferLoaded, this);
+      this.model.on ("change:bufferLoaded", this.bufferLoaded, this);
       this.model.on ("bufferProgress", this.bufferProgressed, this);
       this.model.on ("change:previewing", this.previewingChanged, this);
       this.playing = false;
@@ -33,15 +33,12 @@ define([
     render : function () {
       var data = {
         audioFilename : this.model.get ("audio_filename"),
-        notUploaded : typeof this.model.uploader != "undefined",
+        uploaded : this.model.uploader == undefined,
         bufferLoaded : this.model.get ("bufferLoaded"),
         previewing : this.model.get ("previewing")
       }
 
       this.$el.html (this.template (data));
-
-      if(!this.model.isNew())
-        this.$el.find('.upload-btn').remove()
 
       return this;
     },
@@ -50,7 +47,7 @@ define([
       this.$el.find (".buffer-bar").width (complete + "%");
     },
 
-    bufferLoaded : function () {
+    bufferLoaded : function (model, bufferLoaded) {
       this.setDraggable ();
       this.$el.find (".buffer-bar").slideUp ();
     },

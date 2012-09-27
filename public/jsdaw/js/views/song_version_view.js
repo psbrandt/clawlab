@@ -132,7 +132,7 @@ define([
       });
 
       // Infinite tracks width
-      $("#tracks").width ($("#sequencer").scrollLeft () + 2000);
+      $("#tracks").width ($("#sequencer").scrollLeft () + 1000);
 
       // grid stage width, height and margin top
       $("#timeline-stage").css ({

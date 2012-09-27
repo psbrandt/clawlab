@@ -4,7 +4,7 @@ class AudioSource
 
   belongs_to :song_version
 
-  attr_accessible :audio, :remote_audio_url, :audio_cache, :audio_filename
+  attr_accessible :id, :audio, :remote_audio_url, :audio_cache, :audio_filename
 
   mount_uploader :audio, AudioUploader
 

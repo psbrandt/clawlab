@@ -4,7 +4,7 @@ define (function () {
      * Load an audio file from an object of type File. Needs an audio context to
      * decode data. onsuccess callback contains the audioBuffer
      */
-    loadFromFile : function(file, context, onsuccess, onerror) {
+    loadFromFile : function(file, context, onsuccess, options) {
       var reader = new FileReader;
       
       if (!file.type.match('audio.mp3') && !file.type.match('audio.wav')) {
@@ -16,18 +16,10 @@ define (function () {
           context.decodeAudioData(e.target.result, onsuccess, onerror);
         }
       };
-
-      reader.onprogress = function(e) {
-        if (e.lengthComputable) {
-          $progress = $('.progress', '#newTrackModal');
-          if ($progress.hasClass('hide'))
-            $progress.fadeIn('fast');
-          
-          // show loading progress
-          var loaded = Math.floor(e.loaded / e.total * 100);
-          $progress.children().width(loaded + '%');
-        }
-      };
+      reader.onerror = options.onerror || function () {
+        alert('AudioSourceLoader: error');        
+      }
+      reader.onprogress = options.onprogress;
 
       reader.readAsArrayBuffer(file);  
     },

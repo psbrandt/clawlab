@@ -22,14 +22,14 @@ define([
       this.audioSource = Claw.Player.model.audioSources.get (
         this.model.get("audio_source_id")
       );
-      this.buffer = Claw.Player.buffers[this.audioSource.id];
-      this.audioSource.on ("bufferLoaded", this.bufferLoaded, this);
+      this.buffer = Claw.Player.buffers[this.audioSource.get("id")];
+      this.audioSource.on ("change:bufferLoaded", this.bufferLoaded, this);
       this.model.on ("change:source_offset", this.sourceOffsetChanged, this)
     },
 
     render : function () {
       this.$el.html (this.template ({
-        filename : this.audioSource.get ("filename")
+        filename : this.audioSource.get ("audio_filename")
       }));
       this.$el.draggable ({
         containment : "parent",
@@ -45,7 +45,8 @@ define([
     },
     
     /** Set the buffer and render the clip */
-    bufferLoaded : function () {
+    bufferLoaded : function (model, bufferLoaded) {
+      if (!bufferLoaded) return;
       this.buffer = Claw.Player.buffers[this.audioSource.id];
       this.render ();
     },

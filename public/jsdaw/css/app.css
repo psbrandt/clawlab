@@ -3,6 +3,7 @@
 @import "actions.css";
 @import "library.css";
 @import "transport.css";
+@import "clips.css";
 
 body {
   background-color:black;

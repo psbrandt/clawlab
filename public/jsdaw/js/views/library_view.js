@@ -42,11 +42,12 @@ define([
     },
 
     addAudioSource : function (audioSourceModel) {
+      var audioSourceView = new AudioSourceView ({ 
+        model : audioSourceModel,
+        id : audioSourceModel.get("id")
+      }).render();
       $("#audio-source-list", this.el).append (
-        new AudioSourceView ({ 
-          model : audioSourceModel,
-          id : audioSourceModel.get("id")
-        }).render().el
+          audioSourceView.el
       );
     },
 

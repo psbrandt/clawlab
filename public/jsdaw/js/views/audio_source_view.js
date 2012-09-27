@@ -44,6 +44,7 @@ define([
     },
 
     bufferProgressed : function (complete) {
+      console.log (complete);
       this.$el.find (".buffer-bar").width (complete + "%");
     },
 

@@ -3,6 +3,10 @@ class ClipActionOffsetEnd < ClipAction
   field :offset, :type => Float
   field :old_offset, :type => Float
 
+  def pretty_name
+    "Offset end"
+  end
+
   def redo
     self.update_attributes!(:old_offset => clip.end_offset)
     clip.track.song_version.root_action.children.find { |a| 

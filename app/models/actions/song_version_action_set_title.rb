@@ -3,6 +3,10 @@ class SongVersionActionSetTitle < SongVersionAction
   field :title, :type => String
   field :old_title, :type => String
 
+  def pretty_name
+    "Set title #{title}"
+  end
+
   def redo
     self.update_attributes!(:old_title => song_version.title)
     song_version.root_action.add_child(self)

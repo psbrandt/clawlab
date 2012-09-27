@@ -5,7 +5,8 @@ class ClipsController < ApplicationController
 
   def create
     action = ClipActionCreate.new(
-      :track => @track, 
+      :song_version_id => @song_version.id,
+      :track_id => @track.id, 
       :params => (params[:clip] || {})
     )
     if @clip = action.redo
@@ -20,8 +21,21 @@ class ClipsController < ApplicationController
     action.redo
   end
 
+  # Call the right method in function of the given params
+  # TODO : do it cleaner
+  def update
+    offset_source if params[:source_offset] != @clip.source_offset
+    offset_begin  if params[:begin_offset]  != @clip.begin_offset
+    offset_end    if params[:end_offset]    != @clip.end_offset
+  end
+
   def offset_source
-    action = ClipActionOffsetSource.new :clip => @clip, :offset => params[:offset]
+    action = ClipActionOffsetSource.new(
+      :song_version_id => @song_version.id,
+      :track_id => @track.id, 
+      :clip_id  => @clip.id,
+      :offset => params[:source_offset]
+    )
     action.redo
     if @clip.save!
       render :json => @clip
@@ -31,7 +45,12 @@ class ClipsController < ApplicationController
   end
 
   def offset_begin
-    action = ClipActionOffsetBegin.new :clip => @clip, :offset => params[:offset]
+    action = ClipActionOffsetBegin.new(
+      :song_version_id => @song_version.id,
+      :track_id => @track.id, 
+      :clip_id  => @clip.id,
+      :offset => params[:begin_offset]
+    )
     action.redo
     if @clip.save!
       render :json => @clip
@@ -41,7 +60,12 @@ class ClipsController < ApplicationController
   end
 
   def offset_end
-    action = ClipActionOffsetEnd.new :clip => @clip, :offset => params[:offset]
+    action = ClipActionOffsetEnd.new(
+      :song_version_id => @song_version.id,
+      :track_id => @track.id, 
+      :clip_id  => @clip.id,
+      :offset => params[:end_offset]
+    )
     action.redo
     if @clip.save!
       render :json => @clip

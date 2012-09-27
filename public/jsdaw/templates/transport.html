@@ -1,0 +1,55 @@
+<div class="navbar-inverse navbar navbar-fixed-bottom" id="transport">
+  <div class="navbar-inner">
+    <div class="container">
+      <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+      
+      <!-- Be sure to leave the brand out there if you want it shown -->
+      <a class="brand" href="#"><%= title %></a>
+      <ul class="nav">
+        <li>
+          <button class="btn btn-info" id="add-track-button">
+            <i class="icon-plus icon-white"></i> add track
+          </button>
+        </li>
+        <li class="divider-vertical"></li>
+        <li>
+          <div class="btn-group">
+            <button class="btn btn-primary" id="rewind-btn">
+              <i class="icon-fast-backward icon-white"></i>
+            </button>
+            <button class="btn btn-inverse" id="stop-btn">
+              <i class="icon-white icon-stop"></i>
+            </button>
+            <button class="btn btn-inverse" id="play-btn" disabled="disabled">
+              <i class="icon-white icon-play"></i>
+            </button>
+          </div>
+        </li>
+        <li class="divider-vertical"></li>
+        <li class="active">
+          <a class="current-time">00:00:000 | 1.1</a>
+        </li>
+        <li class="divider-vertical"></li>
+        <li>
+          <div class="btn-group">
+            <button class="btn" id="zoom-out-btn">
+              <i class="icon-zoom-out"></i>
+            </button>
+            <button class="btn" id="zoom-in-btn">
+              <i class="icon-zoom-in"></i>
+            </button>
+          </div>
+        </li>
+      </ul>
+
+      <ul class="nav pull-right">
+        <li>
+          <button class="btn btn-inverse active" id="toggle-right-bar-btn">
+            <i class="icon-white icon-headphones"></i>
+            <i class="icon-white icon-list"></i>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

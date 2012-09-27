@@ -1,0 +1,54 @@
+@import "timeline.css";
+@import "tracks.css";
+@import "actions.css";
+@import "library.css";
+@import "transport.css";
+@import "clips.css";
+
+body {
+  background-color:black;
+  margin-bottom:40px 0;
+  overflow:hidden;
+}
+
+#main {
+}
+
+#workspace {
+  overflow-y:scroll;
+  float:left;
+}
+
+#left-bar {
+  background-color:#333;
+  height:100%;
+  width:200px;
+  float:left;
+  z-index:1000;
+}
+#sequencer {
+  height:100%;
+  overflow-y : hidden;
+  overflow-x:scroll;
+}
+
+#timeline-stage {
+  position:absolute;
+  overflow:hidden;
+}
+
+#right-bar {
+  float:right;
+  width:300px;
+  height:100%;
+  background-color:#222;
+  color:#EEE;
+  padding:8px;
+  overflow:hidden;
+}
+
+#right-bar .tab-content {
+  height:90%;
+  overflow-y:auto;
+  overflow-x:hidden;
+}

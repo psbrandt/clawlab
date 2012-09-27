@@ -2,6 +2,10 @@ class TrackActionCreate < TrackAction
 
   field :params, :type => Hash, :default => {}
 
+  def pretty_name
+    "Create track"
+  end
+
   def name
     i = params["id"] if params
     "track_action_create_#{i}"
@@ -17,6 +21,8 @@ class TrackActionCreate < TrackAction
     params["id"] = t.id
 
     song_version.root_action << self
+    
+    return t
   end
 
   def undo

@@ -1,0 +1,11 @@
+#action-tree {
+}
+
+.action {
+  text-transform : uppercase;
+  font-size:12px;
+}
+
+.action .pretty-name {
+  font-weight : bold;
+}

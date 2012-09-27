@@ -6,19 +6,36 @@
   <%= stylesheet_link_tag    "bootstrap" %>
   <%= stylesheet_link_tag    "bootstrap-responsive" %>
   <%= stylesheet_link_tag    "navigation", :media => "all" %>
+
+  <!-- jsdaw styles -->
+  <link href="/jsdaw/css/app.css" media="all" rel="stylesheet" type="text/css">
+
   <%= javascript_include_tag "application" %>
   <%= javascript_include_tag "bootstrap.min" %>
+
   <%= csrf_meta_tags %>
 </head>
 <body>
 <%= render "shared/navigation" %>
-<div id="claw"></div>
+<!-- Main container. -->
+<div role="main" id="main"></div>
+
+<!-- Stuff needed to init the app -->
+<!-- TODO try to pass global values like that : http://stackoverflow.com/questions/9916073/how-to-load-bootstrapped-models-in-backbone-js-while-using-amd-require-js/10288587#10288587 -->
 <script>
-  var json = <%= @song_version.to_json.html_safe %>;
-  var token = "<%= form_authenticity_token %>";
-  console.log(json);
-  console.log(token);
-  //Claw.load(json, token, el);
+  window.clawData = {
+    currentSongVersion : <%= @song_version.to_builder.target!.html_safe %>,
+    authenticityToken : "<%= form_authenticity_token %>"
+  }
+  <!-- var el = $("#claw"); -->
+  <!-- console.log(json); -->
+  <!-- console.log(token); -->
+  <!-- //Claw.load(json, token, el); -->
 </script>
+
+<!-- Application source. -->
+<script src="/jsdaw/js/libs/require/require.js" data-main="/jsdaw/js/main"></script>
+
+
 </body>
 </html>

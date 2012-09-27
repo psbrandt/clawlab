@@ -19,12 +19,25 @@ class TracksController < ApplicationController
   end
 
   def destroy
-    action = TrackActionDestroy.new :track_id => @track.id
+    action = TrackActionDestroy.new(
+      :song_version_id => @song_version.id,
+      :track_id => @track.id
+    )
     action.redo
+    render :json => {:message => "Track successfully destroyed"}
   end
 
+  def update
+    set_name   if params[:name]
+    set_volume if params[:volume]
+  end
+  
   def set_name
-    action = TrackActionSetName.new :track_id => @track.id, :name => params[:name]
+    action = TrackActionSetName.new(
+      :song_version_id => @song_version.id,
+      :track_id => @track.id, 
+      :name => params[:name]
+    )
     action.redo
     if @track.save!
       render :json => @track
@@ -34,7 +47,10 @@ class TracksController < ApplicationController
   end
 
   def set_volume
-    action = TrackActionSetVolume.new :track_id => @track.id, :volume => params[:volume]
+    action = TrackActionSetVolume.new(
+      :song_version_id => @song_version.id,
+      :track_id => @track.id, :volume => params[:volume]
+    )
     action.redo
     if @track.save!
       render :json => @track

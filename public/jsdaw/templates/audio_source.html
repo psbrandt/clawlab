@@ -1,0 +1,11 @@
+<i class="<%= previewing ? 'icon-stop' : 'icon-play' %> icon-white preview-btn"></i>
+<span class="filename"><%= audioFilename %></span>
+<span class="pull-right">
+  <% if (!uploaded) { %>
+  <i class="icon-upload icon-white upload-btn"></i>
+  <% } %>
+  <i class="icon-remove-circle icon-white remove-btn"></i>
+</span>
+<% if (!bufferLoaded) { %>
+  <div class="bar buffer-bar" style="width:1%"></div>
+<% } %>

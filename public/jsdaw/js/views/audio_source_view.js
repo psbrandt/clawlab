@@ -19,13 +19,14 @@ define([
     events : {
       "click .remove-btn" : "removeClicked",
       "click .upload-btn" : "uploadClicked",
-      "click .play-stop-btn"   : "playStopClicked"
+      "click .preview-btn"   : "previewClicked"
     },
 
     initialize : function () {
       this.model.on ("destroy", this.remove, this);
       this.model.on ("bufferLoaded", this.bufferLoaded, this);
       this.model.on ("bufferProgress", this.bufferProgressed, this);
+      this.model.on ("change:previewing", this.previewingChanged, this);
       this.playing = false;
     },
 
@@ -33,7 +34,8 @@ define([
       var data = {
         audioFilename : this.model.get ("audio_filename"),
         notUploaded : typeof this.model.uploader != "undefined",
-        bufferLoaded : this.model.get ("bufferLoaded")
+        bufferLoaded : this.model.get ("bufferLoaded"),
+        previewing : this.model.get ("previewing")
       }
 
       this.$el.html (this.template (data));
@@ -65,8 +67,17 @@ define([
       this.model.destroy ();
     },
 
-    playStopClicked : function () {
-      Claw.Player.playAudioSource (this.model.get("id"));
+    previewClicked : function () {
+      if (this.$el.find (".preview-btn").hasClass ("icon-play"))
+        Claw.Player.startAudioSourcePreview (this.model);
+      else
+        Claw.Player.stopAudioSourcePreview (this.model);
+    },
+
+    previewingChanged : function (model, previewing) {
+      this.$el.find (".preview-btn").
+        toggleClass ("icon-stop", previewing).
+        toggleClass ("icon-play", !previewing)
     },
 
     uploadClicked : function () {

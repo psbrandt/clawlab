@@ -5,6 +5,10 @@ define([
 ], function($, _, Backbone, TrackCollection, Track) {
   var AudioSource = Backbone.Model.extend ({
 
+    defaults : {
+      previewing : false
+    },
+
     initialize : function (data) {
       self = this;
     },

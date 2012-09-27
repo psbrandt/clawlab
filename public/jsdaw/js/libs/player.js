@@ -32,6 +32,10 @@ define([
       this.clipNodes  = {};
       this.clips      = [];
       this.playingSources = {};
+
+      // to store an audio source beeing previewed
+      this.sourcePreview = { model : undefined, source : undefined}; 
+
       this.playing    = false;
       this.startTime;
       this.playbackFrom = 0;
@@ -67,15 +71,24 @@ define([
       this.model.audioSources.on ("add", function (audioSource) { console.log ("aads")});
     },
 
-    playAudioSource : function (audioSourceId) {
+    startAudioSourcePreview : function (audioSource) {
+      try {
+        // stop possible playing source
+        this.sourcePreview.source.noteOff (0);
+        this.sourcePreview.model.set ("previewing", false);
+      } catch (e) { }
       var source = this.context.createBufferSource ();
-      source.buffer = this.buffers[audioSourceId]
+      source.buffer = this.buffers[audioSource.id]
       source.connect (this.context.destination);
       source.noteOn(0);
+      this.sourcePreview = {model : audioSource, source : source};
+      audioSource.set ("previewing", true);
     },
 
-    stopAudioSource : function (audioSourceId) {
-      
+    stopAudioSourcePreview : function (audioSource) {
+      this.sourcePreview.source.noteOff (0);
+      this.sourcePreview = { model : undefined, source : undefined }
+      audioSource.set ("previewing", false);
     },
 
     addClip : function (clip, track) {

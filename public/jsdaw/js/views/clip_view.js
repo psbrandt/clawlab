@@ -31,16 +31,23 @@ define([
       this.$el.html (this.template ({
         filename : this.audioSource.get ("audio_filename")
       }));
+
+      if (this.buffer) this.drawWaveform ()
+
+      // not working ...
+      this.$el.resizable ({
+        handles : "e, w"
+      });
+
       this.$el.draggable ({
         containment : "parent",
         scroll : true,
         scrollSensitivity : 40,
         axis : "x"
       });
-
       // Hack to remove position set to relative by default
       this.$el.css ("position", "absolute");
-      if (this.buffer) this.drawWaveform ()
+
       return this;
     },
     

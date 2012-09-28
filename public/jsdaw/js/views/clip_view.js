@@ -6,7 +6,8 @@ define([
   "underscore",
   "backbone",
   "text!templates/clip.html",
-  "libs/waveform"
+  "libs/waveform",
+  "jqueryui"
 ], function($, _, Backbone, clipTemplate, Waveform) {
   return Backbone.View.extend ({
 
@@ -65,7 +66,7 @@ define([
       var length = this.buffer.duration - this.model.get ("begin_offset") 
         - this.model.get ("end_offset");
       // height in pixels
-      var height = 75;
+      var height = this.$el.height ();
       // where to start in the buffer in seconds
       var begin_offset = this.model.get ("begin_offset");
       // where to end in the buffer in seconds
@@ -73,7 +74,6 @@ define([
       // when the clip starts in the song
       var offset = this.model.get("source_offset") + begin_offset
       this.$el.css ({
-        width : Claw.Helpers.secToPx (length),
         left : Claw.Helpers.secToPx (offset)
       }).find ("canvas").attr ({
         width : Claw.Helpers.secToPx (length),

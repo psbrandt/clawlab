@@ -11,6 +11,24 @@ define([
     
     template : timelineTemplate,
 
+    events : {
+      "click #tracker" : "trackerClicked"
+    },
+
+    /** pause song, set playingAt position, and playback if the song was
+      * playing */
+    trackerClicked : function (e) {
+      // Do nothing if click happenned outside the top of timeline
+      if (e.offsetY > this.model.get ("timelineHeight")) return;
+      var wasPlaying = this.model.get ("playing");
+      this.model.pause ();
+      this.model.set (
+        "playingAt", 
+        Claw.Helpers.pxToSec (e.offsetX + this.model.get ("scrollLeft"))
+      );
+      if (wasPlaying) this.model.play ();
+    },
+
     initialize : function () {      
       this.model.on ("change:scrollLeft", function (model, scrollLeft) {
         this.drawTimeline (scrollLeft);

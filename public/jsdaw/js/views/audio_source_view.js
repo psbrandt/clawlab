@@ -56,7 +56,8 @@ define([
       this.$el.draggable ({
         revert : "invalid",
         revertDuration : 100,
-        helper : "clone"
+        helper : "clone",
+        cursor : "move"
       });
     },
     

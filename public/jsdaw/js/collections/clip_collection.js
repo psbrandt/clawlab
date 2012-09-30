@@ -6,8 +6,7 @@ define([
 ], function($, _, Backbone, ClipModel) {
 
   return Backbone.Collection.extend ({
-    model : ClipModel,
-    url : "clips"
+    model : ClipModel
   });
 
 });

@@ -15,14 +15,15 @@ define([
      * Take a File and add a new AudioSource to collection
      */
     addFromFile : function (file, uploader) {
-      var src = new AudioSourceModel ({
+      var audioSource = new AudioSourceModel ({
         file : file,
         audio_filename : file.name,
         id : new ObjectId ().toString ()
       });
-      src.uploader = uploader;
-      src.collection = this;
-      this.add (src);
+      audioSource.uploader = uploader;
+      audioSource.collection = this;
+      this.add (audioSource);
+      return audioSource;
     }
   });
 

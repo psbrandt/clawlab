@@ -6,6 +6,7 @@ define([
   "underscore",
   "backbone",
   "text!templates/main.html", 
+  "text!templates/dropzone.html", 
   "views/track_view",
   "views/track_controls_view",
   "views/action_tree_view",
@@ -14,8 +15,9 @@ define([
   "views/transport_view",
   // jquery plugins at the end
   "getscrollbarwidth"
-], function($, _, Backbone, mainTemplate, TrackView, TrackControlsView, 
-            ActionTreeView, LibraryView, TimelineView, TransportView) {
+], function($, _, Backbone, mainTemplate, dropzoneTemplate, TrackView, 
+            TrackControlsView, ActionTreeView, LibraryView, TimelineView,
+            TransportView) {
   return Backbone.View.extend ({
 
     template : _.template (mainTemplate),
@@ -47,6 +49,17 @@ define([
       this.$el.html (this.template ({
         rightBarVisible : this.model.get ("rightBarVisible")
       }));
+
+      this.$el.find (".dropzone").html (dropzoneTemplate);
+      // Initialize fileupload
+      this.$fileupload = this.$el.find('input:file.file-upload-field')
+      // Listen drop or add
+      this.$fileupload.fileupload({
+        dropZone: this.$el.find('#left-bar .dropzone'),
+        fileInput: null,
+        add: _.bind(this.handleFileSelect, this),
+        dataType: 'json'
+      })
 
       var self = this;
       this.$el.find ("#sequencer, #workspace").on ("scroll", function (e) {
@@ -80,6 +93,16 @@ define([
       }).render ();
       
       return this;
+    },
+
+    handleFileSelect : function ($e, data) {
+      for (var i = 0, f; f = data.files[i]; i++) {
+        var audioSource = 
+          this.model.audioSources.addFromFile (f, this.$fileupload);
+        var track = this.model.addTrack (function (track) {
+          track.addClip (audioSource.id, 0);
+        });
+      }
     },
 
     rightBarVisibilityChanged : function (model, visible) {

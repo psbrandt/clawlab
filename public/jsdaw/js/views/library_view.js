@@ -7,15 +7,16 @@ define([
   "backbone",
   "text!templates/library.html",
   "views/audio_source_view",
+  "text!templates/dropzone.html",
   "fileupload/jquery.fileupload",
   "fileupload/jquery.iframe-transport"
-], function($, _, Backbone, libraryTemplate, AudioSourceView) {
+], function($, _, Backbone, libraryTemplate, AudioSourceView, dropzoneTemplate) {
   return Backbone.View.extend ({
 
     template : _.template (libraryTemplate),
 
     events : {
-      "dragover #dropzone" : "handleDragOver"
+      "dragover .dropzone" : "handleDragOver"
     },
 
     initialize : function () {
@@ -25,7 +26,7 @@ define([
 
     render : function () {
       this.$el.html (this.template ());
-
+      this.$el.find (".dropzone").html (dropzoneTemplate);
       //render audio sources
       this.collection.each (this.addAudioSource);
 
@@ -33,7 +34,7 @@ define([
       this.$fileupload = this.$el.find('input:file.file-upload-field')
       // Listen drop or add
       this.$fileupload.fileupload({
-        dropZone: this.$el.find('#dropzone'),
+        dropZone: this.$el.find('.dropzone'),
         fileInput: null,
         add: _.bind(this.handleFileSelect, this),
         dataType: 'json'

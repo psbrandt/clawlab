@@ -81,7 +81,6 @@ define([
           audioSource.set ("bufferLoaded", true)
         },
         { onprogress : function (e) {
-          console.log (e);
           var complete = e.loaded * 100 / e.total;
           audioSource.trigger ("bufferProgress", complete);
         }}

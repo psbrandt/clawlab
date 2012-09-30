@@ -23,17 +23,22 @@ define([
       this.audioSource = Claw.Player.model.audioSources.get (
         this.model.get("audio_source_id")
       );
+
+      // If the audio source was not found, return
+      if (this.audioSource == undefined) {
+        return;
+      }
       this.buffer = Claw.Player.buffers[this.audioSource.get("id")];
       this.audioSource.on ("change:bufferLoaded", this.bufferLoaded, this);
       this.model.on ("change:source_offset", this.sourceOffsetChanged, this)
     },
 
     render : function () {
-      this.$el.html (this.template ({
-        filename : this.audioSource.get ("audio_filename")
-      }));
-
-      if (this.buffer) this.drawWaveform ()
+      var data = {}
+      try {
+        data.filename = this.audioSource.get ("audio_filename")
+        } catch (e) { data.filename = "not found" }
+      this.$el.html (this.template (data));
 
       // not working ...
       this.$el.resizable ({
@@ -48,6 +53,8 @@ define([
       });
       // Hack to remove position set to relative by default
       this.$el.css ("position", "absolute");
+
+      if (this.buffer) this.drawWaveform ()
 
       return this;
     },
@@ -66,7 +73,8 @@ define([
       var length = this.buffer.duration - this.model.get ("begin_offset") 
         - this.model.get ("end_offset");
       // height in pixels
-      var height = this.$el.height ();
+      var height = 75; //huh ..
+
       // where to start in the buffer in seconds
       var begin_offset = this.model.get ("begin_offset");
       // where to end in the buffer in seconds

@@ -11,6 +11,10 @@
   overflow:hidden;
 }
 
+.audio-source.ui-draggable:hover {
+  cursor : move;
+}
+
 .audio-source .bar {
   background-color:#888; 
   height:10px;

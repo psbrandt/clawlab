@@ -67,7 +67,7 @@ define([
     },
 
     // Create a new track in song version and save it
-    addTrack : function () {
+    addTrack : function (callback) {
       //create a new track model
       var t = new Track ();
       //set the parent collection so the url is correct
@@ -78,6 +78,7 @@ define([
       t.save({}, {wait : true, success : function () {
 	//add it to the song version track collection
         self.tracks.add(t);
+        if (callback) callback (t);
       }});
     },
 

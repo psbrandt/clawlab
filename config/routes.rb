@@ -29,10 +29,10 @@ Claw::Application.routes.draw do
   # SONG VERSIONS
   resources :song_versions do
     # TRACKS
-    resources :tracks, :except => [:edit, :new]
-
-    # CLIPS
-    resources :clips, :except => [:edit, :new]
+    resources :tracks, :except => [:edit, :new] do
+      # CLIPS
+      resources :clips, :except => [:edit, :new]
+    end
 
     resources :audio_sources, :except => [:edit, :update]
 

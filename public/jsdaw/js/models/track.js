@@ -36,7 +36,6 @@ define([
       });
       //set the parent collection so the url is correct
       c.collection = this.clips;
-
       var self = this;
       //persist the clip
       c.save({}, {

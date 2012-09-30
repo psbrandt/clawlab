@@ -17,8 +17,13 @@ class ClipsController < ApplicationController
   end
   
   def destroy
-    action = ClipActionDestroy.new :clip => @clip
+    action = ClipActionDestroy.new(
+      :song_version_id => @song_version.id,
+      :track_id => @track.id, 
+      :clip_id => @clip.id
+    )
     action.redo
+    render :json => {:message => "Clip successfully destroyed"}
   end
 
   # Call the right method in function of the given params

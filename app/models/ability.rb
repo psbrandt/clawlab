@@ -42,7 +42,7 @@ class Ability
       can :manage, Track, :song_version => { :user_id => user.id }
       
       # clips
-      can :manage, Clip,:track => { :song_version => { :user_id => user.id } }
+      can :manage, Clip, :track => { :song_version => { :user_id => user.id } }
     end
     # can read root_action if song_version.song.users includes user
     # can :read, SongVersionActionCreate, :song_version => { :song_id => ...

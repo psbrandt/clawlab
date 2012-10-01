@@ -14,7 +14,8 @@ define([
       name : "New track",
       volume : 0,
       height : 75,
-      muted : false
+      muted : false,
+      solo  : false
     },
 
     initialize : function (data) {

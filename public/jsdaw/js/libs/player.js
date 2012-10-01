@@ -31,6 +31,7 @@ define([
       this.trackNodes = {};
       this.clipNodes  = {};
       this.clips      = [];
+      this.soloedTrack  = undefined; //the track playing solo
       this.playingSources = {};
 
       // to store an audio source beeing previewed
@@ -107,11 +108,11 @@ define([
       audioSource.set ("previewing", false);
     },
 
-    addClip : function (clip, track) {
+    addClip : function (clip) {
       //this.clips.push (clip);
       var clipGainNode = this.context.createGainNode ();
       this.clipNodes[clip.id] = clipGainNode
-      clipGainNode.connect (this.trackNodes[track.id]);
+      clipGainNode.connect (this.trackNodes[clip.get ("track_id")]);
 
       clip.on ("change:source_offset", this.sourceOffsetChanged, this);
     },
@@ -122,16 +123,16 @@ define([
         this.trackNodes[track.id] = trackGainNode;
         trackGainNode.connect(this.context.destination);
 
-        var self = this;
         track.on ("change:muted", function (track, muted) { 
           muted ? this.muteTrack (track) : this.unmuteTrack (track)
         }, this);
+        track.on ("change:solo", function (track, solo) {
+          solo ? this.soloTrack (track) : this.unsoloTrack (track);
+        }, this)
         //track.on ("change:volume", this.setTrackVolume, this);
-        track.clips.on ("add", function (clip) { self.addClip (clip, track) });
-
-        track.clips.each (function (clip) {
-          self.addClip (clip, track);
-        });
+        track.clips.on ("add", this.addClip, this);
+        
+        track.clips.each (this.addClip, this);
       }
     },
 
@@ -141,6 +142,25 @@ define([
 
     unmuteTrack : function (track) {
       this.trackNodes[track.id].gain.value = 1; //FIXME set with volume
+    },
+
+    soloTrack : function (track) {
+      if (this.soloedTrack)
+        this.soloedTrack.set ("solo", false);
+      this.model.tracks.each (function (t) {
+        if (t != track) {
+          this.muteTrack (t)// mute all tracks
+        }      
+      }, this);
+      this.unmuteTrack (track);
+      this.soloedTrack = track;
+    },
+
+    unsoloTrack : function (track) {
+      this.model.tracks.each (function (t) {
+        if (!t.get ("mute")) this.unmuteTrack (t);
+      }, this);
+      this.soloedTrack = undefined;
     },
 
     releaseTrack : function(track) {
@@ -196,8 +216,9 @@ define([
 
       var self = this;
       _.each (this.model.clips (), function (clip) {
-        var end = self.buffers [clip.get ("audio_source_id")].duration +
-          clip.get ("source_offset");
+        var buffer = self.buffers [clip.get ("audio_source_id")];
+        if (buffer == undefined) return;
+        var end = buffer.duration + clip.get ("source_offset");
         if (end > self.playbackFrom)
           self.playNote (clip, self.startTime + clip.get ("source_offset") - self.playbackFrom);
       });

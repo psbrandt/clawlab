@@ -28,6 +28,7 @@ define([
     render : function () {
       var data = {
         title : this.model.get("title"),
+        bpm   : this.model.get ("bpm")
       };
       this.$el.html (this.template (data));
       //render directly in body

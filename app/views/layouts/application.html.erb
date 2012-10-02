@@ -12,19 +12,11 @@
 </head>
 <body>
 <%= render "shared/navigation" %>
-<div class="container">
   <%- flash.each do |name, msg| -%>
-  <div class="row">
-    <div class="span6">
-      <%= content_tag :div, msg, :class => "flash alert" if msg.is_a?(String) %>
-    </div>
+  <div class="container">
+    <%= content_tag :div, msg, :class => "flash alert" if msg.is_a?(String) %>
   </div>
   <%- end -%>
-  <div class="row">
-    <div class="span12">
-      <%= yield %>
-    </div>
-  </div>
-</div>
+  <%= yield %>
 </body>
 </html>

@@ -13,7 +13,13 @@
 */
 
 .hero-unit {
-color : #fff;
+  border:none;
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  border-radius: 0px;
+  text-align:center;
+  margin-bottom:0;
+  color : #fff;
 background: rgb(181,189,200); /* Old browsers */
 
 background: -moz-linear-gradient(top,  rgba(181,189,200,1) 0%, rgba(130,140,149,1) 52%, rgba(51,62,70,1) 100%); /* FF3.6+ */
@@ -35,13 +41,19 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b5bdc8', end
 .hero-unit .light {
   color: #bbb;
 }
-.hero-unit .btn-large {
-  font-size:28px;
-  padding:10px 40px;
+.hero-unit .btn {
+  font-size:24px;
+  padding:14px 24px;
+  font-weight:200;
+}
+
+.share-follow {
+  background-color:#ccc;
+  padding-top:5px;
 }
 
 .concepts h3 {
-  color : #eee;
+  color : #fff;
 background: rgb(149,3,37); /* Old browsers */
 
 background: -moz-linear-gradient(top,  rgba(149,3,37,1) 0%, rgba(126,2,31,1) 44%, rgba(96,0,22,1) 100%); /* FF3.6+ */

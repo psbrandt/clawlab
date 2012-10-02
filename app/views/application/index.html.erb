@@ -1,4 +1,4 @@
-<div class="hero-unit" style="text-align:center">
+<div class="hero-unit">
   <h1>Cl<span class="light">oud</span> A<span class="light">udio</span> 
     W<span class="light">orkstation</span></h1>
   <p>
@@ -9,54 +9,105 @@
   <%= link_to "sign up", new_user_registration_path, :class => "btn btn-primary btn-large" %>
 </div>
 
-<div class="row concepts">
-  <div class="span3 accordion">
-    <h3>Work from anywhere.</h3>
-    <div id="work-from-anywhere" class="accordion-body collapse">
-      Use Claw to work on your musical projects from anywhere. Upload your 
-      tracks. Edit them via a web based multi-track sequencer. Work together
-      with your band
+<!-- FB stuffs -->
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/fr_FR/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));</script>
+<!-- end of FB stuffs -->
+
+<div class="share-follow">
+  <div class="container">
+    <div class="row">
+      <div class="span6">
+	<a href="https://twitter.com/clawlab" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false">Follow @clawlab</a>
+	<a href="https://twitter.com/share" class="twitter-share-button" data-url="http://clawlab.org" data-text="A Cloud Audio Workstation" data-via="clawlab" data-related="clawlab" data-count="none">Tweet</a>
+	<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+	<div class="g-plusone" data-size="medium" data-annotation="none" data-href="http://clawlab.org"></div>
+<script type="text/javascript">
+  window.___gcfg = {lang: 'fr'};
+
+  (function() {
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/plusone.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+  })();
+</script>
+	<div class="fb-like" data-href="http://clawlab.org" data-send="true" data-layout="button_count" data-width="450" data-show-faces="false"></div>
+
+      </div>
+
+      <div class="span6">
+	<iframe src="http://ghbtns.com/github-btn.html?user=gabriel-cardoso&repo=clawlab&type=watch"
+  allowtransparency="true" frameborder="0" scrolling="0" width="62px" height="20px"></iframe>
+	<iframe src="http://ghbtns.com/github-btn.html?user=gabriel-cardoso&repo=clawlab&type=fork"
+  allowtransparency="true" frameborder="0" scrolling="0" width="62px" height="20px"></iframe>
+	<a style="margin-bottom:12px" class="btn btn-mini" href="https://groups.google.com/d/forum/clawlab">
+	  <img src="https://groups.google.com/forum/browse-all-color.png" alt="google-groups-logo" width="20px"/> 
+	  Google group
+	</a>
+
+      </div>
     </div>
-    <a class="accordion-toggle btn btn-mini pull-right btn-inverse" data-toggle="collapse" 
-       href="#work-from-anywhere">
-      <span class="caret"></span> learn more
-    </a>
   </div>
-  <div class="span3 accordion">
-    <h3>No more "ping pong".</h3>
-    <div id="no-more-ping-pong" class="accordion-body collapse">
-      A version control system allows you to work in parallel, compare, 
-      restore and merge different song versions. <br />
-      You can also comment songs and tracks, create/assign tasks, etc.
+</div>
+
+<div class="concepts">
+  <div class="container">
+    <div class="row">
+      <div class="span3 accordion">
+	<h3>Work from anywhere.</h3>
+	<div id="work-from-anywhere" class="accordion-body collapse">
+	  Use Claw to work on your musical projects from anywhere. Upload your 
+	  tracks. Edit them via a web based multi-track sequencer. Work together
+	  with your band
+	</div>
+	<a class="accordion-toggle btn btn-mini btn-inverse" data-toggle="collapse" 
+	   href="#work-from-anywhere">
+	  <span class="caret"></span> learn more
+	</a>
+      </div>
+      <div class="span3 accordion">
+	<h3>No more "ping pong".</h3>
+	<div id="no-more-ping-pong" class="accordion-body collapse">
+	  A version control system allows you to work in parallel, compare, 
+	  restore and merge different song versions. <br />
+	  You can also comment songs and tracks, create/assign tasks, etc.
+	</div>
+	<a class="accordion-toggle btn btn-mini btn-inverse" data-toggle="collapse" 
+	   href="#no-more-ping-pong">
+	  <span class="caret"></span> learn more
+	</a>
+      </div>
+      <div class="span3 accordion">
+	<h3>
+	  <span style="text-decoration:line-through">"Yet another DAW"</span>.
+	</h3>
+	<div id="not-yet-another-daw" class="accordion-body collapse">
+	  Claw is not "yet another DAW". The aim is to complete the tools we 
+	  already use and make it possible to collaborate with people using 
+	  different DAW. Still, the web interface has elementary edition features
+	</div>
+	<a class="accordion-toggle btn btn-mini btn-inverse" data-toggle="collapse" 
+	   href="#not-yet-another-daw">
+	  <span class="caret"></span> learn more
+	</a>
+      </div>
+      <div class="span3 accordion">
+	<h3>A social network.</h3>
+	<div id="social-network" class="accordion-body collapse">
+	  Meet other musicians, sound engineers, arrangers, etc.<br />
+	  Collaborate, comment, share knowledges and audio samples with Claw
+	</div>
+	<a class="accordion-toggle btn btn-mini btn-inverse" data-toggle="collapse" 
+	   href="#social-network">
+	  <span class="caret"></span> learn more
+	</a>
+      </div>
     </div>
-    <a class="accordion-toggle btn btn-mini pull-right btn-inverse" data-toggle="collapse" 
-       href="#no-more-ping-pong">
-      <span class="caret"></span> learn more
-    </a>
-  </div>
-  <div class="span3 accordion">
-    <h3>
-      <span style="text-decoration:line-through">"Yet another DAW"</span>.
-    </h3>
-    <div id="not-yet-another-daw" class="accordion-body collapse">
-      Claw is not "yet another DAW". The aim is to complete the tools we 
-      already use and make it possible to collaborate with people using 
-      different DAW. Still, the web interface has elementary edition features
-    </div>
-    <a class="accordion-toggle btn btn-mini pull-right btn-inverse" data-toggle="collapse" 
-       href="#not-yet-another-daw">
-      <span class="caret"></span> learn more
-    </a>
-  </div>
-  <div class="span3 accordion">
-    <h3>A social network.</h3>
-    <div id="social-network" class="accordion-body collapse">
-      Meet other musicians, sound engineers, arrangers, etc.<br />
-      Collaborate, comment, share knowledges and audio samples with Claw
-    </div>
-    <a class="accordion-toggle btn btn-mini pull-right btn-inverse" data-toggle="collapse" 
-       href="#social-network">
-      <span class="caret"></span> learn more
-    </a>
   </div>
 </div>

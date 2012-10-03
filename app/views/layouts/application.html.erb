@@ -14,7 +14,10 @@
 <%= render "shared/navigation" %>
   <%- flash.each do |name, msg| -%>
   <div class="container">
-    <%= content_tag :div, msg, :class => "flash alert" if msg.is_a?(String) %>
+    <div class="flash alert fade in">
+    <a class="close" data-dismiss="alert" href="#">&times;</a>
+    <%= msg if msg.is_a?(String) %>
+    </div>
   </div>
   <%- end -%>
   <%= yield %>

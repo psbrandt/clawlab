@@ -35,9 +35,10 @@ define([
 
     render : function () {
       var data = {}
+      // if the audio source is not found set filename to "not found"
       try {
         data.filename = this.audioSource.get ("audio_filename")
-        } catch (e) { data.filename = "not found" }
+      } catch (e) { data.filename = "error : file not found" }
       this.$el.html (this.template (data));
 
       // not working ...

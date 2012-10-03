@@ -28,8 +28,8 @@ class TracksController < ApplicationController
   end
 
   def update
-    set_name   if params[:name]
-    set_volume if params[:volume]
+    set_name   if params[:name]   != @track.name
+    set_volume if params[:volume] != @track.volume
   end
   
   def set_name

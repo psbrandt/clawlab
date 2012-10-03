@@ -7,7 +7,7 @@ class TrackAction < Action
   end
 
   def track
-    song_version.track.find self.track_id
+    song_version.tracks.find self.track_id
   end
 
   def same_as? action

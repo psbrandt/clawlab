@@ -5,7 +5,9 @@ define([
   "jquery",
   "underscore",
   "backbone",
-  "text!templates/track_controls.html"
+  "text!templates/track_controls.html",
+  // jquery plugins at the end
+  "libs/jquery.editinplace"
 ], function($, _, Backbone, trackControlsT) {
   return Backbone.View.extend ({
     
@@ -37,7 +39,23 @@ define([
       // Rendering controls
       this.$el.html (this.template (data));
 
+      this.$name = $(".name", this.el).editInPlace ({
+        context : this,
+        onChange : this.setName
+      })
+
       return this;
+    },
+
+    setName : function (name) {
+      if (name == this.model.get ("name")) {
+        this.$el.find (".name").editInPlace ("close");
+        return;
+      }
+      var self = this;
+      this.model.save ({ name : name }, { success : function (o, data) {
+        self.$el.find (".name").editInPlace ("close", data.name);
+      }}); 
     },
 
     removeTrackClicked : function () {

@@ -87,7 +87,7 @@ class SongVersionsController < ApplicationController
     )
     action.redo
     if @song_version.save!
-      render :json => { :message => "Title set" }
+      render :json => @song_version
     else
       render :json => @song_version.errors, :status => :unprocessable_entity
     end

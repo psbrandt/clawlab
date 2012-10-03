@@ -4,3 +4,12 @@
   letter-spacing:2px;
   font-family : "monospace"
 }
+
+#transport input {
+  margin:10px 0 0 14px;
+  width:100px;
+  background-color:#444;
+  color:#ccc;
+  padding:0;
+  border:0;
+}

@@ -37,3 +37,12 @@
   position:relative;
   width : 100%;
 }
+
+.track-controls input {
+  margin:0; 
+  width:100px;
+  background-color:#111;
+  color:#ccc;
+  padding:0;
+  border:0;
+}

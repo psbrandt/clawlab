@@ -3,7 +3,9 @@ define([
   "underscore",
   "backbone",
   "models/track", 
-  "text!templates/transport.html"
+  "text!templates/transport.html",
+  // jquery plugins at the end
+  "libs/jquery.editinplace"
 ], function($, _, Backbone, Track, transportT) {
   return Backbone.View.extend ({
 
@@ -31,9 +33,25 @@ define([
         bpm   : this.model.get ("bpm")
       };
       this.$el.html (this.template (data));
+
+      this.$el.find (".title").editInPlace ({
+        context : this,
+        onChange : this.setTitle
+      })
       //render directly in body
       $("body").append (this.el);
       return this;
+    },
+
+    setTitle : function (title) {
+      if (title == this.model.get ("title")) {
+        this.$el.find (".title").editInPlace ("close");
+        return;
+      }
+      var self = this;
+      this.model.save ({ title : title }, { success : function (o, data) {
+        self.$el.find (".title").editInPlace ("close", data.title);
+      }}); 
     },
 
     toggleRightBarClicked : function (e) {

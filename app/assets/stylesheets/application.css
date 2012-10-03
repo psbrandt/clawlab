@@ -42,27 +42,42 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b5bdc8', end
 .hero-unit .light {
   color: #bbb;
 }
+
+.hero-unit h1 {
+  padding-top:30px;
+}
+
 .hero-unit .btn-large {
   font-size:24px;
   padding:14px 24px;
   font-weight:200;
 }
 
-.share-follow {
-  background-color:#ccc;
-  padding-top:5px;
-}
-
 .concepts {
-  background-color:#333;
+  border-top:4px solid #222;
+  padding-top:10px;
+  background-color:#ddd;
   color : #eee;
   text-align:center;
+  background: #34373a; /* Old browsers */
+  background: -moz-linear-gradient(top,  #34373a 0%, #000000 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#34373a), color-stop(100%,#000000)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  #34373a 0%,#000000 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  #34373a 0%,#000000 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  #34373a 0%,#000000 100%); /* IE10+ */
+  background: linear-gradient(to bottom,  #34373a 0%,#000000 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#34373a', endColorstr='#000000',GradientType=0 ); /* IE6-9 */
+}
+
+.concepts .accordion-group {
+  border:0;
 }
 
 .concepts h3 {
-  text-align:center;
+  text-align:left;
   color : #fff;
   margin-bottom:4px;
+  padding-left : 10px;
 background: rgb(149,3,37); /* Old browsers */
 
 background: -moz-linear-gradient(top,  rgba(149,3,37,1) 0%, rgba(126,2,31,1) 44%, rgba(96,0,22,1) 100%); /* FF3.6+ */
@@ -84,3 +99,4 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#950325', end
 .concepts .accordion-body {
   text-align:left;
 }
+

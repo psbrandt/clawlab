@@ -38,9 +38,8 @@ class TracksController < ApplicationController
       :track_id => @track.id, 
       :name => params[:name]
     )
-    action.redo
-    if @track.save!
-      render :json => @track
+    if @track = action.redo
+      render :json => {:message => "Track name successfully changed", :name =>@track.name }
     else
       render :json => @track.errors, :status => :unprocessable_entity
     end

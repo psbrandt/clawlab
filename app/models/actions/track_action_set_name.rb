@@ -12,7 +12,9 @@ class TrackActionSetName < TrackAction
     song_version.root_action.children.detect { |a|
       a.name == "track_action_create_#{track_id}"
     } << self
-    song_version.tracks.find(track_id).update_attributes!(:name => name)
+    track = song_version.tracks.find(track_id)
+    track.update_attributes!(:name => name)
+    track
   end
 
   def undo

@@ -50,6 +50,7 @@ define([
         rightBarVisible : this.model.get ("rightBarVisible")
       }));
 
+      // The left-bar dropzone
       this.$el.find (".dropzone").html (dropzoneTemplate);
       // Initialize fileupload
       this.$fileupload = this.$el.find('input:file.file-upload-field')
@@ -62,6 +63,7 @@ define([
       })
 
       var self = this;
+      // On scroll, reset dimensions
       this.$el.find ("#sequencer, #workspace").on ("scroll", function (e) {
         self.setWorkspaceDimensions ();
         self.model.set ({

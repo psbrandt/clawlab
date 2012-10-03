@@ -1,5 +1,6 @@
-<h1>Bands</h1>
-<% if user_signed_in? and params[:user_id] == current_user.id.to_s %>
+<div class="container">
+  <h1>Bands</h1>
+  <% if user_signed_in? and params[:user_id] == current_user.id.to_s %>
   <p>
     <%= link_to "New band", new_band_path, :class => "btn btn-primary" %>
   </p>
@@ -9,20 +10,21 @@
       <div class="thumbnail">
         <%= request.sender.name %> invited you to join <%= request.band.name %>
         <%= link_to accept_request_path(request), :method => :put, :class => "btn btn-success" do %>
-          <i class="icon-ok icon-white"></i>
-          <% end %>
+        <i class="icon-ok icon-white"></i>
+        <% end %>
       </div>
     </li>
     <% end %>
   </ul>
-<% end %>
-<ul class="thumbnails">
-  <% @bands.each do |band| %>
-  <li class="span2">
-    <div class="thumbnail">
-      <%= render "thumbnail", :band => band %>
-      <%= render "menu", :band => band if can? :manage, band %>
-    </div>
-  </li>
   <% end %>
-</ul>
+  <ul class="thumbnails">
+    <% @bands.each do |band| %>
+    <li class="span2">
+      <div class="thumbnail">
+	<%= render "thumbnail", :band => band %>
+	<%= render "menu", :band => band if can? :manage, band %>
+      </div>
+    </li>
+    <% end %>
+  </ul>
+</div>

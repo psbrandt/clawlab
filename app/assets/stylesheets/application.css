@@ -52,8 +52,16 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b5bdc8', end
   padding-top:5px;
 }
 
+.concepts {
+  background-color:#333;
+  color : #eee;
+  text-align:center;
+}
+
 .concepts h3 {
+  text-align:center;
   color : #fff;
+  margin-bottom:4px;
 background: rgb(149,3,37); /* Old browsers */
 
 background: -moz-linear-gradient(top,  rgba(149,3,37,1) 0%, rgba(126,2,31,1) 44%, rgba(96,0,22,1) 100%); /* FF3.6+ */
@@ -69,8 +77,9 @@ background: -ms-linear-gradient(top,  rgba(149,3,37,1) 0%,rgba(126,2,31,1) 44%,r
 background: linear-gradient(to bottom,  rgba(149,3,37,1) 0%,rgba(126,2,31,1) 44%,rgba(96,0,22,1) 100%); /* W3C */
 
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#950325', endColorstr='#600016',GradientType=0 ); /* IE6-9 */
-
   -webkit-border-radius: 4px;
   border-radius: 4px;
-  text-align:center;
+}
+.concepts .accordion-body {
+  text-align:left;
 }

@@ -80,6 +80,8 @@ define([
         function (audioBuffer) {
           self.buffers[audioSource.get("id")] = audioBuffer;
           audioSource.set ("bufferLoaded", true)
+          // set ready to play if it is the first source
+          self.model.set ("readyToPlay", true);
         },
         { onprogress : function (e) {
           var complete = e.loaded * 100 / e.total;

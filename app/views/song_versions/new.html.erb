@@ -1,9 +1,12 @@
-<%= form_for @song_version do |f| %>
+<div class="container">
+  <%= form_for @song_version do |f| %>
   <%= f.label :title %>
   <%= f.text_field :title %>
-
+  
   <%= f.label :bpm %>
   <%= f.text_field :bpm, :value => "120.0" %>
+  <%= f.hidden_field :song_id %>
   <br />
   <button type="sumbit" class="btn btn-primary">Create song</button>
-<% end %>
+  <% end %>
+</div>

@@ -1,34 +1,36 @@
-<h1>Friends</h1>
-<ul class="thumbnails">
-  <% current_user.received_requests.each do |request| %>
+<div class="container">
+  <h1>Friends</h1>
+  <ul class="thumbnails">
+    <% current_user.received_requests.each do |request| %>
     <% if request._type == "FriendRequest" %>
-      <li class="span1">
-        <div class="thumbnail">
-          <%= image_tag request.sender.avatar.thumb.url %>
-          <h5><%= link_to request.sender.name, show_user_path(request.sender) %></h5>
-          <%= link_to accept_request_path(request), :method => :put, :class => "btn btn-success" do %>
-          <i class="icon-ok icon-white"></i>
-          <% end %>
-        </div>
-      </li>
+    <li class="span1">
+      <div class="thumbnail">
+        <%= image_tag request.sender.avatar.thumb.url %>
+        <h5><%= link_to request.sender.name, show_user_path(request.sender) %></h5>
+        <%= link_to accept_request_path(request), :method => :put, :class => "btn btn-success" do %>
+        <i class="icon-ok icon-white"></i>
+        <% end %>
+      </div>
+    </li>
     <% end %>
-  <% end %>
-</ul>
-<ul class="thumbnails">
-  <% current_user.sent_requests.each do |request| %>
+    <% end %>
+  </ul>
+  <ul class="thumbnails">
+    <% current_user.sent_requests.each do |request| %>
     <% if request._type == "FriendRequest" %>
-      <li class="span1">
-        <div class="thumbnail">
-          <%= image_tag request.receiver.avatar.thumb.url, :class => "" %>
-          <h5 class=""><%= request.receiver.name %></h5>
-          <%= request.status %>
-        </div>
-      </li>
+    <li class="span1">
+      <div class="thumbnail">
+        <%= image_tag request.receiver.avatar.thumb.url, :class => "" %>
+        <h5 class=""><%= request.receiver.name %></h5>
+        <%= request.status %>
+      </div>
+    </li>
     <% end %>
-  <% end %>
-</ul>
-<ul class="thumbnails">
-  <% @friends.each do |friend| %>
-  <li class="span2"><%= render "thumbnail", :user => friend %></li>
-  <% end %>
-</ul>
+    <% end %>
+  </ul>
+  <ul class="thumbnails">
+    <% @friends.each do |friend| %>
+    <li class="span2"><%= render "thumbnail", :user => friend %></li>
+    <% end %>
+  </ul>
+</div>

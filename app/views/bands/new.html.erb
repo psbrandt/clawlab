@@ -1,11 +1,14 @@
-<h1>new band</h1>
-<%= form_for @band, :html => { :multipart => true }, :url => { :action => :create } do |f| %>
-<p>
-  <%= f.label :name %>
-  <%= f.text_field :name %>
-  <%= f.label :avatar %>
-  <%= f.file_field :avatar %>
-  <%= f.hidden_field :avatar_cache %>
-  <%= f.submit "Create", :class => "btn, btn-primary" %>
-</p>
-<% end %>
+<div class="container">
+  <h1>new band</h1>
+  <%= form_for @band, :html => { :multipart => true }, :url => { :action => :create } do |f| %>
+  <p>
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+    <%= f.label :avatar %>
+    <%= f.file_field :avatar %>
+    <%= f.hidden_field :avatar_cache %>
+    <br />
+    <%= f.submit "Create", :class => "btn btn-primary" %>
+  </p>
+  <% end %>
+</div>

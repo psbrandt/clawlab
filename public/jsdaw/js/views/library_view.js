@@ -26,7 +26,9 @@ define([
 
     render : function () {
       this.$el.html (this.template ());
-      this.$el.find (".dropzone").html (dropzoneTemplate);
+      this.$el.find (".dropzone").html (_.template (dropzoneTemplate, {
+        text : "Drop audio files<br />from your computer<br />(wav or mp3)"
+      }));
       //render audio sources
       this.collection.each (this.addAudioSource);
 

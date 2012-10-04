@@ -14,7 +14,8 @@ define([
   "views/timeline_view",
   "views/transport_view",
   // jquery plugins at the end
-  "getscrollbarwidth"
+  "getscrollbarwidth",
+  "jqueryui"
 ], function($, _, Backbone, mainTemplate, dropzoneTemplate, TrackView, 
             TrackControlsView, ActionTreeView, LibraryView, TimelineView,
             TransportView) {
@@ -23,7 +24,8 @@ define([
     template : _.template (mainTemplate),
 
     events : {
-      "click #right-bar .nav a" : "rightBarMenuClicked"
+      "click #right-bar .nav a" : "rightBarMenuClicked",
+      "drop .dropzone"          : "dropped"
     },
 
     rightBarMenuClicked : function (e) {
@@ -51,7 +53,11 @@ define([
       }));
 
       // The left-bar dropzone
-      this.$el.find (".dropzone").html (dropzoneTemplate);
+      this.$el.find (".dropzone").html (_.template (dropzoneTemplate, {
+        text : "Drop audio files<br /> (.wav or .mp3) here"
+      })).droppable ({
+        accept : ".audio-source"
+      });
       // Initialize fileupload
       this.$fileupload = this.$el.find('input:file.file-upload-field')
       // Listen drop or add
@@ -95,6 +101,13 @@ define([
       }).render ();
       
       return this;
+    },
+
+    dropped : function (e, ui) {
+      if (ui == undefined) return;
+      var track = this.model.addTrack (function (track) {
+        track.addClip (ui.helper.context.id, 0);
+      });
     },
 
     handleFileSelect : function ($e, data) {

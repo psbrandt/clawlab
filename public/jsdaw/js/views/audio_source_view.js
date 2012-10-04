@@ -27,6 +27,8 @@ define([
       this.model.on ("change:bufferLoaded", this.bufferLoaded, this);
       this.model.on ("bufferProgress", this.bufferProgressed, this);
       this.model.on ("change:previewing", this.previewingChanged, this);
+      this.model.on ("uploadProgress", this.uploadProgressed, this);
+      this.model.on ("uploadSuccess", this.uploadSuccessed, this);
       this.playing = false;
     },
 
@@ -41,6 +43,14 @@ define([
       this.$el.html (this.template (data));
 
       return this;
+    },
+
+    uploadProgressed : function (complete) {
+      this.$el.find (".upload-bar").width (complete + "%");
+    },
+
+    uploadSuccessed : function (complete) {
+      this.$el.find (".upload-bar").slideUp ();
     },
 
     bufferProgressed : function (complete) {

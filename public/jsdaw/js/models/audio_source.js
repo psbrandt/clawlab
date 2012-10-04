@@ -23,10 +23,19 @@ define([
         url: this.collection.url,
         formData : { "audio_source[id]" : this.id }
       }).success (_.bind (this.uploadSuccess, this));
+      var self = this;
+      this.uploader.bind ("fileuploadprogress", function (e, data) {
+        self.uploadProgress (data);
+      });
     },
 
     uploadSuccess : function (data) {
       this.set (data)
+      this.trigger ("uploadSuccess");
+    },
+
+    uploadProgress : function (data) {
+      this.trigger ("uploadProgress", parseInt(data.loaded / data.total * 100, 10));
     }
     
   });

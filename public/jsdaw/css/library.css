@@ -15,14 +15,25 @@
   cursor : move;
 }
 
-.audio-source .bar {
+.audio-source .buffer-bar {
   background-color:#888; 
   height:10px;
 }
 
+.audio-source .upload-bar {
+  background-color:#B88; 
+  height:15px;
+}
 .audio-source .remove-btn {
   padding:2px;
 }
 .audio-source .remove-btn:hover, .upload-btn:hover, .preview-btn:hover {
   cursor:pointer;
+}
+
+.audio-source .upload-btn {
+  height:15px;
+}
+.audio-source .upload-btn i {
+  margin-top:-5px;
 }

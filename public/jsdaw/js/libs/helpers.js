@@ -6,9 +6,19 @@ define([
   var Helpers = function (data) {
     this.bpm = data.bpm;
     this.pxPerBeat = data.pxPerBeat;
+    this.snapOn = 1/2;
   }
   
   Helpers.prototype = {
+
+    snap : function (sec) {
+      return this.beatsToSec (this.snapOn * Math.round (sec / this.beatsToSec (this.snapOn)));
+    },
+
+    snapPx : function (px) {
+      var snapOnPx = this.beatsToPx (this.snapOn);
+      return snapOnPx * Math.round (px / snapOnPx)
+    },
     
     pxToSec : function (px) {
       return 60 * px / (this.bpm * this.pxPerBeat);

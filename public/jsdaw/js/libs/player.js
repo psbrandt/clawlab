@@ -171,8 +171,9 @@ define([
     },
 
     releaseClip : function (clip) {
+      if (!this.playing) return;
       this.playingSources [clip.id].noteOff (0);
-      delete this.platingSources [clip.id];
+      delete this.playingSources [clip.id];
     },
 
     sourceOffsetChanged : function (clip, offset) {

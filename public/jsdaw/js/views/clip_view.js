@@ -7,8 +7,9 @@ define([
   "backbone",
   "text!templates/clip.html",
   "libs/waveform",
+  "models/audio_source",
   "jqueryui"
-], function($, _, Backbone, clipTemplate, Waveform) {
+], function($, _, Backbone, clipTemplate, Waveform, AudioSource) {
   return Backbone.View.extend ({
 
     template : _.template (clipTemplate),
@@ -28,12 +29,11 @@ define([
         this.model.get("audio_source_id")
       );
 
-      this.model.on ("change:source_offset", this.sourceOffsetChanged, this)
       this.model.on ("destroy", this.remove, this);
 
-      // If the audio source was not found, return
+      // If the audio source was not found initialize an empty one
       if (this.audioSource == undefined) {
-        return;
+        this.audioSource = new AudioSource ();
       }
       this.buffer = Claw.Player.buffers[this.audioSource.get("id")];
 
@@ -42,16 +42,8 @@ define([
 
     render : function () {
       var data = {}
-      // if the audio source is not found set filename to "not found"
-      try {
-        data.filename = this.audioSource.get ("audio_filename")
-      } catch (e) { data.filename = "error : file not found" }
+      data.filename = this.audioSource.get ("audio_filename")
       this.$el.html (this.template (data));
-
-      // not working ...
-      this.$el.resizable ({
-        handles : "e, w"
-      });
 
       this.$el.draggable ({
         containment : "parent",
@@ -63,6 +55,9 @@ define([
       this.$el.css ("position", "absolute");
 
       if (this.buffer) this.drawWaveform ()
+      else this.$el.find ("canvas").css ({
+        width : "100px",
+      });
 
       return this;
     },
@@ -92,6 +87,8 @@ define([
       // the lenght of the clip in seconds
       var length = this.buffer.duration - this.model.get ("begin_offset") 
         - this.model.get ("end_offset");
+      // width in px
+      var width = Claw.Helpers.secToPx (length);
       // height in pixels
       var height = 75; //huh ..
 
@@ -102,21 +99,22 @@ define([
       // when the clip starts in the song
       var offset = this.model.get("source_offset") + begin_offset
       this.$el.css ({
+        width : width,
         left : Claw.Helpers.secToPx (offset)
       }).find ("canvas").attr ({
-        width : Claw.Helpers.secToPx (length),
+        width : width,
         height : height
       })
       new Waveform ({
         canvas : this.$el.find ("canvas")[0],
         data : this.buffer.getChannelData (0)
       });
-    },
 
-    sourceOffsetChanged : function (model, sourceOffset) {
-      this.$el.css ({
-        left : Claw.Helpers.secToPx (sourceOffset + model.get ("begin_offset"))
-      })
+      // FIXME ! only works after re-rendering (after zoomIn for example)
+      // this.$el.resizable ({
+      //   handles : "e, w",
+      //   maxWidth : Claw.Helpers.secToPx (length)
+      // });
     },
 
     dragStarted : function (e, ui) {
@@ -137,11 +135,12 @@ define([
     },
 
     dragStopped : function (e, ui) {
+      var offset = Math.max (0, this.$el.position ().left);
       _.each (this.alsoDrag, function (el) {
         $(el).trigger ("dragstop");
       })
-      this.model.set ({
-        source_offset : Claw.Helpers.pxToSec (this.$el.position ().left)
+      this.model.save ({
+        source_offset : Claw.Helpers.pxToSec (offset)
       });
     }
 

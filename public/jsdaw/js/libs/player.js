@@ -182,8 +182,7 @@ define([
         source.noteOff (0);
         var end = source.buffer.duration + offset;
         if (end > this.context.currentTime - this.startTime + this.playbackFrom)
-          this.playNote (clip, clip.get ("source_offset") + this.startTime 
-                         - this.playbackFrom);
+          this.playNote (clip, offset + this.startTime - this.playbackFrom);
       }
     },
 

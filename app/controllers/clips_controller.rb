@@ -41,8 +41,7 @@ class ClipsController < ApplicationController
       :clip_id  => @clip.id,
       :offset => params[:source_offset]
     )
-    action.redo
-    if @clip.save!
+    if @clip = action.redo
       render :json => @clip
     else
       render :json => @clip.errors, :status => :unprocessable_entity

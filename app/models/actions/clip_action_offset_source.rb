@@ -15,6 +15,7 @@ class ClipActionOffsetSource < ClipAction
       a.name == "clip_action_create_#{clip.id}"
     } << self
     clip.update_attributes!(:source_offset => offset)
+    clip
   end
 
   def undo

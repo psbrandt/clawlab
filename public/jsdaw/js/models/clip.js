@@ -20,11 +20,8 @@ define([
       begin_offset  : 0,
       end_offset    : 0,
       selected      : false
-    },
-
-    initialize : function (data) {
-      this.on ("change:source_offset", this.save, this);
     }
+
   });
   return ClipModel;
 });

@@ -7,7 +7,8 @@ define([
 
     defaults : {
       previewing : false,
-      bufferLoaded : false
+      bufferLoaded : false,
+      audio_filename : "NOT FOUND"
     },
 
     initialize : function (data) {

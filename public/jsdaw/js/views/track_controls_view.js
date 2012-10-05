@@ -39,6 +39,9 @@ define([
       // Rendering controls
       this.$el.html (this.template (data));
 
+      // Trigger tooltips
+      this.$el.find ('[rel="tooltip"]').tooltip ();
+
       this.$name = $(".name", this.el).editInPlace ({
         context : this,
         onChange : this.setName

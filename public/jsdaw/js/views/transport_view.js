@@ -36,6 +36,8 @@ define([
       };
       this.$el.html (this.template (data));
 
+      this.$el.find ('[rel="tooltip"]').tooltip ();
+
       this.$el.find (".title").editInPlace ({
         context : this,
         onChange : this.setTitle

@@ -6,7 +6,8 @@
       <!-- Be sure to leave the brand out there if you want it shown -->
       <ul class="nav">
         <li>
-          <button class="btn btn-info" id="add-track-btn">
+          <button class="btn btn-info" id="add-track-btn" rel="tooltip" 
+                  data-original-title="Hot key : N">
             <i class="icon-plus icon-white"></i> add track
           </button>
         </li>
@@ -15,12 +16,18 @@
             <span class="caret"></span> Menu
           </a>
           <ul class="dropdown-menu">
-            <li><a href="#" id="menu-delete">Delete</a></li>
+            <li>
+              <a href="#" id="menu-delete">Delete 
+                <span class="pull-right muted">Del</span>
+              </a>
+            </li>
           </ul>
         </li>
         <li class="divider-vertical"></li>
         <li>
-          <a class="title"><%= title %></a>
+          <a class="title" rel="tooltip" data-original-title="Double click to edit">
+            <%= title %>
+          </a>
         </li>
         <li>
           <a><%= bpm %> bpm</a>
@@ -28,13 +35,16 @@
         <li class="divider-vertical"></li>
         <li>
           <div class="btn-group">
-            <button class="btn btn-primary" id="rewind-btn">
+            <button class="btn btn-primary" id="rewind-btn" rel="tooltip"
+                    data-original-title="Hot key : 1">
               <i class="icon-fast-backward icon-white"></i>
             </button>
-            <button class="btn btn-inverse" id="stop-btn">
+            <button class="btn btn-inverse" id="stop-btn" rel="tooltip"
+                    data-original-title="Hot key : 0">
               <i class="icon-white icon-stop"></i>
             </button>
-            <button class="btn btn-inverse" id="play-btn" disabled="disabled">
+            <button class="btn btn-inverse" id="play-btn" disabled="disabled"
+                    rel="tooltip" data-original-title="Hot key : spacebar">
               <i class="icon-white icon-play"></i>
             </button>
           </div>
@@ -46,10 +56,12 @@
         <li class="divider-vertical"></li>
         <li>
           <div class="btn-group">
-            <button class="btn" id="zoom-out-btn">
+            <button class="btn" id="zoom-out-btn" rel="tooltip" 
+                    data-original-title="Hot key : -">
               <i class="icon-zoom-out"></i>
             </button>
-            <button class="btn" id="zoom-in-btn">
+            <button class="btn" id="zoom-in-btn" rel="tooltip" 
+                    data-original-title="Hot key : +">
               <i class="icon-zoom-in"></i>
             </button>
           </div>
@@ -58,7 +70,8 @@
 
       <ul class="nav pull-right">
         <li>
-          <button class="btn btn-inverse active" id="toggle-right-bar-btn">
+          <button class="btn btn-inverse active" id="toggle-right-bar-btn"
+                  rel="tooltip" data-original-title="Show/hide right bar">
             <i class="icon-white icon-headphones"></i>
             <i class="icon-white icon-list"></i>
           </button>

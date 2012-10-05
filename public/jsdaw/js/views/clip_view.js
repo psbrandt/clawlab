@@ -17,6 +17,8 @@ define([
 
     events : {
       "dragstop"   : "dragStopped",
+      "dragstart"  : "dragStarted",
+      "drag"       : "dragging",
       "selected"   : "selected",
       "unselected" : "unselected"
     },
@@ -117,11 +119,29 @@ define([
       })
     },
 
+    dragStarted : function (e, ui) {
+      this.alsoDrag = $("#tracks .ui-selected").not (this.$el);
+      _.each (this.alsoDrag, function (el) {
+        $(el).data ("offset", $(el).position ());
+      });
+      this.offset = ui.position.left;
+    },
+
+    dragging : function (e, ui) {
+      var dl = ui.position.left - this.offset;
+      _.each (this.alsoDrag, function (el) {
+        var prev_offset = $(el).data ("offset");
+        $(el).css ("left", prev_offset.left + dl);
+        return true;
+      });
+    },
+
     dragStopped : function (e, ui) {
-      var offset = ui.offset.left - 200 // huh ... left-bar width
-        + $("#sequencer").scrollLeft () // huh ... scroll
+      _.each (this.alsoDrag, function (el) {
+        $(el).trigger ("dragstop");
+      })
       this.model.set ({
-        source_offset : Claw.Helpers.pxToSec (offset)
+        source_offset : Claw.Helpers.pxToSec (this.$el.position ().left)
       });
     }
 

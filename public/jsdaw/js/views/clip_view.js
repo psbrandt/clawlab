@@ -135,13 +135,16 @@ define([
     },
 
     dragStopped : function (e, ui) {
-      var offset = Math.max (0, this.$el.position ().left);
+      var pxOffset = Math.max (0, this.$el.position ().left);
+      var offset   = Claw.Helpers.pxToSec (pxOffset);
       _.each (this.alsoDrag, function (el) {
         $(el).trigger ("dragstop");
       })
-      this.model.save ({
-        source_offset : Claw.Helpers.pxToSec (offset)
-      });
+      this.alsoDrag = [];
+      if (this.model.get ("source_offset") != offset)
+        this.model.save ({
+          source_offset : offset
+        });
     }
 
   });

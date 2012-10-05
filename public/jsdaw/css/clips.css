@@ -1,5 +1,6 @@
 .clip {
   height : 100%;
+  overflow:hidden;
 background: -moz-linear-gradient(top,  rgba(0,0,0,0.8) 0%, rgba(255,255,255,0.2) 10%, rgba(255,255,255,0.2) 90%, rgba(0,0,0,0.8) 100%); /* FF3.6+ */
 
 background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0.8)), color-stop(10%,rgba(255,255,255,0.2)), color-stop(90%,rgba(255,255,255,0.2)), color-stop(100%,rgba(0,0,0,0.8))); /* Chrome,Safari4+ */
@@ -40,3 +41,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cc9b0000', e
 
 }
 
+.clip.ui-selected .filename {
+  color:rgb(200, 0, 0);
+}

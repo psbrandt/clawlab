@@ -25,7 +25,12 @@ define([
 
     events : {
       "click #right-bar .nav a" : "rightBarMenuClicked",
-      "drop .dropzone"          : "dropped"
+      "drop .dropzone"          : "dropped",
+      "#tracks selected"        : "test"
+    },
+    
+    test : function () {
+      console.log ("sfds");
     },
 
     rightBarMenuClicked : function (e) {
@@ -52,9 +57,16 @@ define([
         rightBarVisible : this.model.get ("rightBarVisible")
       }));
 
+      // make clips selectable
+      this.$el.find ("#tracks").selectable ({
+        filter : ".clip",
+        selected : function (e, ui) { $(ui.selected).trigger ("selected") },
+        unselected : function (e, ui) { $(ui.unselected).trigger ("unselected") }
+      });
+
       // The left-bar dropzone
       this.$el.find (".dropzone").html (_.template (dropzoneTemplate, {
-        text : "Drop audio files<br /> (.wav or .mp3) here"
+        text : "Drop audio files<br />(.wav or .mp3) here"
       })).droppable ({
         accept : ".audio-source"
       });

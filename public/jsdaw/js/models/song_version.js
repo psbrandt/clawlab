@@ -66,6 +66,14 @@ define([
       this.trigger ("stop");
     },
 
+    deleteSelectedClips : function () {
+      this.tracks.each (function (track) {
+        track.clips.each (function (clip) {
+          if (clip.get("selected")) clip.destroy ();
+        })
+      });
+    },
+
     // Create a new track in song version and save it
     addTrack : function (callback) {
       //create a new track model

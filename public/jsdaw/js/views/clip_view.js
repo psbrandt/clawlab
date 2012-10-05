@@ -16,7 +16,9 @@ define([
     className : "clip",
 
     events : {
-      "dragstop" : "dragStopped"
+      "dragstop"   : "dragStopped",
+      "selected"   : "selected",
+      "unselected" : "unselected"
     },
 
     initialize : function () {
@@ -24,13 +26,16 @@ define([
         this.model.get("audio_source_id")
       );
 
+      this.model.on ("change:source_offset", this.sourceOffsetChanged, this)
+      this.model.on ("destroy", this.remove, this);
+
       // If the audio source was not found, return
       if (this.audioSource == undefined) {
         return;
       }
       this.buffer = Claw.Player.buffers[this.audioSource.get("id")];
+
       this.audioSource.on ("change:bufferLoaded", this.bufferLoaded, this);
-      this.model.on ("change:source_offset", this.sourceOffsetChanged, this)
     },
 
     render : function () {
@@ -59,7 +64,19 @@ define([
 
       return this;
     },
-    
+
+    remove : function () {
+      this.$el.remove ();
+    },
+
+    selected : function () {
+      this.model.set ("selected", true);
+    },
+
+    unselected : function () {
+      this.model.set ("selected", false);
+    },
+
     /** Set the buffer and render the clip */
     bufferLoaded : function (model, bufferLoaded) {
       if (!bufferLoaded) return;

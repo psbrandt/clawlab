@@ -133,7 +133,7 @@ define([
         }, this)
         //track.on ("change:volume", this.setTrackVolume, this);
         track.clips.on ("add", this.addClip, this);
-        
+        track.clips.on ("remove", this.releaseClip, this);
         track.clips.each (this.addClip, this);
       }
     },
@@ -168,6 +168,11 @@ define([
     releaseTrack : function(track) {
       this.trackNodes[track.id].disconnect();
       delete this.trackNodes[track.id];
+    },
+
+    releaseClip : function (clip) {
+      this.playingSources [clip.id].noteOff (0);
+      delete this.platingSources [clip.id];
     },
 
     sourceOffsetChanged : function (clip, offset) {

@@ -54,14 +54,31 @@
     Listen, edit and manage your musical projects from anywhere. Share. 
     Collaborate.
   </p>
-  <%= link_to "login", new_user_session_path, :class => "btn btn-primary btn-large btn-inverse" %>
-  <%= link_to "sign up", new_user_registration_path, :class => "btn btn-primary btn-large" %>
-</div>
 
-<div class="concepts">
   <div class="container">
     <div class="row">
-      <div class="span6" id="accordion">
+      <div class="span6 offset3">
+        <div class="alert alert-info">
+          <form class="form-inline">
+            <legend>
+              Subscribe to the upcoming beta
+            </legend>
+            <input type="text" placeholder="Email" style="height:30px;">
+            <button type="submit" class="btn btn-success" style="height:40px">
+              Submit
+            </button><br />
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="concepts-demo">
+  <div class="container">
+    <div class="row">
+      <div class="span6 concepts" id="accordion">
         <h2>What is Claw ?</h2>
 	<div class="accordion-group">
 	<h3 class="accordion-toggle" data-toggle="collapse" href="#work-from-anywhere" data-parent="#accordion">
@@ -111,7 +128,7 @@
 	</div>
 	</div>
       </div>
-      <div class="span6">
+      <div class="span6 video">
         <h2>Demo</h2>
 	<iframe src="http://player.vimeo.com/video/41912188" width="500" height="313" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
       </div>

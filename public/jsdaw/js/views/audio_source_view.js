@@ -39,6 +39,8 @@ define([
         bufferLoaded : this.model.get ("bufferLoaded"),
         previewing : this.model.get ("previewing")
       }
+      
+      if (this.model.get ("bufferLoaded")) this.setDraggable ();
 
       this.$el.html (this.template (data));
 

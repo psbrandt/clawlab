@@ -1,0 +1,12 @@
+<div class="container">
+  <%= form_for @band, :html => { :multipart => true }, :url => { :action => :create } do |f| %>
+  <legend>Edit a band</legend>
+  <%= f.label :name %>
+  <%= f.text_field :name %>
+  <%= f.label :avatar %>
+  <%= f.file_field :avatar %>
+  <%= f.hidden_field :avatar_cache %>
+  <br />
+  <%= f.submit "New band", :class => "btn btn-primary" %>
+  <% end %>
+</div>

@@ -7,13 +7,14 @@ class SongVersionActionSetTitle < SongVersionAction
     "Set title #{title}"
   end
 
-  def redo
+  def redo song_version
+    logger.info song_version.as_document
     self.update_attributes!(:old_title => song_version.title)
     song_version.root_action.add_child(self)
     song_version.update_attributes!(:title => title)
   end
 
-  def undo 
+  def undo song_version
     song_version.root_action.remove_child!(self)
     song_version.update_attributes!(:title => old_title)
 

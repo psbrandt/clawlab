@@ -10,7 +10,7 @@ class SongVersion
   has_one :root_action, :class_name => "SongVersionActionCreate", :dependent => :destroy
 
   embeds_many :tracks, :cascade_callbacks => true
-  has_many :audio_sources
+  embeds_many :audio_sources
 
   validates_presence_of :title, :bpm, :user, :song, :root_action
 

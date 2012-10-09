@@ -7,23 +7,23 @@ class ClipActionOffsetEnd < ClipAction
     "Offset end"
   end
 
-  def redo
+  def redo song_version
     self.update_attributes!(:old_offset => clip.end_offset)
-    clip.track.song_version.root_action.children.find { |a| 
-      a.name == "track_action_create_#{clip.track.id}"
+    song_version.root_action.children.find { |a| 
+      a.name == "track_action_create_#{track_id}"
     }.children.find { |a|
-      a.name == "clip_action_create_#{clip.id}"
+      a.name == "clip_action_create_#{clip_id}"
     } << self
-    clip.update_attributes!(:end_offset => offset)
+    song_version.tracks.find(track_id).clips.find(clip_id).update_attributes!(:end_offset => offset)
   end
 
-  def undo
-    clip.track.song_version.root_action.children.find { |a| 
-      a.name == "track_action_create_#{clip.track.id}"
+  def undo song_version
+    song_version.root_action.children.find { |a| 
+      a.name == "track_action_create_#{track_id}"
     }.children.find { |a|
-      a.name == "clip_action_create_#{clip.id}"
+      a.name == "clip_action_create_#{clip_id}"
     }.remove_child!(self)
-    clip.update_attributes!(:end_offset => old_offset)
+    song_version.tracks.find(track_id).clips.find(clip_id).update_attributes!(:end_offset => old_offset)
 
     # undoing children (dependant actions)
     children.each &:undo

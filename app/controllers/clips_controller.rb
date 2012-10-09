@@ -9,7 +9,7 @@ class ClipsController < ApplicationController
       :track_id => @track.id, 
       :params => (params[:clip] || {})
     )
-    if @clip = action.redo
+    if @clip = action.redo(@song_version)
       render :json => @clip
     else
       render :json => @clip.errors, :status => :unprocessable_entity
@@ -22,7 +22,7 @@ class ClipsController < ApplicationController
       :track_id => @track.id, 
       :clip_id => @clip.id
     )
-    action.redo
+    action.redo @song_version
     render :json => {:message => "Clip successfully destroyed"}
   end
 
@@ -41,7 +41,7 @@ class ClipsController < ApplicationController
       :clip_id  => @clip.id,
       :offset => params[:source_offset]
     )
-    if @clip = action.redo
+    if @clip = action.redo(@song_version)
       render :json => @clip
     else
       render :json => @clip.errors, :status => :unprocessable_entity
@@ -55,7 +55,7 @@ class ClipsController < ApplicationController
       :clip_id  => @clip.id,
       :offset => params[:begin_offset]
     )
-    action.redo
+    action.redo @song_version
     if @clip.save!
       render :json => @clip
     else
@@ -70,7 +70,7 @@ class ClipsController < ApplicationController
       :clip_id  => @clip.id,
       :offset => params[:end_offset]
     )
-    action.redo
+    action.redo @song_version
     if @clip.save!
       render :json => @clip
     else

@@ -53,7 +53,6 @@ class User
 
   has_many :songs
   has_many :song_versions, :dependent => :destroy
-  has_many :audio_sources
   has_many :sent_requests, :class_name => "Request", :inverse_of => :sender, :dependent => :destroy
   has_many :received_requests, :class_name => "Request", :inverse_of => :receiver, :dependent => :destroy
 
@@ -70,6 +69,10 @@ class User
 
   def received_band_requests
     received_requests.where :_type => "BandRequest"
+  end
+
+  def name_mail
+    "\"#{name}\" <#{email}>"
   end
 
 end

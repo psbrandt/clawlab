@@ -1,0 +1,19 @@
+<div class="container">
+  <%= form_tag "share", :method => :post do %>
+  <legend>Share</legend>
+  <input type="text" data-provide="typeahead" placeholder="Enter email",
+         name="user[email]" autocomplete="off"
+         data-source='<%= current_user.friends.map &:email %>' />
+  <br />
+  <button class="btn btn-primary" type="submit">Share</button>
+  <% end %>
+  <h3>Collaborators</h3>
+  <ul class="unstyled">
+    <% @song_version.song.collaborators.each do |user| %>
+    <li>
+      <%= image_tag user.avatar.thumb.url, :class => "img-rounded" %>
+      <%= user.name %> &lt;<%= user.email %>&gt;
+    </li>
+    <% end %>
+  </ul>
+</div>

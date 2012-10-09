@@ -51,7 +51,7 @@ class Action
 
       # if not, create one with no parents and no children
       unless c
-        c = child.class.new(child.as_document.except "_id", "child_ids", "parent_ids")
+        c = child.class.new(child.as_document.except "_id", "_type", "child_ids", "parent_ids")
         self.children << c
       end
 

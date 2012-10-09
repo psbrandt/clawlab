@@ -11,26 +11,26 @@ class ClipActionCreate < ClipAction
     "Create clip"
   end
 
-  def redo
+  def redo song_version
     c = Clip.new params
-    track.clips << c
+    song_version.tracks.find(track_id).clips << c
 
     # storing the id in params to recreate the exact same clip when redoing
     self.params["id"] = c.id
 
     # adding self in action tree
     song_version.root_action.children.detect { |a|
-      a.name == "track_action_create_#{track.id}"
+      a.name == "track_action_create_#{track_id}"
     } << self
     c
   end
 
-  def undo
-    track.clips.delete(clip)
+  def undo song_version
+    song_version.tracks.find(track_id).clips.delete(clip)
 
     # removing self from action tree
     song_version.root_action.children.detect { |a|
-      a.name == "track_action_create_#{track.id}"
+      a.name == "track_action_create_#{track_id}"
     }.remove_child!(self)
 
     # undoing children (dependant actions)

@@ -2,17 +2,17 @@ class AudioSource
   include Mongoid::Document
   include Mongoid::Timestamps::Created
 
-  belongs_to :song_version
+  embedded_in :song_version
 
   attr_accessible :id, :audio, :remote_audio_url, :audio_cache, :audio_filename
 
   mount_uploader :audio, AudioUploader
 
-  belongs_to :uploaded_by, :class_name => "User"
+  field :uploaded_by, :type => Moped::BSON::ObjectId#, :class_name => "User"
   field :author
   field :instrument
 
-  validates_presence_of :audio, :uploaded_by
+  validates_presence_of :uploaded_by
 
   def to_builder
     audio_source = Jbuilder.new

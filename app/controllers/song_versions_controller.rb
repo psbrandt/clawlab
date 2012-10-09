@@ -37,7 +37,7 @@ class SongVersionsController < ApplicationController
 
   # TODO : accept user unregistered email and send an invitation by email
   def share
-    user = User.find params[:user]
+    user = User.where(params[:user]).first
     request = SongVersionSharingRequest.new(
       :sender => current_user, 
       :receiver => user, 
@@ -56,7 +56,7 @@ class SongVersionsController < ApplicationController
   # TODO : if action_id is nil, undo last action
   def undo
     action = Action.find(params[:action_id])
-    action.undo
+    action.undo @song_version
     @song_version.save!
     if @song_version.save!
       render :json => { :message => "Undo successed" }
@@ -68,7 +68,7 @@ class SongVersionsController < ApplicationController
   # TODO : if action_id is nil, redo last undone action
   def redo
     action = Action.find(params[:action_id])
-    action.redo
+    action.redo @song_version
     if @song_version.save!
       render :json => { :message => "Redo successed" }
     else
@@ -81,11 +81,8 @@ class SongVersionsController < ApplicationController
   end
   
   def set_title
-    action = SongVersionActionSetTitle.new(
-      :song_version => @song_version, 
-      :title => params[:title]
-    )
-    action.redo
+    action = SongVersionActionSetTitle.new :title => params[:title]
+    action.redo @song_version
     if @song_version.save!
       render :json => @song_version
     else

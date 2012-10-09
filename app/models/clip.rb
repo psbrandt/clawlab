@@ -10,5 +10,7 @@ class Clip
   field :begin_offset, :type => Float, :default => 0
   field :end_offset, :type => Float, :default => 0
 
+  attr_accessible :id, :audio_source_id, :source_offset, :begin_offset, :end_offset,
+  :created_at, :updated_at
   validates_presence_of :audio_source_id
 end

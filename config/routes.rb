@@ -24,7 +24,7 @@ Claw::Application.routes.draw do
     resources :comments
     get "song_versions/new" => "song_versions#new", :as => :new_version
   end
-  post "songs/:id/share" => "songs#share", :as => :share_song
+  get "songs/:id/share" => "songs#share", :as => :share_song
   
   # SONG VERSIONS
   resources :song_versions do
@@ -39,9 +39,9 @@ Claw::Application.routes.draw do
     resource :root_action, :only => [:update, :show], :controller => "actions"
 
   end
-  put  "song_versions/:id/set_title" => "song_versions#set_title"
   post "song_versions/:id/undo"      => "song_versions#undo"
   post "song_versions/:id/redo"      => "song_versions#redo"
+  get  "song_versions/:id/share"     => "song_versions#show_share", :as => :share_song_version
   post "song_versions/:id/share"     => "song_versions#share", :as => :share_song_version
   
   # at last to make it work

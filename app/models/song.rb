@@ -10,6 +10,6 @@ class Song
   # Return all users involved in the project (users having a version of the 
   # song)
   def collaborators
-    :song_version.map(&:user).uniq
+    song_versions.map(&:user).uniq
   end
 end

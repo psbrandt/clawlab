@@ -2,7 +2,7 @@
   <h1>Bands</h1>
   <% if user_signed_in? and params[:user_id] == current_user.id.to_s %>
   <p>
-    <%= link_to "New band", new_band_path, :class => "btn btn-primary" %>
+    <%= link_to "New band", new_band_path, :class => "btn btn-primary btn-large" %>
   </p>
   <ul class="thumbnails">
     <% current_user.received_band_requests.each do |request| %>

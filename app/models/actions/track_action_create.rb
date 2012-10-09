@@ -11,9 +11,8 @@ class TrackActionCreate < TrackAction
     "track_action_create_#{i}"
   end
 
-  def redo
+  def redo song_version
     t = Track.new params
-    song_version = SongVersion.find(song_version_id)
 
     song_version.tracks << t
 
@@ -25,7 +24,7 @@ class TrackActionCreate < TrackAction
     return t
   end
 
-  def undo
+  def undo song_version
     song_version = SongVersion.find(song_version_id)
 
     song_version.tracks.find(self.params["id"]).delete

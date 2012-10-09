@@ -9,6 +9,7 @@ class Track
 
   embeds_many :clips
 
+  attr_accessible :_id, :name, :volume, :updated_at, :created_at
   validates_numericality_of :volume, :less_than_or_equal_to => 6
   validates_presence_of :name
 end

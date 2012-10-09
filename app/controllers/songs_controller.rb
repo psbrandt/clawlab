@@ -5,4 +5,8 @@ class SongsController < ApplicationController
   def index
     @songs = current_user.song_versions.map(&:song).uniq
   end
+
+  def share
+    render :layout => false
+  end
 end

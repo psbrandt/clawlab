@@ -6,7 +6,7 @@
   <% current_user.received_requests.each do |request| %>
     <% if request._type == "SongVersionSharingRequest" %>
     <li>
-      <%= link_to request.sender.name, request.sender %> 
+      <%= link_to request.sender.name, show_user_path(request.sender) %> 
       wants to share a song with you
       <%= link_to "accept", accept_request_path(request), :method => :put %>
     </li>
@@ -15,16 +15,17 @@
 </ul>
 
 <table class="table table-hover table-condensed">
-  <tr><th>owner</th><th></th><th>last update</th><th>created at</th><th></th></tr>
+  <tr><th>owner</th><th></th><th></th><th>last update</th><th>created at</th><th></th></tr>
   <% @songs.each do |song| %>
     <tr class="info">
       <td>
         <%= current_user == song.user ? "me" : song.user.name %>
       </td>
+      <td></td>
       <td>
         <%= link_to "New empty version", 
             new_song_version_path(:song_version => {:song_id => song.id}),
-            :class => "btn btn-small"
+        :class => "btn btn-small"
         %>
       </td>
       <td>
@@ -41,7 +42,15 @@
         <%= song_version.user == current_user ? "me" : "#{song_version.user.name}" %>
       </td>
       <td>
-        <% if can? :edit, song_version %>
+        <% if can? :share, song_version %>
+        <%= link_to share_song_version_path(song_version), 
+            :class => "btn btn-small btn-success" do %>
+        <i class="icon-user icon-white"></i>+ Share
+        <% end %>
+        <% end %>
+      </td>
+      <td>
+        <% if can? :edit, song_version %>        
           <%= link_to song_version.title, edit_song_version_path(song_version), 
               :class=>"btn-block", :style => "font-weight:bold" %> 
         <% else %>
@@ -62,9 +71,11 @@
         <%= song_version.created_at.strftime "%Y-%m-%d at %H:%M" %>
       </td>
       <td>
+        <% if can? :delete, song_version %>
         <%= link_to song_version, :class => "btn btn-small",
             :data => { :confirm => "Are you sure ?" }, :method => :delete do %>
         <i class="icon-trash"></i>
+        <% end %>
         <% end %>
       </td>
     </tr>

@@ -13,6 +13,7 @@ define([
     defaults : {
       name : "New track",
       volume : 0,
+      volume : 1,
       height : 75,
       muted : false,
       solo  : false

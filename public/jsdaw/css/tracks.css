@@ -46,3 +46,13 @@
   padding:0;
   border:0;
 }
+
+.track-controls .volume-slider {
+  width:120px;
+  margin-left:5px;
+}
+
+.track-controls .volume-display {
+  margin-left:15px;
+  color: #eee;
+}

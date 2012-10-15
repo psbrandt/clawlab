@@ -8,18 +8,18 @@ class TrackActionSetVolume < TrackAction
   end
 
   def redo song_version
+    track = song_version.tracks.find(track_id)
     self.update_attributes!(:old_volume => track.volume)
     song_version.root_action.children.detect { |a|
-      a.volume == "track_action_create_#{track_id}"
+      a.name == "track_action_create_#{track_id}"
     } << self
-    track = song_version.tracks.find(track_id)
     track.update_attributes!(:volume => volume)
     track
   end
 
   def undo song_version
     song_version.root_action.children.detect { |a|
-      a.volume == "track_action_create_#{track_id}"
+      a.name == "track_action_create_#{track_id}"
     }.remove_child!(self)
     song_version.tracks.find(track_id).update_attributes!(:volume => old_volume)
 

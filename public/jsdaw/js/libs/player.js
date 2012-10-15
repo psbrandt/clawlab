@@ -124,9 +124,11 @@ define([
     addTrack : function(track) {
       if (typeof this.trackNodes[track.id] === 'undefined') {
         var trackGainNode = this.context.createGainNode();
+        trackGainNode.gain.value = track.get ("volume");
         this.trackNodes[track.id] = trackGainNode;
         trackGainNode.connect(this.context.destination);
-
+        
+        track.on ("change:volume", this.setTrackVolume, this);
         track.on ("change:muted", function (track, muted) { 
           muted ? this.muteTrack (track) : this.unmuteTrack (track)
         }, this);
@@ -140,12 +142,16 @@ define([
       }
     },
 
+    setTrackVolume : function (track, volume) {
+      this.trackNodes[track.id].gain.value = volume;
+    },
+
     muteTrack : function (track) {
       this.trackNodes[track.id].gain.value = 0;
     },
 
     unmuteTrack : function (track) {
-      this.trackNodes[track.id].gain.value = 1; //FIXME set with volume
+      this.trackNodes[track.id].gain.value = track.get ("volume"); //FIXME set with volume
     },
 
     soloTrack : function (track) {
@@ -178,23 +184,40 @@ define([
       delete this.playingSources [clip.id];
     },
 
+    // TODO : try to DRY these three methods below
+    
     sourceOffsetChanged : function (clip, offset) {
       if (this.playing) {
         var source = this.playingSources [clip.id];
         source.noteOff (0);
-        var end = source.buffer.duration + offset;
+        var end = source.buffer.duration + offset - clip.get ("end_offset");
         if (end > this.context.currentTime - this.startTime + this.playbackFrom)
-          this.playNote (clip, offset + this.startTime - this.playbackFrom);
+          this.playNote (clip, offset + this.startTime + 
+                         clip.get ("begin_offset") - this.playbackFrom);
       }
     },
 
     beginOffsetChanged : function (clip, offset) {
       if (this.playing) {
+        var source = this.playingSources [clip.id];
+        source.noteOff (0);
+        var end = source.buffer.duration + clip.get ("source_offset") - 
+          clip.get ("end_offset");
+        if (end > this.context.currentTime - this.startTime + this.playbackFrom)
+          this.playNote (clip, clip.get ("source_offset") + this.startTime + 
+                         offset - this.playbackFrom);
       }
     },
 
-    sourceOffsetChanged : function (clip, offset) {
+    endOffsetChanged : function (clip, offset) {
       if (this.playing) {
+        var source = this.playingSources [clip.id];
+        source.noteOff (0);
+        var end = source.buffer.duration + clip.get ("source_offset") - 
+          clip.get ("end_offset");
+        if (end > this.context.currentTime - this.startTime + this.playbackFrom)
+          this.playNote (clip, clip.get ("source_offset") + this.startTime + 
+                         clip.get ("begin_offset") - this.playbackFrom);
       }
     },
 
@@ -220,11 +243,7 @@ define([
       var length = source.buffer.duration - beginOffset - endOffset
       if (time < this.startTime) {
         var offset = this.startTime - time;
-        source.noteGrainOn (
-          0,
-          beginOffset + offset,
-          length - offset
-        );
+        source.noteGrainOn (0, beginOffset + offset, length - offset);
       }
       else
         source.noteGrainOn (time, beginOffset, length);

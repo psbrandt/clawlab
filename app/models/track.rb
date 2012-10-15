@@ -5,7 +5,7 @@ class Track
   embedded_in :song_version
 
   field :name, :type => String, :default => "New track"
-  field :volume, :type => Float, :default => 0
+  field :volume, :type => Float, :default => 1
 
   embeds_many :clips
 

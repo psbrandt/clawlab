@@ -29,7 +29,6 @@ define([
         json_track.index = coll.getIndexCount ();
         return coll.add (new Track (json_track));
       }, new TrackCollection ());
-      
 
       var audioSourceModels = _.map (data.audio_sources, function (json_source) {
         return new AudioSource (json_source);
@@ -95,8 +94,18 @@ define([
       $.get ("root_action", function (data) {
         self.set ("root_action", data);
       })
-    }
+    },
 
+    merge : function (song_version_id) {
+      $.ajax ({
+        type : "PUT",
+        url : "merge",
+        data : {song_version_id : song_version_id }, 
+        success : function (data) {
+          console.log (data);
+        }
+      });
+    }
     
   });
 

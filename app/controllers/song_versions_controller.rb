@@ -53,6 +53,21 @@ class SongVersionsController < ApplicationController
     end
   end
 
+  def merge
+    other = SongVersion.find params[:song_version_id]
+    @song_version.root_action.merge other.root_action, @song_version
+    other.audio_sources.each do |audio_source|
+      unless @song_version.audio_sources.include? audio_source
+        @song_version.audio_sources << audio_source
+      end
+    end
+    if @song_version.save!
+      render :json => @song_version
+    else
+      render :json => @song_version.errors, :status => :unprocessable_entity
+    end
+  end
+
   # TODO : if action_id is nil, undo last action
   def undo
     action = Action.find(params[:action_id])

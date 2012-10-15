@@ -20,6 +20,15 @@ define([
       begin_offset  : 0,
       end_offset    : 0,
       selected      : false
+    },
+
+    validate : function (attrs) {
+      if (typeof attrs.begin_offset  !== "number" ||
+          typeof attrs.source_offset !== "number" ||
+          typeof attrs.end_offset    !== "number")
+        return "Offsets must be of type number";
+      if (attrs.begin_offset < 0) return "Begin offset can not be negative";
+      if (attrs.end_offset   < 0) return "End offset can not be negative";
     }
 
   });

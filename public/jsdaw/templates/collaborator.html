@@ -1,0 +1,8 @@
+<li>
+  <a href="<%= profile_url %>"><img src="<%= avatar_url %>" /></a>
+  <%= name %>
+  <% _.each (song_versions, function (song_version) { %>
+    <button class="btn btn-small btn-warning merge-btn"
+            data-song-version-id="<%= song_version._id %>">merge</button>
+  <% }) %>
+</li>

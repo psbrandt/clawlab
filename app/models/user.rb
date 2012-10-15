@@ -75,4 +75,11 @@ class User
     "\"#{name}\" <#{email}>"
   end
 
+  def to_builder
+    user = Jbuilder.new
+    user.(self, :name)
+    user.avatar_url self.avatar.url
+    user
+  end
+
 end

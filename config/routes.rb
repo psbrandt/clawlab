@@ -39,10 +39,12 @@ Claw::Application.routes.draw do
     resource :root_action, :only => [:update, :show], :controller => "actions"
 
   end
-  post "song_versions/:id/undo"      => "song_versions#undo"
-  post "song_versions/:id/redo"      => "song_versions#redo"
-  get  "song_versions/:id/share"     => "song_versions#show_share", :as => :share_song_version
-  post "song_versions/:id/share"     => "song_versions#share", :as => :share_song_version
+  post "song_versions/:id/undo"  => "song_versions#undo"
+  post "song_versions/:id/redo"  => "song_versions#redo"
+  get  "song_versions/:id/collaborators" => "song_versions#collaborators"
+  get  "song_versions/:id/share" => "song_versions#show_share", :as => :share_song_version
+  post "song_versions/:id/share" => "song_versions#share", :as => :share_song_version
+  put  "song_versions/:id/merge" => "song_versions#merge"
   
   # at last to make it work
   get ":id" => "users#show", :as => :show_user

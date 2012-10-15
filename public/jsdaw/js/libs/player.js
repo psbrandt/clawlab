@@ -37,7 +37,7 @@ define([
       // to store an audio source beeing previewed
       this.sourcePreview = { model : undefined, source : undefined}; 
 
-      this.playing    = false;
+      this.playing = false;
       this.startTime;
       this.playbackFrom = 0;
       this.model = songVersionModel;
@@ -117,6 +117,8 @@ define([
       clipGainNode.connect (this.trackNodes[clip.get ("track_id")]);
 
       clip.on ("change:source_offset", this.sourceOffsetChanged, this);
+      clip.on ("change:begin_offset",  this.beginOffsetChanged,  this);
+      clip.on ("change:end_offset",    this.endOffsetChanged,    this);
     },
 
     addTrack : function(track) {
@@ -186,6 +188,16 @@ define([
       }
     },
 
+    beginOffsetChanged : function (clip, offset) {
+      if (this.playing) {
+      }
+    },
+
+    sourceOffsetChanged : function (clip, offset) {
+      if (this.playing) {
+      }
+    },
+
     schedule : function () {
       this.model.set ("playingAt", 
                       this.context.currentTime - this.startTime + this.playbackFrom);
@@ -202,12 +214,20 @@ define([
       source.buffer = this.buffers [clip.get ("audio_source_id")];
       source.loop = false;
       source.connect (this.clipNodes [clip.id]);
+      var sourceOffset = clip.get ("source_offset"),
+      beginOffset = clip.get ("begin_offset"),
+      endOffset = clip.get ("end_offset")
+      var length = source.buffer.duration - beginOffset - endOffset
       if (time < this.startTime) {
         var offset = this.startTime - time;
-        source.noteGrainOn (0, offset, source.buffer.duration - offset);
+        source.noteGrainOn (
+          0,
+          beginOffset + offset,
+          length - offset
+        );
       }
       else
-        source.noteOn (time);
+        source.noteGrainOn (time, beginOffset, length);
 
       this.playingSources [clip.id] = source;
     },
@@ -223,11 +243,15 @@ define([
 
       var self = this;
       _.each (this.model.clips (), function (clip) {
-        var buffer = self.buffers [clip.get ("audio_source_id")];
+        var buffer = self.buffers [clip.get ("audio_source_id")],
+        sourceOffset = clip.get ("source_offset"),
+        beginOffset  = clip.get ("begin_offset"),
+        endOffset    = clip.get ("end_offset");
         if (buffer == undefined) return;
-        var end = buffer.duration + clip.get ("source_offset");
+        var end = buffer.duration + sourceOffset - endOffset;
         if (end > self.playbackFrom)
-          self.playNote (clip, self.startTime + clip.get ("source_offset") - self.playbackFrom);
+          self.playNote (clip, self.startTime + 
+                         sourceOffset + beginOffset - self.playbackFrom);
       });
       this.model.set ("playing", true);
       this.schedule ();

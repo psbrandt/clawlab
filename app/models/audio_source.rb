@@ -4,7 +4,7 @@ class AudioSource
 
   embedded_in :song_version
 
-  attr_accessible :id, :audio, :remote_audio_url, :audio_cache, :audio_filename
+  attr_accessible :id, :audio, :remote_audio_url, :audio_cache, :audio_filename, :uploaded_by
 
   mount_uploader :audio, AudioUploader
 
@@ -12,7 +12,7 @@ class AudioSource
   field :author
   field :instrument
 
-  validates_presence_of :uploaded_by
+  validates_presence_of :audio, :uploaded_by
 
   def to_builder
     audio_source = Jbuilder.new

@@ -5,6 +5,7 @@ class Clip
   embedded_in :track
 
   field :audio_source_id, :type => Moped::BSON::ObjectId
+  field :audio_source_url, :type => String
 
   field :source_offset, :type => Float, :default => 0
   field :begin_offset, :type => Float, :default => 0

@@ -1,0 +1,14 @@
+#chat {
+  height:100%;
+}
+#chat .messages {
+  height:80%;
+  overflow:auto;
+  border-bottom:5px solid #bbb;
+}
+#chat .input-message {
+}
+
+#chat .messages .info {
+  font-style:italic;
+}

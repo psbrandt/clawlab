@@ -16,6 +16,8 @@ You need :
 
 - Server-side framework : [Rails 3.1+](http://rubyonrails.org/)
 - Database : [MongoDB](http://www.mongodb.org/)
+- Pub/sub system (optional) : [Faye](http://faye.jcoglan.com/) you will need 
+  [Node.js](http://nodejs.org/) for that and run `npm install faye`
 
 Be sure to have a running MongoDB server on port `:27017`
 
@@ -23,10 +25,16 @@ Be sure to have a running MongoDB server on port `:27017`
 mongod [--dbpath=path/to/data]
 ```
 
-And run your rails server
+Run your rails server
 
 ```
 rails server
+```
+
+Run Faye server
+
+```
+node faye.js
 ```
 
 # Development

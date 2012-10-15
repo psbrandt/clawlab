@@ -6,13 +6,18 @@ define([
   "underscore",
   "backbone",
   "text!templates/action_tree.html",
+  "text!templates/action_tree_menu.html",
   "text!templates/action.html",
   "text!templates/action_children.html",
-], function($, _, Backbone, actionTreeTemplate, actionTemplate, actionChildrenTemplate) {
+], function($, _, Backbone, actionTreeTemplate, menuTemplate, actionTemplate, 
+            actionChildrenTemplate) {
   return Backbone.View.extend ({
     
+    id : "action-tree",
+    className : "tab-pane",
     // The main template for the action tree
     template : _.template (actionTreeTemplate),
+    menuTemplate : _.template (menuTemplate),
 
     // A common template for actions
     actionTemplate : _.template (actionTemplate),
@@ -26,11 +31,16 @@ define([
 
     initialize : function () {
       _.bindAll (this, "render");
+      
+      this.$elMenu = $("<li></li>"); 
+      this.elMenu  = this.$elMenu[0];
 
       this.model.on ("change:root_action", this.render);
     },
 
     render : function () {
+      this.$elMenu.html (this.menuTemplate ());
+      
       // Computing root action view
       var root_action = this.template (this.model.get("root_action"));
 

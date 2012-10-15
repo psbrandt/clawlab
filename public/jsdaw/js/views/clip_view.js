@@ -6,10 +6,11 @@ define([
   "underscore",
   "backbone",
   "text!templates/clip.html",
+  "text!templates/clip_edit.html",
   "libs/waveform",
   "models/audio_source",
   "jqueryui"
-], function($, _, Backbone, clipTemplate, Waveform, AudioSource) {
+], function($, _, Backbone, clipTemplate, editTemplate, Waveform, AudioSource) {
   return Backbone.View.extend ({
 
     template : _.template (clipTemplate),
@@ -21,7 +22,8 @@ define([
       "dragstart"  : "dragStarted",
       "drag"       : "dragging",
       "selected"   : "selected",
-      "unselected" : "unselected"
+      "unselected" : "unselected",
+      "dblclick"   : "dblClicked"
     },
 
     initialize : function () {
@@ -38,6 +40,10 @@ define([
       this.buffer = Claw.Player.buffers[this.audioSource.get("id")];
 
       this.audioSource.on ("change:bufferLoaded", this.bufferLoaded, this);
+      this.model.on (
+        "change:begin_offset change:source_offset change:end_offset", 
+        this.render, this
+      );
     },
 
     render : function () {
@@ -51,7 +57,7 @@ define([
         scrollSensitivity : 40,
         axis : "x"
       });
-      // Hack to remove position set to relative by default
+      // Hack to remove position set to relative by ui-draggable
       this.$el.css ("position", "absolute");
 
       if (this.buffer) this.drawWaveform ()
@@ -66,12 +72,34 @@ define([
       this.$el.remove ();
     },
 
-    selected : function () {
+    selected : function (e, ui) {
       this.model.set ("selected", true);
     },
 
     unselected : function () {
       this.model.set ("selected", false);
+    },
+
+    dblClicked : function () {
+      var self = this;
+      var modal = _.template (editTemplate, {
+        begin_offset  : this.model.get("begin_offset"),
+        end_offset    : this.model.get("end_offset"),
+        source_offset : this.model.get("source_offset")
+      });
+      $(modal).modal({
+        backdrop : false,
+        keyboard : true
+      }).on ("hidden", function () {$(this).remove ()})
+        .find (".save-btn").on ("click", function () { 
+          self.model.set ({
+            "begin_offset"  : parseFloat ($("input[name=begin_offset]").val ()),
+            "end_offset"    : parseFloat ($("input[name=end_offset]").val ()),
+            "source_offset" : parseFloat ($("input[name=source_offset]").val ())
+          });
+          self.model.save ();
+          return false;
+        })
     },
 
     /** Set the buffer and render the clip */
@@ -84,20 +112,20 @@ define([
     /**
      * Update the el with right size and offset. Buffer need to be loaded */
     drawWaveform : function () {
-      // the lenght of the clip in seconds
-      var length = this.buffer.duration - this.model.get ("begin_offset") 
-        - this.model.get ("end_offset");
+      // where to start in the buffer in seconds
+      var beginOffset = this.model.get ("begin_offset");
+      // where to end in the buffer in seconds
+      var endOffset = this.model.get ("end_offset");
+      // when the clip starts in the song
+      var offset = this.model.get("source_offset") + beginOffset;
+
+      // the length of the clip in seconds
+      var length = this.buffer.duration - beginOffset - endOffset;
       // width in px
       var width = Claw.Helpers.secToPx (length);
       // height in pixels
       var height = 75; //huh ..
 
-      // where to start in the buffer in seconds
-      var begin_offset = this.model.get ("begin_offset");
-      // where to end in the buffer in seconds
-      var end_offset = this.model.get ("end_offset");
-      // when the clip starts in the song
-      var offset = this.model.get("source_offset") + begin_offset
       this.$el.css ({
         width : width,
         left : Claw.Helpers.secToPx (offset)
@@ -105,9 +133,14 @@ define([
         width : width,
         height : height
       })
+
+      var dataArray = this.buffer.getChannelData (0);
       new Waveform ({
         canvas : this.$el.find ("canvas")[0],
-        data : this.buffer.getChannelData (0)
+        data : dataArray.subarray (
+          beginOffset * this.buffer.sampleRate, 
+          (endOffset <= 0) ? dataArray.length : -endOffset * this.buffer.sampleRate
+        )
       });
 
       // FIXME ! only works after re-rendering (after zoomIn for example)
@@ -128,17 +161,15 @@ define([
     dragging : function (e, ui) {
       var dl = ui.position.left - this.offset;
       _.each (this.alsoDrag, function (el) {
-        var prev_offset = $(el).data ("offset");
-        $(el).css ("left", prev_offset.left + dl);
+        var prevOffset = $(el).data ("offset");
+        $(el).css ("left", prevOffset.left + dl);
         return true;
       });
     },
 
-    dragStopped : function (e, ui) {
-      var pxOffset  = Claw.Helpers.snapPx (
-        Math.max (0, this.$el.position ().left)
-      );
-      var offset = Claw.Helpers.pxToSec (pxOffset);
+    dragStopped : function (e) {
+      var pxOffset  = Claw.Helpers.snapPx (this.$el.position ().left);
+      var offset = Claw.Helpers.pxToSec (pxOffset) - this.model.get ("begin_offset");
       this.$el.css ("left", pxOffset);
       _.each (this.alsoDrag, function (el) {
         $(el).trigger ("dragstop");

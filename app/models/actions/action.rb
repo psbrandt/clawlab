@@ -39,7 +39,7 @@ class Action
   end
 
   # Add all children from the given action to self.children
-  def merge action
+  def merge action, song_version
     # raise an error if actions are not of same type
     unless self.class.to_s == action.class.to_s
       raise ArgumentError, "#{action.class} and #{self.class} are not equal"
@@ -52,11 +52,12 @@ class Action
       # if not, create one with no parents and no children
       unless c
         c = child.class.new(child.as_document.except "_id", "_type", "child_ids", "parent_ids")
-        self.children << c
+        # self.children << c
+        c.redo song_version
       end
 
       # then merge kids
-      c.merge child
+      c.merge child, song_version
     end
   end
 

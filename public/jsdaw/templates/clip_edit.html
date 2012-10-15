@@ -1,0 +1,21 @@
+<div class="modal fade">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h3>Edit clip</h3>
+  </div>
+  <div class="modal-body">
+    <form>
+      <label>Begin offset</label>
+      <input type="text" name="begin_offset" value="<%= begin_offset %>"/>
+      <label>End offset</label>
+      <input type="text" name="end_offset" value="<%= end_offset %>"/>
+      <label>Source offset</label>
+      <input type="text" name="source_offset" value="<%= source_offset %>"/>
+      <br />
+      <button class="btn btn-primary save-btn">Save</button>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button class="btn close-btn" data-dismiss="modal">Close</button>
+  </div>
+</div>

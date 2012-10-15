@@ -19,7 +19,9 @@ class SongVersion
     song_version = Jbuilder.new
     
     # add id, title and tracks
-    song_version.(self, :id, :title, :bpm, :tracks)
+    song_version.(self, :id, :title, :bpm, :tracks, :user_id)
+
+    song_version.user(self.user, :id, :name)
  
     song_version.audio_sources audio_sources do |builder, audio_source|
       builder.(audio_source, :id, :author, :instrument, :uploaded_by)      

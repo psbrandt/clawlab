@@ -10,8 +10,7 @@
   <!-- jsdaw styles -->
   <link href="/jsdaw/css/app.css" media="all" rel="stylesheet" type="text/css">
 
-  <%= javascript_include_tag "application" %>
-  <%= javascript_include_tag "bootstrap.min" %>
+  <%= javascript_include_tag "application", "bootstrap.min", "http://localhost:8000/faye.js" %>
 
   <%= csrf_meta_tags %>
 </head>

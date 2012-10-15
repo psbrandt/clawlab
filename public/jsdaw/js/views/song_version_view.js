@@ -9,36 +9,41 @@ define([
   "text!templates/dropzone.html", 
   "views/track_view",
   "views/track_controls_view",
-  "views/action_tree_view",
-  "views/library_view",
   "views/timeline_view",
   "views/transport_view",
+  "views/library_view",
+  "views/sharing_view",
+  "views/action_tree_view",
+  "views/chat_view",
+  "models/chat",
   // jquery plugins at the end
   "getscrollbarwidth",
   "jqueryui"
 ], function($, _, Backbone, mainTemplate, dropzoneTemplate, TrackView, 
-            TrackControlsView, ActionTreeView, LibraryView, TimelineView,
-            TransportView) {
+            TrackControlsView, TimelineView, TransportView, LibraryView,
+            SharingView, ActionTreeView, ChatView, ChatModel) {
   return Backbone.View.extend ({
 
     template : _.template (mainTemplate),
 
     events : {
       "click #right-bar .nav a" : "rightBarMenuClicked",
-      "drop .dropzone"          : "dropped",
-      "#tracks selected"        : "test"
+      "drop .dropzone"          : "dropped"
     },
     
-    test : function () {
-      console.log ("sfds");
-    },
-
     rightBarMenuClicked : function (e) {
       e.preventDefault();
       $(e.currentTarget).tab ("show");
     },
 
     initialize : function () {
+      try {
+        this.chatModel = new ChatModel ({
+          song_version_id : this.model.id,
+          user : this.model.get ("user")
+        })
+      } catch (e) { console.log ("Faye server not found") }
+
       // listen when a track is created
       this.model.tracks.bind ("add", this.addTrack, this);
 
@@ -101,17 +106,36 @@ define([
       // Render tracks
       this.model.tracks.each (function (track) { self.addTrack (track) });
 
-      new LibraryView ({
-        collection : this.model.audioSources,
-        el : $("#library")
+      var libraryView = new LibraryView ({
+        collection : this.model.audioSources
       }).render ();
       
+      var sharingView = new SharingView ({
+        model : this.model
+      }).render ();
+
       // Render action tree
-      new ActionTreeView ({
-        model : this.model,
-        el : $("#action-tree")
+      var actionTreeView = new ActionTreeView ({
+        model : this.model
       }).render ();
       
+      $("#right-bar .nav").append (
+        libraryView.elMenu, 
+        sharingView.elMenu, 
+        actionTreeView.elMenu
+      );
+      $("#right-bar .tab-content").append (
+        libraryView.el, sharingView.el, actionTreeView.el
+      );
+
+      if (this.chatModel) {
+        var chatView = new ChatView ({
+          model : this.chatModel
+        }).render ();
+        $("#right-bar .nav").append (chatView.elMenu);
+        $("#right-bar .tab-content").append (chatView.el);
+      }
+
       return this;
     },
 

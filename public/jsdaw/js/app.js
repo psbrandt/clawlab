@@ -5,12 +5,17 @@ define([
   "router",
   "models/song_version",
   "views/song_version_view",
+  "models/chat",
+  "views/chat_view",
+  "views/action_tree_view",
+  "views/library_view",
+  "views/sharing_view",
   "libs/helpers",
   "libs/player",
   "views/transport_view"
-], function (
-  $, _, Backbone, Router, SongVersionModel, SongVersionView, Helpers, 
-  Player, TransportView) {
+], function ($, _, Backbone, Router, SongVersionModel, SongVersionView, 
+             ChatModel, ChatView, ActionTreeView, LibraryView, SharingView,
+             Helpers, Player, TransportView) {
 
   var initialize = function(clawData){
     // Pass in our Router module and call it's initialize function
@@ -29,17 +34,16 @@ define([
       pxPerBeat : songVersionModel.get ("scale")
     });
 
-      // Render the transport view
+    // Render the transport view
     new TransportView({
       model : songVersionModel
     }).render ();
 
-
     Claw.Player = new Player (songVersionModel)
-      // Render the song version
+    // Render the song version
     new SongVersionView ({
-      el : "#main",
-      model : songVersionModel
+      model : songVersionModel,
+      el : "#main"
     }).render ();
 
     window.Claw = Claw;

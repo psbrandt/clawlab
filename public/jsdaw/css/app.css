@@ -1,6 +1,7 @@
 @import "libs/jquery-ui.css";
 @import "timeline.css";
 @import "tracks.css";
+@import "ghost-tracks.css";
 @import "actions.css";
 @import "library.css";
 @import "chat.css";

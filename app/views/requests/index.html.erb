@@ -1,6 +1,7 @@
 <ul>
   <% @requests.each do |request| %>
   <li>
+    <%= request.class %>
     <%= link_to request.sender.name, show_user_path(request.sender) %> 
     <%= request.status %>
     <%= link_to "accept", accept_request_path(request), :method => :put %>

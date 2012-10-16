@@ -56,3 +56,8 @@
   margin-left:15px;
   color: #eee;
 }
+
+.ghost-track-controls .name, .ghost-track-controls .volume-display {
+  color:#999;
+}
+

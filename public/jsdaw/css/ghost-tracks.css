@@ -1,0 +1,26 @@
+.ghost-track-controls .track-info {
+  float:left;
+  height:100%;
+  padding:0px 5px; 
+  margin-right:5px;
+background: #171717; /* Old browsers */
+
+background: -moz-linear-gradient(top,  #171717 0%, #2a2a2a 100%); /* FF3.6+ */
+
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#171717), color-stop(100%,#2a2a2a)); /* Chrome,Safari4+ */
+
+background: -webkit-linear-gradient(top,  #171717 0%,#2a2a2a 100%); /* Chrome10+,Safari5.1+ */
+
+background: -o-linear-gradient(top,  #171717 0%,#2a2a2a 100%); /* Opera 11.10+ */
+
+background: -ms-linear-gradient(top,  #171717 0%,#2a2a2a 100%); /* IE10+ */
+
+background: linear-gradient(to bottom,  #171717 0%,#2a2a2a 100%); /* W3C */
+
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#171717', endColorstr='#2a2a2a',GradientType=0 ); /* IE6-9 */
+
+}
+.ghost-track-controls .name, .ghost-track-controls .volume-display {
+  color:#999;
+}
+

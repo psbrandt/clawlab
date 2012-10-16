@@ -48,7 +48,7 @@ define([
     },
 
     clips : function () {
-      return this.tracks.reduce (function (acc, track) { 
+      return this.tracks.reduce (function (acc, track) {
         return acc.concat (track.clips.toArray()) }, new Array ());
     },
 
@@ -97,12 +97,13 @@ define([
     },
 
     merge : function (song_version_id) {
+      var self = this;
       $.ajax ({
         type : "PUT",
         url : "merge",
         data : {song_version_id : song_version_id }, 
         success : function (data) {
-          console.log (data);
+          // update model
         }
       });
     }

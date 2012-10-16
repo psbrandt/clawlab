@@ -29,4 +29,11 @@ class RequestsController < ApplicationController
                   raise ActionController::RoutingError.new('Not Found')
                 end
   end
+
+  def index_song_version_sharing
+    @requests = current_user.sent_requests.where(
+      :song_version_id => Moped::BSON::ObjectId(params[:song_version_id])
+    )
+    render :json => @requests
+  end
 end

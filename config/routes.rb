@@ -38,6 +38,7 @@ Claw::Application.routes.draw do
 
     resource :root_action, :only => [:update, :show], :controller => "actions"
 
+    get "requests" => "requests#index_song_version_sharing"
   end
   post "song_versions/:id/undo"  => "song_versions#undo"
   post "song_versions/:id/redo"  => "song_versions#redo"

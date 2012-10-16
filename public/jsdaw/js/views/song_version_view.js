@@ -9,6 +9,7 @@ define([
   "text!templates/dropzone.html", 
   "views/track_view",
   "views/track_controls_view",
+  "views/ghost_track_controls_view",
   "views/timeline_view",
   "views/transport_view",
   "views/library_view",
@@ -16,12 +17,14 @@ define([
   "views/action_tree_view",
   "views/chat_view",
   "models/chat",
+  "models/song_version",
   // jquery plugins at the end
   "getscrollbarwidth",
   "jqueryui"
 ], function($, _, Backbone, mainTemplate, dropzoneTemplate, TrackView, 
-            TrackControlsView, TimelineView, TransportView, LibraryView,
-            SharingView, ActionTreeView, ChatView, ChatModel) {
+            TrackControlsView, GhostTrackControlsView, TimelineView, 
+            TransportView, LibraryView, SharingView, ActionTreeView, 
+            ChatView, ChatModel, SongVersion) {
   return Backbone.View.extend ({
 
     template : _.template (mainTemplate),
@@ -54,6 +57,8 @@ define([
       });
       this.model.on ("change:scale", this.render, this);
       this.model.on ("change:rightBarVisible", this.rightBarVisibilityChanged, this);
+      this.model.on ("change:ghost", this.render, this);
+      this.model.on ("merged", this.render, this);
     },
     
     render : function () {
@@ -105,6 +110,13 @@ define([
       
       // Render tracks
       this.model.tracks.each (function (track) { self.addTrack (track) });
+
+      // Render ghost tracks
+      var ghost = this.model.get ("ghost")
+      if (ghost)
+        this.model.get ("ghost").tracks.each (function (track) {
+          self.addGhostTrack (track);
+        });
 
       var libraryView = new LibraryView ({
         collection : this.model.audioSources
@@ -167,14 +179,44 @@ define([
 
     addTrack : function (trackModel) {
       var trackControlsView = new TrackControlsView ({ 
-        model : trackModel
+        model : trackModel,
+        attributes : { "data-id" : trackModel.id }
       }).render ();
       var trackView = new TrackView ({ 
+        model : trackModel,
+        attributes : { "data-id" : trackModel.id }
+      }).render ();
+          
+      this.$el.find ("#tracks").append (trackView.el);
+      this.$el.find ("#tracks-controls").append (trackControlsView.el);
+
+    },
+
+    addGhostTrack : function (trackModel) {
+      var ghost = this.model.get ("ghost");
+      if (!ghost) return;
+
+      trackModel.set ("user", ghost.get ("user"));
+      var sisterTrack = this.model.tracks.get (trackModel.id)
+      trackModel.set ("status", (sisterTrack)?"diff":"new");
+
+      var ghostTrackControlsView = new GhostTrackControlsView ({ 
+        model : trackModel
+      }).render ();
+      var ghostTrackView = new TrackView ({ 
         model : trackModel
       }).render ();
 
-      this.$el.find ("#tracks").append (trackView.el);
-      this.$el.find ("#tracks-controls").append (trackControlsView.el);
+      // append after sister if it exists else at the end
+      if (sisterTrack) {
+        this.$el.find (".track[data-id='" + sisterTrack.id + "']")
+          .after (ghostTrackView.el);
+        this.$el.find (".track-controls[data-id='" + sisterTrack.id + "']")
+          .after (ghostTrackControlsView.el);
+      } else {
+        this.$el.find ("#tracks").append (ghostTrackView.el);
+        this.$el.find ("#tracks-controls").append (ghostTrackControlsView.el);
+      }
     },
 
     setWorkspaceDimensions : function () {

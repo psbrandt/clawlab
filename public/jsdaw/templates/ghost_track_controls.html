@@ -1,0 +1,26 @@
+<div class="track-info">
+  <% if (status == "new") { %>
+  <span class="label label-important">
+    <i class="icon-plus icon-white"></i> new
+  </span>
+  <% } %>
+  <% if (status == "diff") { %>
+  <span class="label label-warning">
+    <i class="icon-chevron-up icon-white"></i> diff 
+    <i class="icon-chevron-up icon-white"></i>
+  </span>
+  <% } %>
+  <br />
+  <i class="icon-lock icon-white"></i>
+  <img src="<%= avatar_url %>" />
+</div>
+<div class="name" rel="tooltip" data-original-title="Double click to edit"
+     data-placement="bottom"><%= name %></div>
+<div class="btn-group">
+  <button class="btn btn-small solo-btn">solo</button>
+  <button class="btn btn-small mute-btn"><i class="icon-volume-off"></i></button>
+</div>
+<span class="badge satus">
+</span>
+
+

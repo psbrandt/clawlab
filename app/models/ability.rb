@@ -16,7 +16,7 @@ class Ability
       can [:manage, :invite], Band, :user_ids => user.id
 
       # managing requests
-      can [:read, :destroy], Request, :sender_id => user.id
+      can [:read, :destroy, :index_song_version_sharing], Request, :sender_id => user.id
       # TODO : can remove requests from received_requests (destroy?)
       can [:read, :update, :accept], Request, :receiver_id => user.id
       

@@ -26,9 +26,9 @@ class ImageUploader < CarrierWave::Uploader::Base
     # asset_path("fallback/" + [version_name, "default.png"].compact.join('_'))
     case model.class.to_s
     when "User"
-      [version_name, "default_avatar.png"].compact.join('_')
+      "/assets/" + [version_name, "default_avatar.png"].compact.join('_')
     when "Band"
-      "headphones.jpeg"
+      "/assets/headphones.jpeg"
     end
   end
 
@@ -38,6 +38,10 @@ class ImageUploader < CarrierWave::Uploader::Base
   # Create different versions of your uploaded files:
   version :thumb do
     process :resize_to_fill => [50, 50]
+  end
+
+  version :mini do
+    process :resize_to_fill => [20, 20]
   end
 
   # Add a white list of extensions which are allowed to be uploaded.

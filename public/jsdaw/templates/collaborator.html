@@ -1,8 +1,14 @@
 <li>
-  <a href="<%= profile_url %>"><img src="<%= avatar_url %>" /></a>
+  <img src="<%= avatar_url %>" class="img-rounded" />
   <%= name %>
   <% _.each (song_versions, function (song_version) { %>
+  <div class="btn-group">
+    <button class="btn btn-small toggle-ghost-btn" 
+            data-song-version-id="<%= song_version._id %>">
+      <i class="icon-eye-open"></i>
+    </button>
     <button class="btn btn-small btn-warning merge-btn"
             data-song-version-id="<%= song_version._id %>">merge</button>
+  </div>
   <% }) %>
 </li>

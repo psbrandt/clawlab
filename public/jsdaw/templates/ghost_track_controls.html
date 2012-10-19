@@ -1,26 +1,38 @@
 <div class="track-info">
+  <i class="icon-lock icon-white"></i>
+  <img src="<%= avatar_url %>" />
   <% if (status == "new") { %>
-  <span class="label label-important">
-    <i class="icon-plus icon-white"></i> new
+  <span class="label label-info">
+    <i class="icon-plus-sign icon-white" rel="tooltip" 
+       data-original-title="You don't have this track. You can safely merge it" 
+       data-placement="right"></i>
   </span>
+  <br />
+  <button class="btn btn-mini merge-track-btn">
+    <i class="icon-merge"></i> merge
+  </button>
   <% } %>
   <% if (status == "diff") { %>
   <span class="label label-warning">
-    <i class="icon-chevron-up icon-white"></i> diff 
-    <i class="icon-chevron-up icon-white"></i>
+    <i class="icon-exclamation-sign icon-white" rel="tooltip" 
+       data-original-title="You already have this track. You may loose some work by merging" 
+       data-placement="right"></i>
+  </span>
+  <br />
+  <button class="btn btn-mini merge-track-btn">
+    <i class="icon-merge"></i> merge
+  </button>
+  <% } %>
+  <% if (status == "nodiff") { %>
+  <span class="label label-success">
+    <i class="icon-ok-sign icon-white" rel="tooltip" 
+       data-original-title="Up to date ! Your version of the track is the same"
+       data-placement="right"></i>
   </span>
   <% } %>
-  <br />
-  <i class="icon-lock icon-white"></i>
-  <img src="<%= avatar_url %>" />
 </div>
-<div class="name" rel="tooltip" data-original-title="Double click to edit"
-     data-placement="bottom"><%= name %></div>
-<div class="btn-group">
-  <button class="btn btn-small solo-btn">solo</button>
-  <button class="btn btn-small mute-btn"><i class="icon-volume-off"></i></button>
-</div>
-<span class="badge satus">
-</span>
+<div class="name"><%= name %></div>
+<button class="btn btn-small solo-btn">solo</button>
+<button class="btn btn-small mute-btn"><i class="icon-volume-off"></i></button>
 
 

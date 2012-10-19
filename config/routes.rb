@@ -46,6 +46,7 @@ Claw::Application.routes.draw do
   get  "song_versions/:id/share" => "song_versions#show_share", :as => :share_song_version
   post "song_versions/:id/share" => "song_versions#share", :as => :share_song_version
   put  "song_versions/:id/merge" => "song_versions#merge"
+  put  "song_versions/:id/merge_track" => "song_versions#merge_track"
   
   # at last to make it work
   get ":id" => "users#show", :as => :show_user

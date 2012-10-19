@@ -192,19 +192,20 @@ define([
 
     },
 
-    addGhostTrack : function (trackModel) {
+    addGhostTrack : function (ghostTrack) {
       var ghost = this.model.get ("ghost");
       if (!ghost) return;
 
-      trackModel.set ("user", ghost.get ("user"));
-      var sisterTrack = this.model.tracks.get (trackModel.id)
-      trackModel.set ("status", (sisterTrack)?"diff":"new");
+      var sisterTrack = this.model.tracks.get (ghostTrack.id)
+      ghostTrack.set ("status", (sisterTrack)?"diff":"new");
 
+      ghostTrack.set ("user", ghost.get ("user"));
+      ghostTrack.set ("songVersionId", ghost.get("_id"));
       var ghostTrackControlsView = new GhostTrackControlsView ({ 
-        model : trackModel
+        model : ghostTrack
       }).render ();
       var ghostTrackView = new TrackView ({ 
-        model : trackModel
+        model : ghostTrack
       }).render ();
 
       // append after sister if it exists else at the end

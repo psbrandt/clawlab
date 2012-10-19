@@ -50,7 +50,7 @@ define([
         value : this.model.get ("volume")
       });
 
-      // Trigger tooltips
+      // Init tooltips
       this.$el.find ('[rel="tooltip"]').tooltip ();
 
       this.$name = $(".name", this.el).editInPlace ({

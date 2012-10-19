@@ -68,6 +68,32 @@ class SongVersionsController < ApplicationController
     end
   end
 
+  def merge_track
+    @track = @song_version.tracks.find params[:track_id]
+    other = SongVersion.find params[:other_version_id]
+    other_create_action = other.root_action.children.detect { |a|
+      a.name == "track_action_create_#{@track.id}"
+    }
+
+    create_action = @track.song_version.root_action.children.detect { |a|
+      a.name == "track_action_create_#{@track.id}"
+    }
+    unless create_action
+      create_action = TrackActionCreate.new(
+        :song_version_id => @song_version.id, 
+        :params => other_create_action.params
+      )
+      create_action.redo @song_version
+    end
+      
+    create_action.merge other_create_action, @song_version
+    if @track.save!
+      render :json => @track
+    else
+      render :json => @track.errors
+    end
+  end
+
   # TODO : if action_id is nil, undo last action
   def undo
     action = Action.find(params[:action_id])

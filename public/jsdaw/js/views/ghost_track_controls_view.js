@@ -13,8 +13,9 @@ define([
     className : "track-controls ghost-track-controls",
 
     events : {
-      "click .mute-btn"      : "muteClicked",
-      "click .solo-btn"      : "soloClicked"
+      "click .mute-btn"        : "muteClicked",
+      "click .solo-btn"        : "soloClicked",
+      "click .merge-track-btn" : "mergeClicked"
     },
 
     initialize : function () {
@@ -39,18 +40,14 @@ define([
       // Rendering controls
       this.$el.html (this.template (data));
 
-      this.$el.find (".volume-slider").slider({
-        range : "min",
-        step  : 0.01,
-        min   : 0,
-        max   : 1,
-        value : this.model.get ("volume")
-      });
-      this.$el.find (".volume-slider").slider({
-        disabled : true
-      })
+      // Init tooltips
+      this.$el.find ('[rel="tooltip"]').tooltip ();
 
       return this;
+    },
+
+    mergeClicked : function () {
+      this.model.merge ();
     },
 
     soloChanged : function (model, solo) {

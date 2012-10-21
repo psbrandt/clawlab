@@ -13,6 +13,10 @@ class ApplicationController < ActionController::Base
     songs_url
   end
 
+  def after_update_path_for(resource)
+    edit_user_registration_url
+  end
+
   rescue_from CanCan::AccessDenied do |exception|
     if signed_in?
       render :json => {:status => :error, :message => "You don't have permission to #{exception.action} #{exception.subject.class.to_s.pluralize}"}, :status => 403

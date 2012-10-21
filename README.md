@@ -18,6 +18,8 @@ You need :
 - Database : [MongoDB](http://www.mongodb.org/)
 - Pub/sub system (optional) : [Faye](http://faye.jcoglan.com/) you will need 
   [Node.js](http://nodejs.org/) for that and run `npm install faye`
+- Image manipulator : [ImageMagick](http://www.imagemagick.org/) not mandatory
+if you don't add or edit avatars
 
 Be sure to have a running MongoDB server on port `:27017`
 

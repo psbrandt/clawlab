@@ -69,28 +69,35 @@ class SongVersionsController < ApplicationController
   end
 
   def merge_track
-    @track = @song_version.tracks.find params[:track_id]
     other = SongVersion.find params[:other_version_id]
     other_create_action = other.root_action.children.detect { |a|
-      a.name == "track_action_create_#{@track.id}"
+      a.name == "track_action_create_#{params[:track_id]}"
     }
 
-    create_action = @track.song_version.root_action.children.detect { |a|
-      a.name == "track_action_create_#{@track.id}"
-    }
-    unless create_action
+    begin
+      track = @song_version.tracks.find params[:track_id]
+      create_action = @song_version.root_action.children.detect { |a|
+        a.name == "track_action_create_#{params[track.id]}"
+      }
+    rescue
       create_action = TrackActionCreate.new(
         :song_version_id => @song_version.id, 
         :params => other_create_action.params
       )
-      create_action.redo @song_version
+      track = create_action.redo @song_version
     end
       
+    other.audio_sources.each do |audio_source|
+      unless @song_version.audio_sources.include? audio_source
+        @song_version.audio_sources << audio_source
+      end
+    end
+
     create_action.merge other_create_action, @song_version
-    if @track.save!
-      render :json => @track
+    if @song_version.save!
+      render :json => track
     else
-      render :json => @track.errors
+      render :json => @song_version.errors
     end
   end
 

@@ -5,12 +5,14 @@ define([
   "jquery",
   "underscore",
   "backbone",
+  "models/clip",
   "text!templates/clip.html",
   "text!templates/clip_edit.html",
   "libs/waveform",
   "models/audio_source",
   "jqueryui"
-], function($, _, Backbone, clipTemplate, editTemplate, Waveform, AudioSource) {
+], function($, _, Backbone, Clip, clipTemplate, editTemplate, Waveform, 
+	    AudioSource) {
   return Backbone.View.extend ({
 
     template : _.template (clipTemplate),
@@ -23,7 +25,8 @@ define([
       "drag"       : "dragging",
       "selected"   : "selected",
       "unselected" : "unselected",
-      "dblclick"   : "dblClicked"
+      "dblclick"   : "dblClicked",
+      "click"      : "clicked"
     },
 
     initialize : function () {
@@ -66,6 +69,43 @@ define([
       });
 
       return this;
+    },
+
+    clicked : function (e) {
+      if (e.altKey) {
+	var time = Claw.Helpers.pxToSec (e.offsetX);
+	var leftClip = new Clip ({
+          audio_source_id : this.model.get ("audio_source_id"),
+          source_offset : this.model.get ("source_offset"),
+	  begin_offset : this.model.get ("begin_offset"),
+	  end_offset : Claw.Player.buffers[this.audioSource.id].duration - this.model.get ("begin_offset") - time,
+          track_id : this.model.get ("track_id")
+	});
+	var rightClip = new Clip ({
+          audio_source_id : this.model.get ("audio_source_id"),
+          source_offset : this.model.get ("source_offset"),
+	  begin_offset : this.model.get ("begin_offset") + time,
+	  end_offset : this.model.get ("end_offset"),
+          track_id : this.model.get ("track_id")
+	});
+
+        leftClip.collection  = this.model.collection;
+        rightClip.collection = this.model.collection;
+
+	leftClip.save ({}, {
+	  wait : true, success : function () {
+	    //add it to the track clip collection
+            leftClip.collection.add (leftClip);
+          }
+	});
+	rightClip.save ({}, {
+	  wait : true, success : function () {
+	    //add it to the track clip collection
+            rightClip.collection.add (rightClip);
+          }
+	});
+	this.model.destroy ();
+      }
     },
 
     remove : function () {

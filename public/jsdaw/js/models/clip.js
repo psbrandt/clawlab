@@ -29,6 +29,10 @@ define([
         return "Offsets must be of type number";
       if (attrs.begin_offset < 0) return "Begin offset can not be negative";
       if (attrs.end_offset   < 0) return "End offset can not be negative";
+    },
+
+    splitAt : function (time) {
+      console.log (this);
     }
 
   });

@@ -101,6 +101,38 @@ class SongVersionsController < ApplicationController
     end
   end
 
+  def take_track
+    other = SongVersion.find params[:other_version_id]
+    other_create_action = other.root_action.children.detect { |a|
+      a.name == "track_action_create_#{params[:track_id]}"
+    }
+
+    begin
+      track = @song_version.tracks.find params[:track_id]
+    rescue
+      create_action = @song_version.root_action.children.detect { |a|
+        a.name == "track_action_create_#{params[track.id]}"
+      } || TrackActionCreate.new(
+        :song_version_id => @song_version.id, 
+        :params => other_create_action.params
+      )
+      track = create_action.redo @song_version
+    end
+      
+    other.audio_sources.each do |audio_source|
+      unless @song_version.audio_sources.include? audio_source
+        @song_version.audio_sources << audio_source
+      end
+    end
+
+    create_action.merge other_create_action, @song_version
+    if @song_version.save!
+      render :json => track
+    else
+      render :json => @song_version.errors
+    end
+  end
+
   # TODO : if action_id is nil, undo last action
   def undo
     action = Action.find(params[:action_id])

@@ -14,8 +14,9 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'text!templates/alert_modal.html'
-], function($, _, Backbone, AlertT) {
+  'text!templates/alert_modal.html',
+  'recorder'
+], function($, _, Backbone, AlertT, Recorder) {
   return Backbone.Model.extend ({
     initialize : function (songVersionModel, onloadCallback) {
       // browser compatibility test
@@ -27,6 +28,10 @@ define([
       } else
         this.context = new webkitAudioContext || new AudioContext;
       
+      // Create and connect the master gain node to context destination
+      this.masterGainNode = this.context.createGainNode ();
+      this.masterGainNode.connect (this.context.destination);
+
       this.buffers    = {};
       this.trackNodes = {};
       this.clipNodes  = {};
@@ -36,13 +41,20 @@ define([
 
       // to store an audio source beeing previewed
       this.sourcePreview = { model : undefined, source : undefined}; 
-
-      this.playing = false;
-      this.startTime;
-      this.playbackFrom = 0;
+      
+      var self = this;
       this.model = songVersionModel;
 
-      var self = this;
+      this.playing = false;
+      this.exporting = false;
+      this.rec = new Recorder (this.masterGainNode, {
+	workerPath : "/jsdaw/js/libs/recorderjs/recorderWorker.js",
+	callback : function (blob) { self.model.trigger ("exported", blob) }
+      })
+      this.end; // to store the end time of the song
+      this.startTime;
+      this.playbackFrom = 0;
+
       var loadCount = 0;
       this.model.audioSources.each (function (audioSource) {
         AudioSourceLoader.loadFromUrl (
@@ -67,9 +79,24 @@ define([
 
       this.model.on ("play" , this.playNotes, this);
       this.model.on ("stop", this.stopNotes, this);
+      this.model.on ("exportMaster", this.startExport, this);
       this.model.tracks.on ("add", this.addTrack, this);
       this.model.tracks.on ("remove", this.releaseTrack, this);
       this.model.audioSources.on ("add", this.audioSourceAdded, this);
+    },
+
+    startExport : function () {
+      this.rec.clear  ();
+      this.rec.record ();
+      this.exporting = true;
+      this.model.set ("exporting", true);
+      this.playNotes ();
+    },
+
+    stopExport : function () {
+      this.rec.stop ();
+      this.exporting = false;
+      this.rec.exportWAV ();
     },
 
     audioSourceAdded : function (audioSource) {
@@ -126,7 +153,7 @@ define([
         var trackGainNode = this.context.createGainNode();
         trackGainNode.gain.value = track.get ("volume");
         this.trackNodes[track.id] = trackGainNode;
-        trackGainNode.connect(this.context.destination);
+        trackGainNode.connect(this.masterGainNode);
         
         track.on ("change:volume", this.setTrackVolume, this);
         track.on ("change:muted", function (track, muted) { 
@@ -222,9 +249,9 @@ define([
     },
 
     schedule : function () {
-      this.model.set ("playingAt", 
-                      this.context.currentTime - this.startTime + this.playbackFrom);
-      
+      var time = this.context.currentTime - this.startTime + this.playbackFrom;
+      this.model.set ("playingAt", time);
+      if (time > this.end) this.model.stop ();
       var self = this;
       this.timeoutId = setTimeout (function () {
         self.schedule ();
@@ -260,6 +287,7 @@ define([
       
       this.playbackFrom = this.model.get ("playingAt");
 
+      var end;
       var self = this;
       _.each (this.model.clips (), function (clip) {
         var buffer = self.buffers [clip.get ("audio_source_id")],
@@ -267,19 +295,21 @@ define([
         beginOffset  = clip.get ("begin_offset"),
         endOffset    = clip.get ("end_offset");
         if (buffer == undefined) return;
-        var end = buffer.duration + sourceOffset - endOffset;
+        end = buffer.duration + sourceOffset - endOffset;
         if (end > self.playbackFrom)
           self.playNote (clip, self.startTime + 
                          sourceOffset + beginOffset - self.playbackFrom);
       });
+      this.end = end;
       this.model.set ("playing", true);
       this.schedule ();
     },
 
     stopNotes : function () {
       clearTimeout (this.timeoutId);
+      if (this.exporting) this.stopExport ();
       this.playing = false;
-      this.model.set ("playing", false);
+      this.model.set ({ playing : false, exporting : false });
       _.each (this.playingSources, function (source) { source.noteOff (0) });
       this.playingSources = {};
     },

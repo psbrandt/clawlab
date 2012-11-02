@@ -10,6 +10,12 @@ define([
   }
   
   Helpers.prototype = {
+    bytesToSize : function (bytes) {
+      if(bytes <= 0) return '0';
+      var t2 = Math.min(Math.round(Math.log(bytes)/Math.log(1024)), 12);
+      return (Math.round(bytes * 100 / Math.pow(1024, t2)) / 100) +
+	(" KMGTPEZYXWVU").charAt(t2).replace(' ', '') + 'B';
+    },
 
     snap : function (sec) {
       return this.beatsToSec (this.snapOn * Math.round (sec / this.beatsToSec (this.snapOn)));

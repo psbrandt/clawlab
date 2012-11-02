@@ -1,0 +1,22 @@
+<div class="export-modal modal fade">
+  <div class="modal-header">
+    <h3>Export</h3>
+  </div>
+  <div class="modal-body">
+    <ul class="unstyled">
+      <% tracks.each (function (track) { %>
+      <li <%= (track.get ("muted"))?"class=\"muted\"":"" %>>
+	  <%= track.get ("name") %>
+      </li>
+      <% }) %>
+    </ul>
+    </ul>
+    <button class="btn btn-primary export-master-btn" 
+	    data-loading-text="Exporting ...">
+      Export
+    </button>
+  </div>
+  <div class="modal-footer">
+    <button class="btn close-btn" data-dismiss="modal">Close</button>
+  </div>
+</div>

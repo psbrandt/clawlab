@@ -4,9 +4,10 @@ define([
   "backbone",
   "models/track", 
   "text!templates/transport.html",
+  "text!templates/export.html",
   // jquery plugins at the end
   "libs/jquery.editinplace"
-], function($, _, Backbone, Track, transportT) {
+], function($, _, Backbone, Track, transportT, exportTemplate) {
   return Backbone.View.extend ({
 
     events : {
@@ -17,7 +18,8 @@ define([
       "click #zoom-in-btn"      : "zoomInClicked",
       "click #zoom-out-btn"     : "zoomOutClicked",
       "click #toggle-right-bar-btn" : "toggleRightBarClicked",
-      "click #menu-delete"      : "menuDeleteClicked"
+      "click #menu-delete"      : "menuDeleteClicked",
+      "click #menu-export"      : "menuExportClicked"
     },
 
     template : _.template (transportT),
@@ -26,6 +28,8 @@ define([
       this.model.on ("change:playingAt", this.playingAtChanged, this);
       this.model.on ("change:playing", this.togglePlayingMode, this);
       this.model.on ("change:readyToPlay", this.toggleReadyMode, this);
+      this.model.on ("change:exporting", this.exportingChanged);
+      this.model.on ("exported", this.exported);
       $(document).on ("keyup", this.handleKey);
     },
 
@@ -45,6 +49,26 @@ define([
       //render directly in body
       $("body").append (this.el);
       return this;
+    },
+
+    exported : function (blob) {
+      var url = (window.URL || window.webkitURL).createObjectURL(blob);
+      var link = $("<br /><a>Download " + blob.type + " (" + 
+		   Claw.Helpers.bytesToSize (blob.size) + ")</a>");
+      link.attr ("href", url);
+      link.attr ("download", "output.wav");
+      $(".export-modal .modal-body").append (link);
+    },
+
+    exportingChanged : function (model, exporting) {
+      if (exporting) {
+	$(".export-master-btn").button ("loading");
+	$(".export-modal .close-btn").attr ("disabled", "disabled");
+      }
+      else {
+	$(".export-master-btn").button ("reset");
+	$(".export-modal .close-btn").removeAttr ("disabled");
+      }
     },
 
     handleKey : function (e) {
@@ -69,6 +93,7 @@ define([
       case 8 : // delete
       case 46 : // suppr
         $("#menu-delete").trigger ("click");
+	e.preventDefault ();
         break;
       }
     },
@@ -86,6 +111,20 @@ define([
 
     menuDeleteClicked : function () {
       this.model.deleteSelectedClips ();
+    },
+
+    menuExportClicked : function () {
+      var self = this;
+      var modal = _.template (exportTemplate, {
+	tracks : this.model.tracks
+      });
+      this.$el.append (modal);
+      $(modal).modal ({
+	backdrop : true
+      }).on ("hidden", function () { $(this).remove () })
+	.find (".export-master-btn").on ("click", function () {
+	  self.model.exportMaster ();
+	});
     },
 
     toggleRightBarClicked : function (e) {

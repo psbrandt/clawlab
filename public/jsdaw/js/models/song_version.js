@@ -15,6 +15,7 @@ define([
     defaults : {
       playingAt : 0,
       playing : false,
+      exporting : false,
       timelineHeight : 20,
       readyToPlay : false,
       scale : 40, // in px per beat
@@ -63,6 +64,10 @@ define([
 
     pause : function () {
       this.trigger ("stop");
+    },
+
+    exportMaster : function () {
+      this.trigger ("exportMaster");
     },
 
     deleteSelectedClips : function () {

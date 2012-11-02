@@ -13,6 +13,8 @@ require.config({
 
     waveform : "libs/waveform-chrome",
 
+    recorder : "libs/recorderjs/recorder",
+
     // Require.js plugins
     text: "libs/require/text",
     order: "libs/require/order",

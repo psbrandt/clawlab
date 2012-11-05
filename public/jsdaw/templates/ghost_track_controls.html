@@ -4,23 +4,23 @@
   <% if (status == "new") { %>
   <span class="label label-info">
     <i class="icon-plus-sign icon-white" rel="tooltip" 
-       data-original-title="You don't have this track. You can take it"
+       data-original-title="You don't have this track. You can safely merge it" 
        data-placement="right"></i>
   </span>
   <br />
-  <button class="btn btn-mini take-track-btn">
-    <i class="icon-arrow-up"></i> take it
+  <button class="btn btn-mini merge-track-btn">
+    <i class="icon-merge"></i> merge
   </button>
   <% } %>
   <% if (status == "diff") { %>
   <span class="label label-warning">
     <i class="icon-exclamation-sign icon-white" rel="tooltip" 
-       data-original-title="You already have this track. You will loose your modifications if you take it" 
+       data-original-title="You already have this track. You may loose some work by merging" 
        data-placement="right"></i>
   </span>
   <br />
-  <button class="btn btn-mini take-track-btn">
-    <i class="icon-arrow-up"></i> take it
+  <button class="btn btn-mini merge-track-btn">
+    <i class="icon-merge"></i> merge
   </button>
   <% } %>
   <% if (status == "nodiff") { %>

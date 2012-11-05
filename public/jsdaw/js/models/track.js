@@ -53,22 +53,7 @@ define([
       $.ajax ({
         type : "PUT",
         url  : "merge_track",
-        data : {
-          other_version_id : this.get ("songVersionId"),
-          track_id : this.id
-        },
-        success : function (data) {
-          self.set (data);
-        }
-      });
-    },
-
-    take : function () {
-      var self = this;
-      $.ajax ({
-        type : "PUT",
-        url  : "take_track",
-        data : {
+        data : { 
           other_version_id : this.get ("songVersionId"),
           track_id : this.id
         },
@@ -77,7 +62,6 @@ define([
         }
       });
     }
-
   });
   return TrackModel;
 });

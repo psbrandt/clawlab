@@ -13,9 +13,9 @@ define([
     className : "track-controls ghost-track-controls",
 
     events : {
-      "click .mute-btn"       : "muteClicked",
-      "click .solo-btn"       : "soloClicked",
-      "click .take-track-btn" : "takeClicked"
+      "click .mute-btn"        : "muteClicked",
+      "click .solo-btn"        : "soloClicked",
+      "click .merge-track-btn" : "mergeClicked"
     },
 
     initialize : function () {
@@ -46,8 +46,8 @@ define([
       return this;
     },
 
-    takeClicked : function () {
-      this.model.take ();
+    mergeClicked : function () {
+      this.model.merge ();
     },
 
     soloChanged : function (model, solo) {

@@ -12,9 +12,10 @@ define([
 
     events : {
       "click #add-track-btn"    : "addTrackClicked",
-      "click #play-btn"         : "playPauseClicked",
-      "click #stop-btn"         : "stopClicked",
       "click #rewind-btn"       : "rewindClicked",
+      "click #stop-btn"         : "stopClicked",
+      "click #play-btn"         : "playPauseClicked",
+      "click #loop-btn"         : "loopClicked",
       "click #zoom-in-btn"      : "zoomInClicked",
       "click #zoom-out-btn"     : "zoomOutClicked",
       "click #toggle-right-bar-btn" : "toggleRightBarClicked",
@@ -49,6 +50,13 @@ define([
       //render directly in body
       $("body").append (this.el);
       return this;
+    },
+    
+    loopClicked : function (e) {
+      if ($(e.currentTarget).hasClass ("active"))
+	this.model.set ("looping", false);
+      else
+	this.model.set ("looping", true);
     },
 
     exported : function (blob) {

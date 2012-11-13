@@ -15,9 +15,23 @@ define([
       "click #tracker" : "trackerClicked"
     },
 
-    /** pause song, set playingAt position, and playback if the song was
-      * playing */
+    /** if modifier keys pressed, set loop points else pause song, set 
+      * playingAt position, and playback if the song was playing */
     trackerClicked : function (e) {
+      if (e.metaKey) {
+	this.model.set (
+	  "endLoop",
+	  Claw.Helpers.pxToSec (e.offsetX + this.model.get ("scrollLeft"))
+	);
+	return;
+      }
+      if (e.altKey) {
+	this.model.set (
+	  "startLoop",
+	  Claw.Helpers.pxToSec (e.offsetX + this.model.get ("scrollLeft"))
+	);
+	return;
+      }
       // Do nothing if click happenned outside the top of timeline
       if (e.offsetY > this.model.get ("timelineHeight")) return;
       var wasPlaying = this.model.get ("playing");
@@ -33,10 +47,14 @@ define([
       this.model.on ("change:scrollLeft", function (model, scrollLeft) {
         this.drawTimeline (scrollLeft);
         this.drawTracker  (scrollLeft, model.get ("playingAt"));
+	this.drawLoopZone (scrollLeft, model.get ("startLoop"), 
+			   model.get ("endLoop"));
       }, this)
       this.model.on ("change:playingAt", function (model, playingAt) {
         this.drawTracker  (model.get ("scrollLeft"), playingAt);
-      }, this)
+      }, this);
+      this.model.on ("change:startLoop", this.startLoopChanged, this);
+      this.model.on ("change:endLoop", this.endLoopChanged, this);
     },
 
     render : function () {
@@ -48,27 +66,64 @@ define([
         height : this.$el.height ()
       });
 
-      this.drawTimeline (0);
-      this.drawTracker  (0, 0);
-      
+      var scrollLeft = this.model.get ("scrollLeft");
+      this.drawTimeline   (scrollLeft);
+      this.drawTracker    (scrollLeft, this.model.get ("playingAt"));
+      this.drawLoopZone (scrollLeft, this.model.get ("startLoop"), 
+			 this.model.get ("endLoop"));
       return this;
+    },
+
+    startLoopChanged : function (model, pos) {
+      this.drawLoopZone (
+	model.get ("scrollLeft"), pos, model.get ("endLoop")
+      );
+    },
+
+    endLoopChanged : function (model, pos) {
+      this.drawLoopZone (
+	model.get ("scrollLeft"), model.get ("startLoop"), pos
+      );
+    },
+
+    drawLoopZone : function (offset, start, end) {
+      ctx = this.$el.find ("#loopZone")[0].getContext ("2d")
+        , ctxHeight = ctx.canvas.height
+        , ctxWidth  = ctx.canvas.width;
+      
+      var x1 = Claw.Helpers.secToPx (start) - offset;
+      var x2 = Claw.Helpers.secToPx (end) - offset;
+      // Clear canvas
+      ctx.clearRect(0, 0, ctxWidth, ctxHeight);
+      
+      // return if both points are not visible
+      if ((x1 < 0 && x2 < 0) || (x1 > ctxWidth && x2 > ctxWidth)) return;
+
+      ctx.beginPath ();
+      ctx.rect (x1, 0, x2 - x1, ctxHeight + 1);
+      ctx.fillStyle = "rgba(0, 136, 204, 0.2)";
+      ctx.fill ();
+      ctx.strokeStyle = "#08C";
+      ctx.stroke ();
     },
 
     drawTracker : function (offset, playingAt) {
       ctx = this.$el.find ("#tracker")[0].getContext ("2d")
-        , ctx_height = ctx.canvas.height
-        , ctx_width  = ctx.canvas.width
+        , ctxHeight = ctx.canvas.height
+        , ctxWidth  = ctx.canvas.width
       
       var x = Claw.Helpers.secToPx (playingAt) - offset;
       // Clear canvas
-      ctx.clearRect(0, 0, ctx_width, ctx_height);
-      if (x < 0 || x > ctx_width) return;
+      ctx.clearRect(0, 0, ctxWidth, ctxHeight);
+
+      // Return if the tracker is not visible
+      if (x < 0 || x > ctxWidth) return;
+
       ctx.beginPath ();
       ctx.moveTo (x, 0);
-      ctx.lineTo (x, ctx_height);
+      ctx.lineTo (x, ctxHeight);
       ctx.strokeStyle = "red";
-      ctx.stroke ();
-      
+      ctx.stroke ();      
     },
 
     /**
@@ -77,23 +132,23 @@ define([
     drawTimeline : function (offsetX) {
       var grid_every = 1/8,
       ctx = this.$el.find ("#timeline")[0].getContext ("2d")
-        , ctx_width  = ctx.canvas.width
-        , ctx_height = ctx.canvas.height
-        , step_width = Claw.Helpers.beatsToPx (grid_every)
+        , ctxWidth  = ctx.canvas.width
+        , ctxHeight = ctx.canvas.height
+        , stepWidth = Claw.Helpers.beatsToPx (grid_every)
         , is_beat    = function(n) {return (n % (1 / grid_every)) == 0;}
         , is_bar     = function(n) {return (n % (4 / grid_every)) == 0;};
 
       // Clear canvas
-      ctx.clearRect(0, 0, ctx_width, ctx_height);
+      ctx.clearRect(0, 0, ctxWidth, ctxHeight);
 
       // Filling the top area that will contain timeline numbers
       ctx.fillStyle = "#444";
-      ctx.fillRect(0, 0, ctx_width, this.model.get ("timelineHeight") - 1);
+      ctx.fillRect(0, 0, ctxWidth, this.model.get ("timelineHeight") - 1);
       
-      for(var i = (Math.ceil (offsetX / step_width)), 
-	  max = (Math.ceil(ctx_width / step_width) + offsetX); 
+      for(var i = (Math.ceil (offsetX / stepWidth)), 
+	  max = (Math.ceil(ctxWidth / stepWidth) + offsetX); 
 	  i < max; i++) {
-        var x = i * step_width + 1 - offsetX
+        var x = i * stepWidth + 1 - offsetX
         // by default, will draw a vertical line under the numbers
         var start_y = this.model.get ("timelineHeight");
         if(is_bar(i)) {
@@ -116,7 +171,7 @@ define([
         }
         ctx.beginPath();
         ctx.moveTo(x, start_y);
-        ctx.lineTo(x, ctx_height);
+        ctx.lineTo(x, ctxHeight);
         ctx.closePath();
         ctx.stroke();
       }

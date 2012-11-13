@@ -251,7 +251,15 @@ define([
     schedule : function () {
       var time = this.context.currentTime - this.startTime + this.playbackFrom;
       this.model.set ("playingAt", time);
-      if (time > this.end) this.model.stop ();
+      if (this.model.get ("looping") &&
+	  Math.floor (time * 100) >= 
+	  Math.floor (this.model.get ("endLoop") * 100)) {
+	this.stopNotes ();
+	this.model.set ("playingAt", this.model.get ("startLoop"));
+ 	this.model.play ();
+	return;
+      }
+      //if (time > this.end) this.model.stop ();
       var self = this;
       this.timeoutId = setTimeout (function () {
         self.schedule ();

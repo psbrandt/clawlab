@@ -21,7 +21,14 @@ define([
       scale : 40, // in px per beat
       rightBarVisible : true,
       scrollLeft : 0,
-      scrollTop  : 0
+      scrollTop  : 0,
+      startLoop  : 0,
+      endLoop    : 0,
+      looping    : false
+    },
+
+    validate : function (attrs) {
+      if (attrs.endLoop < attrs.startLoop) return "can't end before it starts";
     },
 
     initialize : function (data) {

@@ -5,9 +5,12 @@ define([
   "models/track", 
   "text!templates/transport.html",
   "text!templates/export.html",
+  "text!templates/download_button.html",
+  "mousetrap",
   // jquery plugins at the end
   "libs/jquery.editinplace"
-], function($, _, Backbone, Track, transportT, exportTemplate) {
+], function($, _, Backbone, Track, transportT, exportTemplate, 
+	    downloadButtonT, Mousetrap) {
   return Backbone.View.extend ({
 
     events : {
@@ -30,8 +33,29 @@ define([
       this.model.on ("change:playing", this.togglePlayingMode, this);
       this.model.on ("change:readyToPlay", this.toggleReadyMode, this);
       this.model.on ("change:exporting", this.exportingChanged);
-      this.model.on ("exported", this.exported);
-      $(document).on ("keyup", this.handleKey);
+      this.model.on ("exported", this.exported, this);
+      //$(document).on ("keyup", this.handleKey);
+      Mousetrap.bind ("space", function () { 
+	$("#play-btn").trigger ("click");
+      });
+      Mousetrap.bind ("0", function () { 
+	$("#rewind-btn").trigger ("click");
+      });
+      Mousetrap.bind ("+", function () { 
+	$("#zoom-in-btn").trigger ("click");
+      });
+      Mousetrap.bind ("-", function () { 
+	$("#zoom-out-btn").trigger ("click");
+      });
+      Mousetrap.bind ("n", function () { 
+	$("#add-track-btn").trigger ("click");
+      });
+      Mousetrap.bind (["delete", "suppr"], function () { 
+	$("#menu-delete").trigger ("click");
+      });
+      Mousetrap.bind ("command+e", function () { 
+	$("#menu-export").trigger ("click");
+      });
     },
 
     render : function () {
@@ -61,49 +85,20 @@ define([
 
     exported : function (blob) {
       var url = (window.URL || window.webkitURL).createObjectURL(blob);
-      var link = $("<br /><a>Download " + blob.type + " (" + 
-		   Claw.Helpers.bytesToSize (blob.size) + ")</a>");
-      link.attr ("href", url);
-      link.attr ("download", "output.wav");
+      var link = _.template(downloadButtonT, {
+	url : url,
+	name : this.model.get ("title"),
+	type : blob.type,
+	size : Claw.Helpers.bytesToSize (blob.size)
+      });
       $(".export-modal .modal-body").append (link);
     },
 
     exportingChanged : function (model, exporting) {
-      if (exporting) {
+      if (exporting)
 	$(".export-master-btn").button ("loading");
-	$(".export-modal .close-btn").attr ("disabled", "disabled");
-      }
-      else {
+      else
 	$(".export-master-btn").button ("reset");
-	$(".export-modal .close-btn").removeAttr ("disabled");
-      }
-    },
-
-    handleKey : function (e) {
-      if (e.srcElement.localName != "body") return;
-
-      switch (e.which) {
-      case 32 : // space bar
-        $("#play-btn").trigger ("click");
-        break;
-      case 48 : case 96 : // 0 key
-        $("#rewind-btn").trigger ("click");
-        break;
-      case 107 : case 191 : // + key
-        $("#zoom-in-btn").trigger ("click");
-        break;
-      case 109 : case 187 : // - key
-        $("#zoom-out-btn").trigger ("click");
-        break;
-      case 78 : // n key
-        $("#add-track-btn").trigger ("click");
-        break;
-      case 8 : // delete
-      case 46 : // suppr
-        $("#menu-delete").trigger ("click");
-	e.preventDefault ();
-        break;
-      }
     },
 
     setTitle : function (title) {
@@ -123,15 +118,22 @@ define([
 
     menuExportClicked : function () {
       var self = this;
+
       var modal = _.template (exportTemplate, {
-	tracks : this.model.tracks
+	tracks : this.model.tracks,
+	regionLength : this.model.get ("startLoop") - this.model.get ("endLoop")
       });
       this.$el.append (modal);
       $(modal).modal ({
-	backdrop : true
-      }).on ("hidden", function () { $(this).remove () })
+	backdrop : "static"
+      }).on ("hidden", function () { 
+	self.model.cancelExport (); 
+	$(this).remove ();
+      })
 	.find (".export-master-btn").on ("click", function () {
-	  self.model.exportMaster ();
+	  self.model.exportMaster ({
+	    region : $(".export-modal .selected-region").hasClass ("active")
+	  })
 	});
     },
 

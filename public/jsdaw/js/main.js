@@ -15,7 +15,8 @@ require.config({
 
     recorder : "libs/recorderjs/recorder",
 
-    mousetrap : "libs/mousetrap.min",
+    // Moustrap dir
+    mousetrap : "libs/mousetrap/mousetrap.min",
 
     // Require.js plugins
     text: "libs/require/text",

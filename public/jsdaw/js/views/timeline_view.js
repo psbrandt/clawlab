@@ -101,9 +101,9 @@ define([
 
       ctx.beginPath ();
       ctx.rect (x1, 0, x2 - x1, ctxHeight + 1);
-      ctx.fillStyle = "rgba(0, 136, 204, 0.2)";
+      ctx.fillStyle = "rgba(0, 86, 154, 0.1)";
       ctx.fill ();
-      ctx.strokeStyle = "#08C";
+      ctx.strokeStyle = "#2F96FF";
       ctx.stroke ();
     },
 
@@ -148,7 +148,7 @@ define([
       for(var i = (Math.ceil (offsetX / stepWidth)), 
 	  max = (Math.ceil(ctxWidth / stepWidth) + offsetX); 
 	  i < max; i++) {
-        var x = i * stepWidth + 1 - offsetX
+        var x = i * stepWidth - offsetX
         // by default, will draw a vertical line under the numbers
         var start_y = this.model.get ("timelineHeight");
         if(is_bar(i)) {

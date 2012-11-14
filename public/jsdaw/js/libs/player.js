@@ -80,12 +80,20 @@ define([
       this.model.on ("play" , this.playNotes, this);
       this.model.on ("stop", this.stopNotes, this);
       this.model.on ("exportMaster", this.startExport, this);
+      this.model.on ("cancelExport", this.cancelExport, this);
       this.model.tracks.on ("add", this.addTrack, this);
       this.model.tracks.on ("remove", this.releaseTrack, this);
       this.model.audioSources.on ("add", this.audioSourceAdded, this);
     },
 
-    startExport : function () {
+    startExport : function (opts) {
+      if (opts.region) {
+	this.model.set ("playingAt", this.model.get ("startLoop"));
+        this.end = this.model.get ("endLoop");
+      } else {
+	this.model.set ("playingAt", 0);
+	this.end = undefined;
+      }
       this.rec.clear  ();
       this.rec.record ();
       this.exporting = true;
@@ -97,6 +105,12 @@ define([
       this.rec.stop ();
       this.exporting = false;
       this.rec.exportWAV ();
+    },
+
+    cancelExport : function () {
+      this.rec.stop  ();
+      this.rec.clear ();
+      this.exporting = false;
     },
 
     audioSourceAdded : function (audioSource) {
@@ -138,11 +152,10 @@ define([
     },
 
     addClip : function (clip) {
-      //this.clips.push (clip);
       var clipGainNode = this.context.createGainNode ();
-      this.clipNodes[clip.id] = clipGainNode
+      this.clipNodes[clip.id] = clipGainNode;
       clipGainNode.connect (this.trackNodes[clip.get ("track_id")]);
-
+      
       clip.on ("change:source_offset", this.sourceOffsetChanged, this);
       clip.on ("change:begin_offset",  this.beginOffsetChanged,  this);
       clip.on ("change:end_offset",    this.endOffsetChanged,    this);
@@ -162,7 +175,6 @@ define([
         track.on ("change:solo", function (track, solo) {
           solo ? this.soloTrack (track) : this.unsoloTrack (track);
         }, this)
-        //track.on ("change:volume", this.setTrackVolume, this);
         track.clips.on ("add", this.addClip, this);
         track.clips.on ("remove", this.releaseClip, this);
         track.clips.each (this.addClip, this);
@@ -187,7 +199,7 @@ define([
       this.model.tracks.each (function (t) {
         if (t != track) {
           this.muteTrack (t)// mute all tracks
-        }      
+        }
       }, this);
       this.unmuteTrack (track);
       this.soloedTrack = track;
@@ -252,17 +264,17 @@ define([
       var time = this.context.currentTime - this.startTime + this.playbackFrom;
       this.model.set ("playingAt", time);
       if (this.model.get ("looping") &&
-	  Math.floor (time * 100) >= 
+	  Math.floor (time * 100) >=
 	  Math.floor (this.model.get ("endLoop") * 100)) {
 	this.stopNotes ();
 	this.model.set ("playingAt", this.model.get ("startLoop"));
  	this.model.play ();
 	return;
       }
-      //if (time > this.end) this.model.stop ();
+      if (time > this.end) this.model.stop ();
       var self = this;
       this.timeoutId = setTimeout (function () {
-        self.schedule ();
+	self.schedule ();
       });
     },
 
@@ -282,7 +294,7 @@ define([
       }
       else
         source.noteGrainOn (time, beginOffset, length);
-
+      
       this.playingSources [clip.id] = source;
     },
 
@@ -295,7 +307,7 @@ define([
       
       this.playbackFrom = this.model.get ("playingAt");
 
-      var end;
+      var clipEnd;
       var self = this;
       _.each (this.model.clips (), function (clip) {
         var buffer = self.buffers [clip.get ("audio_source_id")],
@@ -303,12 +315,12 @@ define([
         beginOffset  = clip.get ("begin_offset"),
         endOffset    = clip.get ("end_offset");
         if (buffer == undefined) return;
-        end = buffer.duration + sourceOffset - endOffset;
-        if (end > self.playbackFrom)
+        clipEnd = buffer.duration + sourceOffset - endOffset;
+        if (clipEnd > self.playbackFrom)
           self.playNote (clip, self.startTime + 
                          sourceOffset + beginOffset - self.playbackFrom);
       });
-      this.end = end;
+      if (!this.end) this.end = clipEnd;
       this.model.set ("playing", true);
       this.schedule ();
     },

@@ -73,8 +73,12 @@ define([
       this.trigger ("stop");
     },
 
-    exportMaster : function () {
-      this.trigger ("exportMaster");
+    exportMaster : function (opt) {
+      this.trigger ("exportMaster", opt);
+    },
+
+    cancelExport : function () {
+      this.trigger ("cancelExport");
     },
 
     deleteSelectedClips : function () {

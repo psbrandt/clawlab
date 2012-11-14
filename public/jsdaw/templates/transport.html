@@ -18,7 +18,7 @@
           <ul class="dropdown-menu">
             <li>
               <a href="#" id="menu-delete">Delete 
-                <span class="pull-right muted">Del</span>
+                <span class="pull-right muted">del</span>
               </a>
             </li>
             <li>
@@ -52,8 +52,9 @@
                     rel="tooltip" data-original-title="Hot key : spacebar">
               <i class="icon-white icon-play"></i>
             </button>
-            <button class="btn btn-info" id="loop-btn" data-toggle="button"
-                    rel="tooltip" data-original-title="Hot key : none ATM">
+            <button class="btn btn-info" id="loop-btn" rel="tooltip"
+                    data-original-title="Hot key : l"
+		    disabled="<%= regionEnd - regionBegin <= 0 %>">
               <i class="icon-white icon-repeat"></i>
             </button>
           </div>

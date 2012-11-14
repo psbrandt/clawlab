@@ -15,19 +15,19 @@ define([
       "click #tracker" : "trackerClicked"
     },
 
-    /** if modifier keys pressed, set loop points else pause song, set 
+    /** if modifier keys pressed, set region points else pause song, set 
       * playingAt position, and playback if the song was playing */
     trackerClicked : function (e) {
       if (e.metaKey) {
 	this.model.set (
-	  "endLoop",
+	  "regionEnd",
 	  Claw.Helpers.pxToSec (e.offsetX + this.model.get ("scrollLeft"))
 	);
 	return;
       }
       if (e.altKey) {
 	this.model.set (
-	  "startLoop",
+	  "regionBegin",
 	  Claw.Helpers.pxToSec (e.offsetX + this.model.get ("scrollLeft"))
 	);
 	return;
@@ -47,14 +47,14 @@ define([
       this.model.on ("change:scrollLeft", function (model, scrollLeft) {
         this.drawTimeline (scrollLeft);
         this.drawTracker  (scrollLeft, model.get ("playingAt"));
-	this.drawLoopZone (scrollLeft, model.get ("startLoop"), 
-			   model.get ("endLoop"));
+	this.drawRegion   (scrollLeft, model.get ("regionBegin"), 
+			   model.get ("regionEnd"));
       }, this)
       this.model.on ("change:playingAt", function (model, playingAt) {
         this.drawTracker  (model.get ("scrollLeft"), playingAt);
       }, this);
-      this.model.on ("change:startLoop", this.startLoopChanged, this);
-      this.model.on ("change:endLoop", this.endLoopChanged, this);
+      this.model.on ("change:regionBegin change:regionEnd", this.regionChanged,
+		     this);
     },
 
     render : function () {
@@ -67,27 +67,23 @@ define([
       });
 
       var scrollLeft = this.model.get ("scrollLeft");
-      this.drawTimeline   (scrollLeft);
-      this.drawTracker    (scrollLeft, this.model.get ("playingAt"));
-      this.drawLoopZone (scrollLeft, this.model.get ("startLoop"), 
-			 this.model.get ("endLoop"));
+      this.drawTimeline (scrollLeft);
+      this.drawTracker  (scrollLeft, this.model.get ("playingAt"));
+      this.drawRegion   (scrollLeft, this.model.get ("regionBegin"), 
+			 this.model.get ("regionEnd"));
       return this;
     },
 
-    startLoopChanged : function (model, pos) {
-      this.drawLoopZone (
-	model.get ("scrollLeft"), pos, model.get ("endLoop")
+    regionChanged : function (model) {
+      this.drawRegion (
+	model.get ("scrollLeft"), 
+	model.get ("regionBegin"), 
+	model.get ("regionEnd")
       );
     },
 
-    endLoopChanged : function (model, pos) {
-      this.drawLoopZone (
-	model.get ("scrollLeft"), model.get ("startLoop"), pos
-      );
-    },
-
-    drawLoopZone : function (offset, start, end) {
-      ctx = this.$el.find ("#loopZone")[0].getContext ("2d")
+    drawRegion : function (offset, start, end) {
+      ctx = this.$el.find ("#selectedRegion")[0].getContext ("2d")
         , ctxHeight = ctx.canvas.height
         , ctxWidth  = ctx.canvas.width;
       
@@ -105,6 +101,12 @@ define([
       ctx.fill ();
       ctx.strokeStyle = "#2F96FF";
       ctx.stroke ();
+      
+      // Draw two little squares on top
+      var side = 5;
+      ctx.fillStyle = "#2F96FF";
+      ctx.fillRect (x1, 0, side, side);
+      ctx.fillRect (x2 - side, 0, side, side);
     },
 
     drawTracker : function (offset, playingAt) {

@@ -33,35 +33,56 @@ define([
       this.model.on ("change:playing", this.togglePlayingMode, this);
       this.model.on ("change:readyToPlay", this.toggleReadyMode, this);
       this.model.on ("change:exporting", this.exportingChanged);
+      this.model.on ("change:regionBegin change:regionEnd", this.regionChanged, 
+		     this);
       this.model.on ("exported", this.exported, this);
       //$(document).on ("keyup", this.handleKey);
+      var self = this;
       Mousetrap.bind ("space", function () { 
-	$("#play-btn").trigger ("click");
+	self.playPauseClicked ();
       });
       Mousetrap.bind ("0", function () { 
-	$("#rewind-btn").trigger ("click");
+	self.rewindClicked ();
+      });
+      Mousetrap.bind ("1", function () {
+	var wasPlaying = self.model.get ("playing");
+	self.model.pause ();
+	self.model.set ("playingAt", self.model.get ("regionBegin"));
+	if (wasPlaying) self.model.play ();
+      });
+      Mousetrap.bind ("2", function () { 
+	var wasPlaying = self.model.get ("playing");
+	self.model.pause ();
+	self.model.set ("playingAt", self.model.get ("regionEnd"));
+	if (wasPlaying) self.model.play ();
+      });
+      Mousetrap.bind ("l", function (e) {
+	self.loopClicked (e);
       });
       Mousetrap.bind ("+", function () { 
-	$("#zoom-in-btn").trigger ("click");
+	self.zoomInClicked ();
       });
       Mousetrap.bind ("-", function () { 
-	$("#zoom-out-btn").trigger ("click");
+	self.zoomOutClicked ();
       });
       Mousetrap.bind ("n", function () { 
-	$("#add-track-btn").trigger ("click");
+	self.addTrackClicked ();
       });
-      Mousetrap.bind (["delete", "suppr"], function () { 
-	$("#menu-delete").trigger ("click");
+      Mousetrap.bind (["del", "backspace"], function () { 
+	self.menuDeleteClicked ();
+	return false; // to avoid triggering previous page
       });
       Mousetrap.bind ("command+e", function () { 
-	$("#menu-export").trigger ("click");
+	self.menuExportClicked ();
       });
     },
 
     render : function () {
       var data = {
         title : this.model.get("title"),
-        bpm   : this.model.get ("bpm")
+        bpm   : this.model.get ("bpm"),
+	regionBegin : this.model.get ("regionBegin"),
+	regionEnd : this.model.get ("regionEnd")
       };
       this.$el.html (this.template (data));
 
@@ -75,12 +96,20 @@ define([
       $("body").append (this.el);
       return this;
     },
+
+    regionChanged : function (model) {
+      if (model.get ("regionEnd") - model.get ("regionBegin") <= 0)
+	this.$el.find ("#loop-btn").attr ("disabled", "disabled");
+      else
+	this.$el.find ("#loop-btn").removeAttr ("disabled");
+    },
     
     loopClicked : function (e) {
-      if ($(e.currentTarget).hasClass ("active"))
-	this.model.set ("looping", false);
-      else
+      if (this.$el.find ("#loop-btn").toggleClass ("active")
+	  .hasClass ("active"))
 	this.model.set ("looping", true);
+      else
+	this.model.set ("looping", false);
     },
 
     exported : function (blob) {
@@ -121,7 +150,7 @@ define([
 
       var modal = _.template (exportTemplate, {
 	tracks : this.model.tracks,
-	regionLength : this.model.get ("startLoop") - this.model.get ("endLoop")
+	regionLength : this.model.get ("regionBegin") - this.model.get ("regionEnd")
       });
       this.$el.append (modal);
       $(modal).modal ({

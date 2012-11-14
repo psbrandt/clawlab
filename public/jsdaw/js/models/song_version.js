@@ -22,13 +22,13 @@ define([
       rightBarVisible : true,
       scrollLeft : 0,
       scrollTop  : 0,
-      startLoop  : 0,
-      endLoop    : 0,
+      regionBegin  : 0,
+      regionEnd  : 4,
       looping    : false
     },
 
     validate : function (attrs) {
-      if (attrs.endLoop < attrs.startLoop) return "can't end before it starts";
+      if (attrs.regionEnd < attrs.regionBegin) return "can't end before it starts";
     },
 
     initialize : function (data) {

@@ -88,8 +88,8 @@ define([
 
     startExport : function (opts) {
       if (opts.region) {
-	this.model.set ("playingAt", this.model.get ("startLoop"));
-        this.end = this.model.get ("endLoop");
+	this.model.set ("playingAt", this.model.get ("regionBegin"));
+        this.end = this.model.get ("regionEnd");
       } else {
 	this.model.set ("playingAt", 0);
 	this.end = undefined;
@@ -265,9 +265,9 @@ define([
       this.model.set ("playingAt", time);
       if (this.model.get ("looping") &&
 	  Math.floor (time * 100) >=
-	  Math.floor (this.model.get ("endLoop") * 100)) {
+	  Math.floor (this.model.get ("regionEnd") * 100)) {
 	this.stopNotes ();
-	this.model.set ("playingAt", this.model.get ("startLoop"));
+	this.model.set ("playingAt", this.model.get ("regionBegin"));
  	this.model.play ();
 	return;
       }

@@ -1,0 +1,27 @@
+body {
+  padding-top:28px;
+}
+#menu-bar .navbar-inner {
+  min-height:28px;
+  padding:0;
+  border-bottom:0;
+}
+#menu-bar a {
+  padding:3px 15px;
+}
+#menu-bar button {
+  margin:1px 0;
+  paddding:1px 5px;
+}
+#menu-bar .divider-vertical {
+  height:28px;
+}
+
+#menu-bar input {
+  margin:3px 0 0 15px;
+  width:100px;
+  background-color:#444;
+  color:#ccc;
+  padding:0;
+  border:0;
+}

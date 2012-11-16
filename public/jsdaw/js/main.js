@@ -4,6 +4,7 @@ require.config({
     jquery: "libs/jquery-1.8.2",
     underscore: "libs/underscore/underscore-min", // https://github.com/amdjs
     backbone: "libs/backbone/backbone-min", // https://github.com/amdjs
+    bootstrap : "libs/bootstrap",
 
     // File uplaod
     fileupload: "libs/fileupload",
@@ -15,8 +16,10 @@ require.config({
 
     recorder : "libs/recorderjs/recorder",
 
-    // Moustrap dir
-    mousetrap : "libs/mousetrap/mousetrap.min",
+    // Moustrap dir for key
+    "mousetrap-core" : "libs/mousetrap/mousetrap.min",
+    "mousetrap-bind" : "libs/mousetrap/mousetrap-bind.min",
+    "mousetrap-pause" : "libs/mousetrap/mousetrap-pause.min",
 
     // Require.js plugins
     text: "libs/require/text",
@@ -32,13 +35,14 @@ require.config({
     // When you have HTML/CSS designers this aids in keeping them out of the js directory
     templates: "../templates"
   }
-
 });
 
 // Let's kick off the application
 
 require([
-  "app"
+  "app",
+  "mousetrap-core",
+  "bootstrap"
 ], function(App){
   App.initialize (window.clawData);
 });

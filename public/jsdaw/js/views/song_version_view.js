@@ -11,20 +11,18 @@ define([
   "views/track_controls_view",
   "views/ghost_track_controls_view",
   "views/timeline_view",
-  "views/transport_view",
   "views/library_view",
   "views/sharing_view",
   "views/action_tree_view",
   "views/chat_view",
   "models/chat",
-  "models/song_version",
   // jquery plugins at the end
   "getscrollbarwidth",
   "jqueryui"
 ], function($, _, Backbone, mainTemplate, dropzoneTemplate, TrackView, 
             TrackControlsView, GhostTrackControlsView, TimelineView, 
-            TransportView, LibraryView, SharingView, ActionTreeView, 
-            ChatView, ChatModel, SongVersion) {
+            LibraryView, SharingView, ActionTreeView, 
+            ChatView, ChatModel) {
   return Backbone.View.extend ({
 
     template : _.template (mainTemplate),
@@ -225,7 +223,7 @@ define([
       $("#right-bar").css ({
         "height" : window.innerHeight // inner height
           - $("#transport").height () // minus transport height
-          - $(".topbar").height () // minus topbar height
+          - $("#menu-bar").height () // minus topbar height
           - $.getScrollbarWidth (), // minus scrollbar width
         "width" : this.model.get ("rightBarVisible") ? 300 : 0
       });
@@ -238,7 +236,7 @@ define([
           - 1, //minus 1 for FF ...
         "height" : window.innerHeight // inner height
           - $("#transport").height () // minus transport height
-          - $(".topbar").height () // minus topbar height
+          - $("#menu-bar").height () // minus topbar height
           - this.model.get ("timelineHeight"),
         "margin-top" : this.model.get ("timelineHeight")
       });

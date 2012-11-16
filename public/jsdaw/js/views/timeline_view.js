@@ -24,14 +24,14 @@ define([
 	  Claw.Helpers.pxToSec (e.offsetX + this.model.get ("scrollLeft"))
 	);
 	return;
-      }
+      };
       if (e.altKey) {
 	this.model.set (
 	  "regionBegin",
 	  Claw.Helpers.pxToSec (e.offsetX + this.model.get ("scrollLeft"))
 	);
 	return;
-      }
+      };
       // Do nothing if click happenned outside the top of timeline
       if (e.offsetY > this.model.get ("timelineHeight")) return;
       var wasPlaying = this.model.get ("playing");

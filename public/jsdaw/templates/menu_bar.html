@@ -1,0 +1,73 @@
+<div class="navbar-inverse navbar navbar-fixed-top" id="menu-bar">
+  <div class="navbar-inner">
+    <div class="container">
+      <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+      
+      <!-- Be sure to leave the brand out there if you want it shown -->
+      <ul class="nav">
+        <li>
+          <button class="btn btn-inverse btn-small" id="add-track-btn" 
+		  rel="tooltip" data-placement="bottom" 
+		  data-original-title="Hot key : N">
+            <i class="icon-plus icon-white"></i> add track
+          </button>
+        </li>
+	<li class="divider-vertical"></li>
+        <li>
+          <a class="title" rel="tooltip" data-placement="bottom"
+	     data-original-title="Double click to edit"><%= title %></a>
+        </li>
+	<li class="divider-vertical"></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            File <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <a href="#" id="menu-export">Export ...
+		<span class="pull-right muted">&#8984; + e</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            Edit <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <a href="#" id="menu-add-track">Add track
+                <span class="pull-right muted">n</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" id="menu-delete">Delete 
+                <span class="pull-right muted">del</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            View <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <a href="#" id="menu-toggle-right-bar">Show/hide right bar</a>
+            </li>
+            <li>
+              <a href="#" id="menu-zoom-in">Zoom in
+                <span class="pull-right muted">+</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" id="menu-delete">Zoom out 
+                <span class="pull-right muted">-</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

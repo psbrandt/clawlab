@@ -5,17 +5,12 @@ define([
   "router",
   "models/song_version",
   "views/song_version_view",
-  "models/chat",
-  "views/chat_view",
-  "views/action_tree_view",
-  "views/library_view",
-  "views/sharing_view",
   "libs/helpers",
   "libs/player",
-  "views/transport_view"
+  "views/transport_view",
+  "views/menu_bar_view"
 ], function ($, _, Backbone, Router, SongVersionModel, SongVersionView, 
-             ChatModel, ChatView, ActionTreeView, LibraryView, SharingView,
-             Helpers, Player, TransportView) {
+             Helpers, Player, TransportView, MenuBarView) {
 
   var initialize = function(clawData){
     // Pass in our Router module and call it's initialize function
@@ -33,6 +28,11 @@ define([
       bpm : songVersionModel.get("bpm"),
       pxPerBeat : songVersionModel.get ("scale")
     });
+
+    // Render the menu bar view
+    new MenuBarView({
+      model : songVersionModel
+    }).render ();
 
     // Render the transport view
     new TransportView({

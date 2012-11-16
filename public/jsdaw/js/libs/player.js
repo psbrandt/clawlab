@@ -263,15 +263,20 @@ define([
     schedule : function () {
       var time = this.context.currentTime - this.startTime + this.playbackFrom;
       this.model.set ("playingAt", time);
-      if (this.model.get ("looping") &&
-	  Math.floor (time * 100) >=
+      // We need to loop if
+      if (!this.exporting && // we are not exporting
+	this.model.get ("looping") && // and looping is set to true in the model
+	  Math.floor (time * 100) >= // and it's time to loop !
 	  Math.floor (this.model.get ("regionEnd") * 100)) {
 	this.stopNotes ();
 	this.model.set ("playingAt", this.model.get ("regionBegin"));
  	this.model.play ();
 	return;
       }
-      if (time > this.end) this.model.stop ();
+      if (time >= this.end) {
+	this.model.stop ();
+	return;
+      }
       var self = this;
       this.timeoutId = setTimeout (function () {
 	self.schedule ();

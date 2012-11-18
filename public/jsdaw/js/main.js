@@ -1,4 +1,7 @@
 require.config({
+
+  urlArgs: "no-cache=" + (new Date()).getTime(),
+
   paths: {
     // Major libraries
     jquery: "libs/jquery-1.8.2",

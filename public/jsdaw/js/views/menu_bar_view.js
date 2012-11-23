@@ -16,12 +16,13 @@ define([
   return Backbone.View.extend ({
 
     events : {
-      "click #menu-add-track"   : "addTrackClicked",
-      "click #menu-zoom-in"     : "zoomInClicked",
-      "click #menu-zoom-out"    : "zoomOutClicked",
+      "click #add-track-btn"  : "addTrackClicked",
+      "click #menu-add-track" : "addTrackClicked",
+      "click #menu-zoom-in"   : "zoomInClicked",
+      "click #menu-zoom-out"  : "zoomOutClicked",
       "click #menu-toggle-right-bar" : "toggleRightBarClicked",
-      "click #menu-delete"      : "menuDeleteClicked",
-      "click #menu-export"      : "menuExportClicked"
+      "click #menu-delete"    : "menuDeleteClicked",
+      "click #menu-export"    : "menuExportClicked"
     },
 
     template : _.template (menuBarTemplate),

@@ -35,16 +35,26 @@ define([
     render : function () {
       var data = {
         audioFilename : this.model.get ("audio_filename"),
+        ellipticalFileName: this.ellipticalFileName(),
         uploaded : this.model.uploader == undefined,
         bufferLoaded : this.model.get ("bufferLoaded"),
         previewing : this.model.get ("previewing")
       }
-      
+
       if (this.model.get ("bufferLoaded")) this.setDraggable ();
 
       this.$el.html (this.template (data));
 
       return this;
+    },
+
+    ellipticalFileName : function () {
+      var name = this.model.get ("audio_filename");
+      var len = name.length;
+      if (len > 30)
+        return name.substr(0, 18) + "..." + name.substr(len - 9, 9);
+      else
+        return name;
     },
 
     uploadProgressed : function (complete) {
@@ -72,7 +82,7 @@ define([
         cursor : "move"
       });
     },
-    
+
     removeClicked : function () {
       this.model.destroy ();
     },

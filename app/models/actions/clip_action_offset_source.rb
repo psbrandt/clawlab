@@ -1,38 +1,9 @@
 class ClipActionOffsetSource < ClipAction
+  include SetAttributeAction
 
-  field :offset, :type => Float
-  field :old_offset, :type => Float
+  sets_clip_attribute :source_offset, :as => :offset, :type => Float
 
   def pretty_name
     "Move"
   end
-
-  def redo song_version
-    clip = song_version.tracks.find(track_id).clips.find(clip_id)
-    self.update_attributes!(:old_offset => clip.source_offset)
-    song_version.root_action.children.detect { |a| 
-      a.name == "track_action_create_#{track_id}"
-    }.children.detect { |a|
-      a.name == "clip_action_create_#{clip_id}"
-    } << self
-    clip.update_attributes!(:source_offset => offset)
-    clip
-  end
-
-  def undo song_version
-    song_version.root_action.children.detect { |a| 
-      a.name == "track_action_create_#{track_id}"
-    }.children.find { |a|
-      a.name == "clip_action_create_#{clip_id}"
-    }.remove_child!(self)
-    song_version.tracks.find(track_id).clips.find(clip_id).update_attributes!(:source_offset => old_offset)
-
-    # undoing children (dependant actions)
-    children.each &:undo
-  end
-
-  def same_as? action
-    super(action) && self.offset == action.offset
-  end
-
 end

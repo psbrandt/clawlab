@@ -6,22 +6,25 @@ define (function () {
      */
     loadFromFile : function(file, context, onsuccess, options) {
       var reader = new FileReader;
-      
+
+      // Don't force options to be set when calling method
+      if(typeof options === 'undefined') options = {};
+
       if (!file.type.match('audio.mp3') && !file.type.match('audio.wav')) {
         throw('Unsupported file format!');
       }
-      
+
       reader.onloadend = function(e) {
         if (e.target.readyState == FileReader.DONE) { // DONE == 2
           context.decodeAudioData(e.target.result, onsuccess, onerror);
         }
       };
       reader.onerror = options.onerror || function () {
-        alert('AudioSourceLoader: error');        
+        alert('AudioSourceLoader: error');
       }
       reader.onprogress = options.onprogress;
 
-      reader.readAsArrayBuffer(file);  
+      reader.readAsArrayBuffer(file);
     },
 
     /**
@@ -48,7 +51,7 @@ define (function () {
       }
       request.send();
     }
-    
+
   };
 
   return AudioSourceLoader;

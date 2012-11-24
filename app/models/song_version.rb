@@ -17,14 +17,14 @@ class SongVersion
   # format to json
   def to_builder
     song_version = Jbuilder.new
-    
+
     # add id, title and tracks
     song_version.(self, :id, :title, :bpm, :tracks, :user_id)
 
     song_version.user(self.user, :id, :name)
- 
+
     song_version.audio_sources audio_sources do |j, audio_source|
-      j.(audio_source, :id, :author, :instrument, :uploaded_by)      
+      j.(audio_source, :id, :author, :instrument, :uploaded_by, :length)
       j.audio_filename audio_source.audio_filename
       j.url audio_source.audio.url
     end

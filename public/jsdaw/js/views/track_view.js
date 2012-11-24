@@ -8,7 +8,7 @@ define([
   "views/clip_view"
 ], function($, _, Backbone, ClipView) {
   return Backbone.View.extend ({
-    
+
     className : "track",
 
     events : {
@@ -17,7 +17,7 @@ define([
 
     dropped : function (e, ui) {
       var sourceOffset = Claw.Helpers.pxToSec (
-        Math.max (0, ui.offset.left + $("#sequencer").scrollLeft () 
+        Math.max (0, ui.offset.left + $("#sequencer").scrollLeft ()
                   - $("#left-bar").width ())
       );
       this.model.addClip (ui.helper.context.id, sourceOffset);
@@ -45,7 +45,7 @@ define([
 
     addClip : function (clip) {
       var clipView = new ClipView ({ model : clip }).render ();
-      
+
       this.$el.append (clipView.el);
     }
 

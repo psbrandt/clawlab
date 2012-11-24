@@ -10,7 +10,7 @@ define([
       bufferLoaded : false,
       audio_filename : "NOT FOUND"
     },
-
+    
     initialize : function (data) {
       self = this;
     },
@@ -19,10 +19,13 @@ define([
       // Return if we don't have to upload it
       if (!this.uploader) return;
       // Send fileupload with model's file
-      this.uploader.fileupload ('send', { 
-        files: [this.get ('file')], 
+      this.uploader.fileupload ('send', {
+        files: [this.get ('file')],
         url: this.collection.url,
-        formData : { "audio_source[id]" : this.id }
+        formData : {
+          "audio_source[id]" : this.id,
+          "audio_source[length]" : this.get ('length')
+        }
       }).success (_.bind (this.uploadSuccess, this));
       var self = this;
       this.uploader.bind ("fileuploadprogress", function (e, data) {
@@ -38,7 +41,7 @@ define([
     uploadProgress : function (data) {
       this.trigger ("uploadProgress", parseInt(data.loaded / data.total * 100, 10));
     }
-    
+
   });
 
   return AudioSource;

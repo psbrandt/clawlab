@@ -24,10 +24,10 @@ define([
         var tpl = (_.template(AlertT))({
           message: 'Your browser is not supported yet, try using Google Chrome.'
         });
-        $(tpl).modal();   
+        $(tpl).modal();
       } else
         this.context = new webkitAudioContext || new AudioContext;
-      
+
       // Create and connect the master gain node to context destination
       this.masterGainNode = this.context.createGainNode ();
       this.masterGainNode.connect (this.context.destination);
@@ -36,26 +36,29 @@ define([
       this.trackNodes = {};
       this.clipNodes  = {};
       this.clips      = [];
-      this.soloedTrack  = undefined; //the track playing solo
+      this.soloedTrack  = null; // the track playing solo
       this.playingSources = {};
 
       // to store an audio source beeing previewed
-      this.sourcePreview = { model : undefined, source : undefined}; 
-      
+      this.sourcePreview = { model : null, source : null};
+
       var self = this;
       this.model = songVersionModel;
 
       this.playing = false;
       this.exporting = false;
+      // Create a new recorder object
       this.rec = new Recorder (this.masterGainNode, {
-	workerPath : "/jsdaw/js/libs/recorderjs/recorderWorker.js",
-	callback : function (blob) { self.model.trigger ("exported", blob) }
+        workerPath : "/jsdaw/js/libs/recorderjs/recorderWorker.js",
+        callback : function (blob) { self.model.trigger ("exported", blob) }
       })
+
       this.end; // to store the end time of the song
       this.startTime;
       this.playbackFrom = 0;
 
       var loadCount = 0;
+
       this.model.audioSources.each (function (audioSource) {
         AudioSourceLoader.loadFromUrl (
           audioSource.get ("url"),
@@ -63,7 +66,7 @@ define([
           function (audioBuffer) {
             self.buffers[audioSource.get("id")] = audioBuffer;
             audioSource.set ("bufferLoaded", true);
-            if (++loadCount == self.model.audioSources.length) 
+            if (++loadCount == self.model.audioSources.length)
               self.model.set ("readyToPlay", true);
           },
           { onprogress : function (e) {
@@ -91,8 +94,8 @@ define([
 	this.model.set ("playingAt", this.model.get ("regionBegin"));
         this.end = this.model.get ("regionEnd");
       } else {
-	this.model.set ("playingAt", 0);
-	this.end = undefined;
+  this.model.set ("playingAt", 0);
+  this.end = null;
       }
       this.rec.clear  ();
       this.rec.record ();
@@ -120,7 +123,8 @@ define([
         self.context,
         function (audioBuffer) {
           self.buffers[audioSource.get("id")] = audioBuffer;
-          audioSource.set ("bufferLoaded", true)
+          audioSource.set ("bufferLoaded", true);
+	  audioSource.set ("length", audioBuffer.duration);
           // set ready to play if it is the first source
           self.model.set ("readyToPlay", true);
         },
@@ -147,7 +151,7 @@ define([
 
     stopAudioSourcePreview : function (audioSource) {
       this.sourcePreview.source.noteOff (0);
-      this.sourcePreview = { model : undefined, source : undefined }
+      this.sourcePreview = { model : null, source : null }
       audioSource.set ("previewing", false);
     },
 
@@ -155,7 +159,7 @@ define([
       var clipGainNode = this.context.createGainNode ();
       this.clipNodes[clip.id] = clipGainNode;
       clipGainNode.connect (this.trackNodes[clip.get ("track_id")]);
-      
+
       clip.on ("change:source_offset", this.sourceOffsetChanged, this);
       clip.on ("change:begin_offset",  this.beginOffsetChanged,  this);
       clip.on ("change:end_offset",    this.endOffsetChanged,    this);
@@ -167,9 +171,9 @@ define([
         trackGainNode.gain.value = track.get ("volume");
         this.trackNodes[track.id] = trackGainNode;
         trackGainNode.connect(this.masterGainNode);
-        
+
         track.on ("change:volume", this.setTrackVolume, this);
-        track.on ("change:muted", function (track, muted) { 
+        track.on ("change:muted", function (track, muted) {
           muted ? this.muteTrack (track) : this.unmuteTrack (track)
         }, this);
         track.on ("change:solo", function (track, solo) {
@@ -209,7 +213,7 @@ define([
       this.model.tracks.each (function (t) {
         if (!t.get ("mute")) this.unmuteTrack (t);
       }, this);
-      this.soloedTrack = undefined;
+      this.soloedTrack = null;
     },
 
     releaseTrack : function(track) {
@@ -224,14 +228,14 @@ define([
     },
 
     // TODO : try to DRY these three methods below
-    
+
     sourceOffsetChanged : function (clip, offset) {
       if (this.playing) {
         var source = this.playingSources [clip.id];
         source.noteOff (0);
         var end = source.buffer.duration + offset - clip.get ("end_offset");
         if (end > this.context.currentTime - this.startTime + this.playbackFrom)
-          this.playNote (clip, offset + this.startTime + 
+          this.playNote (clip, offset + this.startTime +
                          clip.get ("begin_offset") - this.playbackFrom);
       }
     },
@@ -240,10 +244,10 @@ define([
       if (this.playing) {
         var source = this.playingSources [clip.id];
         source.noteOff (0);
-        var end = source.buffer.duration + clip.get ("source_offset") - 
+        var end = source.buffer.duration + clip.get ("source_offset") -
           clip.get ("end_offset");
         if (end > this.context.currentTime - this.startTime + this.playbackFrom)
-          this.playNote (clip, clip.get ("source_offset") + this.startTime + 
+          this.playNote (clip, clip.get ("source_offset") + this.startTime +
                          offset - this.playbackFrom);
       }
     },
@@ -252,10 +256,10 @@ define([
       if (this.playing) {
         var source = this.playingSources [clip.id];
         source.noteOff (0);
-        var end = source.buffer.duration + clip.get ("source_offset") - 
+        var end = source.buffer.duration + clip.get ("source_offset") -
           clip.get ("end_offset");
         if (end > this.context.currentTime - this.startTime + this.playbackFrom)
-          this.playNote (clip, clip.get ("source_offset") + this.startTime + 
+          this.playNote (clip, clip.get ("source_offset") + this.startTime +
                          clip.get ("begin_offset") - this.playbackFrom);
       }
     },
@@ -299,17 +303,17 @@ define([
       }
       else
         source.noteGrainOn (time, beginOffset, length);
-      
+
       this.playingSources [clip.id] = source;
     },
 
-    /* play all clips by getting the current position in the model. All 
+    /* play all clips by getting the current position in the model. All
      * bufferSources are recorded in this.playingSources */
     playNotes : function () {
       if (this.playing) return;
       this.playing = true;
       this.startTime = this.context.currentTime;
-      
+
       this.playbackFrom = this.model.get ("playingAt");
 
       var clipEnd;
@@ -319,10 +323,10 @@ define([
         sourceOffset = clip.get ("source_offset"),
         beginOffset  = clip.get ("begin_offset"),
         endOffset    = clip.get ("end_offset");
-        if (buffer == undefined) return;
+        if (typeof buffer === 'undefined') return;
         clipEnd = buffer.duration + sourceOffset - endOffset;
         if (clipEnd > self.playbackFrom)
-          self.playNote (clip, self.startTime + 
+          self.playNote (clip, self.startTime +
                          sourceOffset + beginOffset - self.playbackFrom);
       });
       if (!this.end) this.end = clipEnd;

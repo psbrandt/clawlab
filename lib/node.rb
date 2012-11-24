@@ -1,5 +1,5 @@
 module Node
-  
+
   attr_accessor :parents
   attr_accessor :children
 
@@ -10,7 +10,7 @@ module Node
   def add_child(child)
     raise ArgumentError, "Attempting to add a nil node as child" unless child
     raise "Child #{child} already added!" if @children.include?(child)
-    
+
     @children << child
     child.parents << self unless child.parents.include?(self)
     return child

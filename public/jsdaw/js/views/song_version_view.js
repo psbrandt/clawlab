@@ -5,8 +5,8 @@ define([
   "jquery",
   "underscore",
   "backbone",
-  "text!templates/main.html", 
-  "text!templates/dropzone.html", 
+  "text!templates/main.html",
+  "text!templates/dropzone.html",
   "views/track_view",
   "views/track_controls_view",
   "views/ghost_track_controls_view",
@@ -31,7 +31,7 @@ define([
       "click #right-bar .nav a" : "rightBarMenuClicked",
       "drop .dropzone"          : "dropped"
     },
-    
+
     rightBarMenuClicked : function (e) {
       e.preventDefault();
       $(e.currentTarget).tab ("show");
@@ -58,7 +58,7 @@ define([
       this.model.on ("change:ghost", this.render, this);
       this.model.on ("merged", this.render, this);
     },
-    
+
     render : function () {
       // Setting #main with the main template
       this.$el.html (this.template ({
@@ -68,8 +68,8 @@ define([
       // make clips selectable
       this.$el.find ("#tracks").selectable ({
         filter : ".clip",
-        selected : function (e, ui) { $(ui.selected).trigger ("selected") },
-        unselected : function (e, ui) { $(ui.unselected).trigger ("unselected") }
+        selected : function (e, ui) { $(ui.selected).trigger ("selected", [e, ui]) },
+        unselected : function (e, ui) { $(ui.unselected).trigger ("unselected", [e, ui]) }
       });
 
       // The left-bar dropzone
@@ -97,7 +97,7 @@ define([
           "scrollTop"  :  $(e.target).scrollTop ()
         });
       });
-      
+
       // Setting workspace dimensions
       this.setWorkspaceDimensions ();
 
@@ -105,7 +105,7 @@ define([
         model : this.model,
         el : "#timeline-stage"
       }).render ();
-      
+
       // Render tracks
       this.model.tracks.each (function (track) { self.addTrack (track) });
 
@@ -119,7 +119,7 @@ define([
       var libraryView = new LibraryView ({
         collection : this.model.audioSources
       }).render ();
-      
+
       var sharingView = new SharingView ({
         model : this.model
       }).render ();
@@ -128,10 +128,10 @@ define([
       var actionTreeView = new ActionTreeView ({
         model : this.model
       }).render ();
-      
+
       $("#right-bar .nav").append (
-        libraryView.elMenu, 
-        sharingView.elMenu, 
+        libraryView.elMenu,
+        sharingView.elMenu,
         actionTreeView.elMenu
       );
       $("#right-bar .tab-content").append (
@@ -150,7 +150,8 @@ define([
     },
 
     dropped : function (e, ui) {
-      if (ui == undefined) return;
+      if (typeof ui === 'undefined') return;
+
       var track = this.model.addTrack (function (track) {
         track.addClip (ui.helper.context.id, 0);
       });
@@ -158,7 +159,7 @@ define([
 
     handleFileSelect : function ($e, data) {
       for (var i = 0, f; f = data.files[i]; i++) {
-        var audioSource = 
+        var audioSource =
           this.model.audioSources.addFromFile (f, this.$fileupload);
         var track = this.model.addTrack (function (track) {
           track.addClip (audioSource.id, 0);
@@ -176,15 +177,15 @@ define([
     },
 
     addTrack : function (trackModel) {
-      var trackControlsView = new TrackControlsView ({ 
+      var trackControlsView = new TrackControlsView ({
         model : trackModel,
         attributes : { "data-id" : trackModel.id }
       }).render ();
-      var trackView = new TrackView ({ 
+      var trackView = new TrackView ({
         model : trackModel,
         attributes : { "data-id" : trackModel.id }
       }).render ();
-          
+
       this.$el.find ("#tracks").append (trackView.el);
       this.$el.find ("#tracks-controls").append (trackControlsView.el);
 
@@ -199,10 +200,10 @@ define([
 
       ghostTrack.set ("user", ghost.get ("user"));
       ghostTrack.set ("songVersionId", ghost.get("_id"));
-      var ghostTrackControlsView = new GhostTrackControlsView ({ 
+      var ghostTrackControlsView = new GhostTrackControlsView ({
         model : ghostTrack
       }).render ();
-      var ghostTrackView = new TrackView ({ 
+      var ghostTrackView = new TrackView ({
         model : ghostTrack
       }).render ();
 
@@ -242,7 +243,7 @@ define([
       });
       // Sequencer margin left and height
       $("#sequencer").css ({
-        "height" : $("#workspace").height () 
+        "height" : $("#workspace").height ()
           + $("#workspace").scrollTop ()
       });
 
@@ -252,13 +253,13 @@ define([
       // grid stage width, height and margin top
       $("#timeline-stage").css ({
         "width" : $("#sequencer").innerWidth (),
-        "height" : $("#sequencer").height () 
+        "height" : $("#sequencer").height ()
           - $.getScrollbarWidth () // minus scrollbars width
           - $("#workspace").scrollTop ()
           + this.model.get ("timelineHeight"),
         "margin-top" : -this.model.get ("timelineHeight")
       });
     }
-    
+
   });
 });

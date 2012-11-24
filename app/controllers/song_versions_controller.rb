@@ -12,6 +12,8 @@ class SongVersionsController < ApplicationController
     @song_version.create_root_action
 
     respond_to do |format|
+      logger.debug @song_version.inspect
+      logger.debug @song_version.tracks.inspect
       if @song_version.save! && @song.save!
         format.html { redirect_to songs_url, :notice => "Song version successfully created" }
         format.json { render } # app/views/song_versions/create.json.jbuilder

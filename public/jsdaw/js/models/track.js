@@ -6,9 +6,9 @@ define([
   "collections/clip_collection"
 ], function($, _, Backbone, Clip, ClipCollection) {
   var TrackModel = Backbone.Model.extend ({
-    
+
     //Setting the id to match Mongoid ids
-    idAttribute : "_id", 
+    idAttribute : "_id",
 
     defaults : {
       name : "New track",
@@ -29,12 +29,13 @@ define([
       this.clips = new ClipCollection (clipModels);
     },
 
-    addClip : function (audioSourceId, offset) {
+    addClip : function (audioSourceId, offset, length) {
       //create a new clip model
       var c = new Clip ({
         audio_source_id : audioSourceId,
         source_offset : offset,
-        track_id : this.id
+        track_id : this.id,
+        length : length
       });
       //set the parent collection so the url is correct
       c.collection = this.clips;
@@ -53,7 +54,7 @@ define([
       $.ajax ({
         type : "PUT",
         url  : "merge_track",
-        data : { 
+        data : {
           other_version_id : this.get ("songVersionId"),
           track_id : this.id
         },

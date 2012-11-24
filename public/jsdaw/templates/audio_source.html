@@ -1,5 +1,7 @@
 <i class="<%= previewing ? 'icon-stop' : 'icon-play' %> icon-white preview-btn"></i>
-<span class="filename"><%= audioFilename %></span>
+<span class="filename" title="<%= audioFilename %>">
+  <%= ellipticalFileName %>
+</span>
 <span class="pull-right">
 <% if (!uploaded) { %>
   <button class="upload-btn btn btn-warning btn-mini">

@@ -1,46 +1,59 @@
 .clip {
   height : 100%;
   overflow:hidden;
-  border-left :1px solid #444;
-  border-right:1px solid #444;
-  background: -moz-linear-gradient(top,  rgba(0,0,0,0.8) 0%, rgba(255,255,255,0.2) 10%, rgba(255,255,255,0.2) 90%, rgba(0,0,0,0.8) 100%); /* FF3.6+ */
-
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0.8)), color-stop(10%,rgba(255,255,255,0.2)), color-stop(90%,rgba(255,255,255,0.2)), color-stop(100%,rgba(0,0,0,0.8))); /* Chrome,Safari4+ */
-
-  background: -webkit-linear-gradient(top,  rgba(0,0,0,0.8) 0%,rgba(255,255,255,0.2) 10%,rgba(255,255,255,0.2) 90%,rgba(0,0,0,0.8) 100%); /* Chrome10+,Safari5.1+ */
-
-  background: -o-linear-gradient(top,  rgba(0,0,0,0.8) 0%,rgba(255,255,255,0.2) 10%,rgba(255,255,255,0.2) 90%,rgba(0,0,0,0.8) 100%); /* Opera 11.10+ */
-
-  background: -ms-linear-gradient(top,  rgba(0,0,0,0.8) 0%,rgba(255,255,255,0.2) 10%,rgba(255,255,255,0.2) 90%,rgba(0,0,0,0.8) 100%); /* IE10+ */
-
-  background: linear-gradient(to bottom,  rgba(0,0,0,0.8) 0%,rgba(255,255,255,0.2) 10%,rgba(255,255,255,0.2) 90%,rgba(0,0,0,0.8) 100%); /* W3C */
-
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cc000000', endColorstr='#cc000000',GradientType=0 ); /* IE6-9 */
-
+  border: 1px solid #444;
+  /*
+  background: -moz-linear-gradient(top,  rgba(65,65,65,0.3) 0%, rgba(255,255,255,0.4) 10%, rgba(255,255,255,0.4) 90%, rgba(65,65,65,0.3) 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(65,65,65,0.3)), color-stop(10%,rgba(255,255,255,0.4)), color-stop(90%,rgba(255,255,255,0.4)), color-stop(100%,rgba(65,65,65,0.3)));
+  background: -webkit-linear-gradient(top,  rgba(65,65,65,0.3) 0%,rgba(255,255,255,0.4) 10%,rgba(255,255,255,0.4) 90%,rgba(65,65,65,0.3) 100%);
+  background: -o-linear-gradient(top,  rgba(65,65,65,0.3) 0%,rgba(255,255,255,0.4) 10%,rgba(255,255,255,0.4) 90%,rgba(65,65,65,0.3) 100%);
+  background: -ms-linear-gradient(top,  rgba(65,65,65,0.3) 0%,rgba(255,255,255,0.4) 10%,rgba(255,255,255,0.4) 90%,rgba(65,65,65,0.3) 100%);
+  background: linear-gradient(to bottom,  rgba(65,65,65,0.3) 0%,rgba(255,255,255,0.4) 10%,rgba(255,255,255,0.4) 90%,rgba(65,65,65,0.3) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cc000000', endColorstr='#cc000000',GradientType=0 );
+  */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0.4)), color-stop(95%,rgba(255,255,255,0.4)), color-stop(100%,rgba(65,65,65,0.3)));
+  background: linear-gradient(to bottom, rgba(255,255,255,0.4) 0%,rgba(255,255,255,0.4) 90%,rgba(65,65,65,0.3) 95%);
 }
 
-.clip .filename {
-  font-size:11px;
-  color: #eee;
-  position:absolute;
-  bottom:0;
+.clip:hover {
+  border: 1px solid #666;
+}
+
+.clip .topbar {
+  height: 13px;
+  background: rgba(80,80,80,0.3);
+  border-bottom: 1px solid rgba(0,0,0,0.5);
+  line-height: 10px;
+  margin-bottom: 1px;
+}
+
+.clip .topbar .filename {
+  font-size: 10px;
+  color: #333;
+  bottom: 0;
+  margin-left: 3px;
+  font-weight: bold;
+  cursor: default;
 }
 
 .clip.ui-selected {
-  border-left :1px solid rgb(20, 164, 255);
-  border-right:1px solid rgb(20, 164, 255);
-  background: -moz-linear-gradient(top,  rgba(20,164,255,0.8) 0%, rgba(255,255,255,0.2) 10%, rgba(255,255,255,0.2) 90%, rgba(20,164,255,0.8) 100%); /* FF3.6+ */
+  border :1px solid rgba(20, 164, 255, 0.2);
+  /*
+  background: -moz-linear-gradient(top,  rgba(20,164,255,0.8) 0%, rgba(255,255,255,0.4) 10%, rgba(255,255,255,0.4) 90%, rgba(20,164,255,0.8) 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(20,164,255,0.8)), color-stop(10%,rgba(255,255,255,0.4)), color-stop(90%,rgba(255,255,255,0.4)), color-stop(100%,rgba(20,164,255,0.8)));
+  background: -webkit-linear-gradient(top,  rgba(20,164,255,0.8) 0%,rgba(255,255,255,0.4) 10%,rgba(255,255,255,0.4) 90%,rgba(20,164,255,0.8) 100%);
+  background: -o-linear-gradient(top,  rgba(20,164,255,0.8) 0%,rgba(255,255,255,0.4) 10%,rgba(255,255,255,0.4) 90%,rgba(20,164,255,0.8) 100%);
+  background: -ms-linear-gradient(top,  rgba(20,164,255,0.8) 0%,rgba(255,255,255,0.4) 10%,rgba(255,255,255,0.4) 90%,rgba(20,164,255,0.8) 100%);
+  background: linear-gradient(to bottom,  rgba(20,164,255,0.8) 0%,rgba(255,255,255,0.4) 10%,rgba(255,255,255,0.4) 90%,rgba(20,164,255,0.8) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cc14a4ff', endColorstr='#cc14a4ff',GradientType=0 );
+  */
+}
 
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(20,164,255,0.8)), color-stop(10%,rgba(255,255,255,0.2)), color-stop(90%,rgba(255,255,255,0.2)), color-stop(100%,rgba(20,164,255,0.8))); /* Chrome,Safari4+ */
+.clip.ui-resizable-resizing {
+  opacity: 0.9;
+}
 
-  background: -webkit-linear-gradient(top,  rgba(20,164,255,0.8) 0%,rgba(255,255,255,0.2) 10%,rgba(255,255,255,0.2) 90%,rgba(20,164,255,0.8) 100%); /* Chrome10+,Safari5.1+ */
-
-  background: -o-linear-gradient(top,  rgba(20,164,255,0.8) 0%,rgba(255,255,255,0.2) 10%,rgba(255,255,255,0.2) 90%,rgba(20,164,255,0.8) 100%); /* Opera 11.10+ */
-
-  background: -ms-linear-gradient(top,  rgba(20,164,255,0.8) 0%,rgba(255,255,255,0.2) 10%,rgba(255,255,255,0.2) 90%,rgba(20,164,255,0.8) 100%); /* IE10+ */
-
-  background: linear-gradient(to bottom,  rgba(20,164,255,0.8) 0%,rgba(255,255,255,0.2) 10%,rgba(255,255,255,0.2) 90%,rgba(20,164,255,0.8) 100%); /* W3C */
-
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cc14a4ff', endColorstr='#cc14a4ff',GradientType=0 ); /* IE6-9 */
-
+.clip.ui-resizable .ui-resizable-w,
+.clip.ui-resizable .ui-resizable-e {
+  width: 13px;
 }

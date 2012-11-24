@@ -1,6 +1,6 @@
 require.config({
 
-  urlArgs: "no-cache=" + (new Date()).getTime(),
+  // urlArgs: "no-cache=" + (new Date()).getTime(),
 
   paths: {
     // Major libraries

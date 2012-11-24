@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
   skip_authorization_check :only => :index
 
   rescue_from Mongoid::Errors::DocumentNotFound do |exception|
-    render :json => {:status => :error}, :status => :not_found
+    render :json => {:status => :error, :message => exception.inspect}, :status => :not_found
   end
 
   def after_sign_in_path_for(resource)

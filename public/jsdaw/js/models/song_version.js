@@ -6,7 +6,7 @@ define([
   "models/track",
   "collections/audio_source_collection",
   "models/audio_source"
-], function($, _, Backbone, TrackCollection, Track, AudioSourceCollection, 
+], function($, _, Backbone, TrackCollection, Track, AudioSourceCollection,
             AudioSource) {
   var SongVersion = Backbone.Model.extend ({
 
@@ -85,7 +85,7 @@ define([
     deleteSelectedClips : function () {
       this.tracks.each (function (track) {
         track.clips.each (function (clip) {
-          if (clip.get("selected")) clip.destroy ();
+          if (clip.get ("selected")) clip.destroy ();
         })
       });
     },
@@ -118,13 +118,13 @@ define([
       $.ajax ({
         type : "PUT",
         url : "merge",
-        data : {song_version_id : song_version_id }, 
+        data : {song_version_id : song_version_id },
         success : function (data) {
           // update model
         }
       });
     }
-    
+
   });
 
   return SongVersion;

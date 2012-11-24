@@ -6,6 +6,8 @@ class AudioSourcesController < ApplicationController
     # Get audio source from :files array
     @audio_source.audio = (params[:files] || []).shift
     @audio_source.uploaded_by = current_user.id
+
+    puts "++++ #{ @audio_source.inspect }"
     respond_to do |format|
       if @audio_source.save!
         format.html { redirect_to song_version_url(@song_version), :notice => "Audio file successfully created" }

@@ -32,7 +32,7 @@ define([
 
       var self = this;
       Mousetrap.bind ({
-	"space" : function () { self.playPauseClicked () },
+	"space" : function () { self.playPauseClicked (); return false; },
 	"0" : function () { self.rewindClicked () },
 	"1" : function () { 
 	  var wasPlaying = self.model.get ("playing");

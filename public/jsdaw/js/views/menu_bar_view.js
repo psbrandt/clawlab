@@ -37,10 +37,11 @@ define([
 	"+" : function () { self.zoomInClicked () },
 	"-" : function () { self.zoomOutClicked () },
 	"n" : function () { self.addTrackClicked () },
-	del : function () { 
+	"backspace" : function () { 
 	  self.menuDeleteClicked ();
 	  return false; // to avoid triggering previous page
 	},
+	"del" : function () { self.menuDeleteClicked (); },
 	"command+e" : function () { self.menuExportClicked () }
       });
     },

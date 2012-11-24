@@ -30,7 +30,7 @@ define([
       "resizestart"   : "resizeStart",
       "resizestop"    : "resizeStop",
       "resize"        : "resizing",
-      "mousedown"     : "mouseDown"
+      "mousedown .topbar"     : "mouseDown"
     },
 
     initialize : function () {
@@ -242,7 +242,9 @@ define([
     },
 
     dragStopped : function (e) {
-      var pxOffset  = Claw.Helpers.snapPx (this.$el.position ().left);
+      var pxOffset = this.$el.position ().left;
+      // Snap if ctrl key is not pressed
+      if (!e.ctrlKey) pxOffset = Claw.Helpers.snapPx (pxOffset);
       var offset = Claw.Helpers.pxToSec (pxOffset) - this.model.get ("begin_offset");
       this.$el.css ("left", pxOffset);
       _.each (this.alsoDrag, function (el) {
@@ -289,7 +291,7 @@ define([
 
       // If resized from the right
       var width = Claw.Helpers.floatFromCss (this.$el.css('width'));
-      var right_offset = this.sourceDuration - (Claw.Helpers.pxToSec(width) + this.model.get ("begin_offset"));
+      var right_offset = Math.max (0, this.sourceDuration - (Claw.Helpers.pxToSec(width) + this.model.get ("begin_offset")));
 
       if (this.model.get ("end_offset") != right_offset) {
         this.model.save ({

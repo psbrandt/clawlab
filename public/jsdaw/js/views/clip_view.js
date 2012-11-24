@@ -109,6 +109,7 @@ define([
 
       this.$el.draggable ({
         containment : "parent",
+	handle : ".topbar",
         scroll : true,
         scrollSensitivity : 40,
         axis : "x"
